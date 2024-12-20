@@ -1,5 +1,10 @@
 import { Page } from "@/components/Page";
 
-export default function Car({ params }: { params: { slug: string } }) {
-  return <Page>Car {params.slug}</Page>;
+export default async function Car({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const par = await params;
+  return <Page>Car {par.slug}</Page>;
 }
