@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { I18nProvider } from "@/core/i18n/provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "@telegram-apps/telegram-ui/dist/styles.css";
+import "normalize.css/normalize.css";
+import { Root } from "@/components/Root/Root";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,10 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <I18nProvider>
+          <Root>{children}</Root>
+        </I18nProvider>
       </body>
     </html>
   );
