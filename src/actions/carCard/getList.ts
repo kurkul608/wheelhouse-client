@@ -40,7 +40,16 @@ export interface CarCard {
   specifications: CarCardSpecifications[];
 }
 
-export const getCarCardsList = async (): Promise<CarCard[]> => {
-  const list = await fetch("http://localhost:8080/cars");
+const CARS_LIMIT = 20;
+
+export const getCarCardsList = async (page: number): Promise<CarCard[]> => {
+  const offset = `${page * CARS_LIMIT}`;
+  const searchParams = new URLSearchParams({
+    limit: `${CARS_LIMIT}`,
+    offset: offset,
+  });
+  const list = await fetch(
+    `http://localhost:8080/cars?${searchParams.toString()}`,
+  );
   return list.json();
 };
