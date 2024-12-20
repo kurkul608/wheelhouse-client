@@ -5,6 +5,15 @@ const withNextIntl = createNextIntlPlugin("./src/core/i18n/i18n.ts");
 
 const nextConfig: NextConfig = {
   /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "weltcar.s3.eu-central-1.amazonaws.com",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);

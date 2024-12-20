@@ -20,7 +20,6 @@ function RootInner({ children }: PropsWithChildren) {
   const lp = useLaunchParams();
   const debug = isDev || lp.startParam === "debug";
 
-  // Initialize the library.
   useClientOnce(() => {
     init(debug);
   });
@@ -28,10 +27,10 @@ function RootInner({ children }: PropsWithChildren) {
   const isDark = useSignal(miniApp.isDark);
   const initDataUser = useSignal(initData.user);
 
-  // Set the user locale.
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    initDataUser && setLocale(initDataUser.languageCode);
+    if (initDataUser) {
+      setLocale(initDataUser.languageCode);
+    }
   }, [initDataUser]);
 
   return (
@@ -45,9 +44,6 @@ function RootInner({ children }: PropsWithChildren) {
 }
 
 export function Root(props: PropsWithChildren) {
-  // Unfortunately, Telegram Mini Apps does not allow us to use all features of
-  // the Server Side Rendering. That's why we are showing loader on the server
-  // side.
   const didMount = useDidMount();
 
   return didMount ? (
@@ -55,6 +51,8 @@ export function Root(props: PropsWithChildren) {
       <RootInner {...props} />
     </ErrorBoundary>
   ) : (
-    <div className="root__loading">Loading</div>
+    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+      Loading
+    </div>
   );
 }
