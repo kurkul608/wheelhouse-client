@@ -6,9 +6,8 @@ import { useRouter } from "next/navigation";
 
 export const Welcome = () => {
   const router = useRouter();
-  // const searchParams = useSearchParams();
 
-  const buttonClick = (e) => {
+  const buttonClick = (e: any) => {
     const path = "/cars";
     const params = new URLSearchParams({
       page: "0",
