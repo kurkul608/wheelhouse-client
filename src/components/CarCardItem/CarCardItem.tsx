@@ -1,12 +1,12 @@
 "use client";
 
-import { CarCard } from "@/actions/carCard/getList";
 import { Card, List } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { CarCard } from "@/models/carCard";
 
 export const CarCardItem = (props: CarCard) => {
   const router = useRouter();

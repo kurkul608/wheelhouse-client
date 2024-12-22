@@ -1,6 +1,5 @@
 "use server";
 
-import { Section, List } from "@telegram-apps/telegram-ui";
 import { Page } from "@/components/Page";
 import React from "react";
 import { CarCardList } from "@/components/CarCardList/CarCardList";
@@ -13,14 +12,10 @@ export default async function Home({
   const sp = await searchParams;
 
   return (
-    <>
-      <Page>
-        <List>
-          <Section>
-            <CarCardList page={+sp.page} />
-          </Section>
-        </List>
-      </Page>
-    </>
+    <Page>
+      <div style={{ background: "var(--tgui--bg_color)" }}>
+        <CarCardList page={+sp.page} />
+      </div>
+    </Page>
   );
 }

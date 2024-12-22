@@ -1,30 +1,33 @@
 import { classNames, type RGB as RGBType } from "@telegram-apps/sdk-react";
-import type { FC, JSX } from "react";
+import type { FC } from "react";
 
 export type RGBProps = JSX.IntrinsicElements["div"] & {
   color: RGBType;
+  size?: number;
 };
 
-export const RGB: FC<RGBProps> = ({ color, className, ...rest }) => (
-  <span
-    {...rest}
-    className={classNames(
-      "inline-flex",
-      "items-center",
-      "gap-[5px]",
-      className,
-    )}
-  >
-    <i
+export const RGB: FC<RGBProps> = ({ color, className, size, ...rest }) => {
+  console.log(size);
+  return (
+    <span
+      {...rest}
       className={classNames(
-        "w-[18px]",
-        "aspect-square",
-        "border",
-        "border-[#555]",
-        "rounded-full",
+        "inline-flex",
+        "items-center",
+        "gap-[5px]",
+        className,
       )}
-      style={{ backgroundColor: color }}
-    />
-    {color}
-  </span>
-);
+    >
+      <i
+        className={classNames(
+          "aspect-square",
+          "border",
+          "border-[#555]",
+          "rounded-full",
+        )}
+        style={{ backgroundColor: color, width: size ? `${size}px` : "18px" }}
+      />
+      {/*{color}*/}
+    </span>
+  );
+};

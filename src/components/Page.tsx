@@ -1,7 +1,7 @@
 "use client";
 
 import { backButton } from "@telegram-apps/sdk-react";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState, CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 
 export function Page({
