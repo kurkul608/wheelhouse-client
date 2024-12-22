@@ -1,6 +1,7 @@
 import { Page } from "@/components/Page";
 import { getCarCard } from "@/actions/carCard/get";
 import { Section } from "@telegram-apps/telegram-ui";
+import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 
 export default async function Car({
   params,
@@ -13,7 +14,13 @@ export default async function Car({
   return (
     <Page>
       <Section>
-        <div>{carCard.externalId}</div>
+        <div className={"h-[340px]"}>
+          <PhotoGallery
+            photoUrls={
+              carCard.photos?.length ? carCard.photos : carCard.importedPhotos
+            }
+          />
+        </div>
       </Section>
     </Page>
   );
