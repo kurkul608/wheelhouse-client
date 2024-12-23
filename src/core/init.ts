@@ -6,6 +6,7 @@ import {
   initData,
   $debug,
   init as initSDK,
+  mainButton,
 } from "@telegram-apps/sdk-react";
 
 /**
@@ -16,6 +17,9 @@ export function init(debug: boolean): void {
 
   initSDK();
 
+  if (!mainButton.isMounted()) {
+    mainButton.mount();
+  }
   if (backButton.isSupported()) {
     backButton.mount();
   }

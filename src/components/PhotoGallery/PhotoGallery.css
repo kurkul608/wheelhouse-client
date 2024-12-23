@@ -1,0 +1,15 @@
+.photo-gallery-dots {
+    margin-bottom: 12px;
+    bottom: -30px;
+}
+.photo-gallery-dots li button:before {
+    color: var(--tgui--hint_color);
+}
+
+.photo-gallery-dots li.slick-active button:before {
+    color: var(--tgui--text_color);
+}
+
+.photo-gallery {
+    /*height: 220px;*/
+}

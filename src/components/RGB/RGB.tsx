@@ -7,7 +7,6 @@ export type RGBProps = JSX.IntrinsicElements["div"] & {
 };
 
 export const RGB: FC<RGBProps> = ({ color, className, size, ...rest }) => {
-  console.log(size);
   return (
     <span
       {...rest}

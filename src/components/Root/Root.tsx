@@ -14,6 +14,8 @@ import { setLocale } from "@/core/i18n/locale";
 import { useDidMount } from "@/hooks/useDidMount";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ErrorPage } from "@/components/ErrorPage";
+import { useRegister } from "@/hooks/useRegister";
+import { UserContext } from "@/contexts/userContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
@@ -33,12 +35,14 @@ function RootInner({ children }: PropsWithChildren) {
     }
   }, [initDataUser]);
 
+  const user = useRegister();
+
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
       platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
     >
-      {children}
+      <UserContext.Provider value={user}>{children}</UserContext.Provider>
     </AppRoot>
   );
 }
