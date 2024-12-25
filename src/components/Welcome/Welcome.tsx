@@ -18,7 +18,10 @@ export const Welcome = () => {
   };
 
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center">
+    <div
+      className="w-full h-[100vh] flex items-center justify-center"
+      style={{ background: "var(--tgui--bg_color)" }}
+    >
       <Button mode="filled" size="l" onClick={buttonClick}>
         Просмотр каталога авто
       </Button>

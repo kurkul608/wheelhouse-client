@@ -12,6 +12,8 @@ import {
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { RGB } from "@/components/RGB/RGB";
 import { classNames, type RGB as RGBType } from "@telegram-apps/sdk-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { getCarsPageUrl } from "@/utils/getCarsPageUrl";
 
 export default async function Car({
   params,
@@ -43,24 +45,44 @@ export default async function Car({
 
   return (
     <Page>
+      <Breadcrumbs
+        items={[
+          {
+            name: "Автомобили",
+            href: getCarsPageUrl(),
+          },
+          { name: model?.value || "" },
+        ]}
+      />
+      <PhotoGallery
+        photoUrls={
+          carCard.photos?.length ? carCard.photos : carCard.importedPhotos
+        }
+      />
       <List
         style={{
           background: "var(--tgui--bg_color)",
         }}
       >
-        <PhotoGallery
-          photoUrls={
-            carCard.photos?.length ? carCard.photos : carCard.importedPhotos
-          }
-        />
+        {/*<PhotoGallery*/}
+        {/*  photoUrls={*/}
+        {/*    carCard.photos?.length ? carCard.photos : carCard.importedPhotos*/}
+        {/*  }*/}
+        {/*/>*/}
         <div className={classNames("flex", "flex-col", "items-center")}>
-          <Title level="3" weight="3">
+          <Title level="1" weight="3">
             {model?.value}
           </Title>
           <Text style={{ color: "var(--tgui--hint_color)" }}>
             {specification?.value}
           </Text>
         </div>
+      </List>
+      <List
+        style={{
+          background: "var(--tgui--secondary_bg_color)",
+        }}
+      >
         <Section header={"Хакартеристики авто:"}>
           <Cell
             subtitle={

@@ -1,15 +1,26 @@
 "use client";
 
-import { Card, List } from "@telegram-apps/telegram-ui";
+import { Button, Card, List } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
-import { useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CarCard } from "@/models/carCard";
+import { BucketContext } from "@/contexts/bucketContext";
+import { addToBucket } from "@/actions/bucket/addTo";
+import { getAuthorization } from "@/utils/getAuthorization";
+import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { deleteFromBucket } from "@/actions/bucket/deleteTo";
+import { getIsCarInBucket } from "@/utils/getIsCarInBucket";
+import { throttle } from "@/utils/throttle";
 
 export const CarCardItem = (props: CarCard) => {
+  const [loading, setIsLoading] = useState(false);
   const router = useRouter();
+  const lp = useLaunchParams();
+
+  const { bucket, update } = useContext(BucketContext);
 
   const modelName = useMemo(() => {
     let modelName = "";
@@ -28,6 +39,30 @@ export const CarCardItem = (props: CarCard) => {
 
   const onCardClick = () => {
     router.push(`/cars/${props.id}`);
+  };
+
+  const isCardInBucket = useMemo(
+    () => getIsCarInBucket(props.id, bucket),
+    [props.id, bucket],
+  );
+
+  const buttonClick = async (e: any) => {
+    e.stopPropagation();
+    const headers = getAuthorization(lp);
+    setIsLoading(true);
+    if (isCardInBucket) {
+      await deleteFromBucket(props.id, headers);
+      if (update) {
+        await update();
+      }
+    } else {
+      await addToBucket(props.id, headers);
+      if (update) {
+        await update();
+      }
+    }
+    await throttle();
+    setIsLoading(false);
   };
 
   return (
@@ -50,6 +85,16 @@ export const CarCardItem = (props: CarCard) => {
             ? "Узнать цену"
             : `${props.price} ${props.currency}`}
         </CardCell>
+        <Button
+          mode={isCardInBucket ? "gray" : "filled"}
+          size="m"
+          stretched
+          disabled={loading}
+          loading={loading}
+          onClick={buttonClick}
+        >
+          {isCardInBucket ? "Убрать из корзины" : "Добавить в корзину"}
+        </Button>
       </>
     </Card>
   );

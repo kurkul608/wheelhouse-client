@@ -13,7 +13,7 @@ export default async function Home({
 
   return (
     <Page>
-      <div style={{ background: "var(--tgui--bg_color)" }}>
+      <div style={{ background: "var(--tgui--secondary_bg_color)" }}>
         <CarCardList page={+sp.page} />
       </div>
     </Page>

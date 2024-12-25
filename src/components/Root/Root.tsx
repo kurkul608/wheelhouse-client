@@ -16,6 +16,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ErrorPage } from "@/components/ErrorPage";
 import { useRegister } from "@/hooks/useRegister";
 import { UserContext } from "@/contexts/userContext";
+import { BucketContext } from "@/contexts/bucketContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
@@ -35,14 +36,18 @@ function RootInner({ children }: PropsWithChildren) {
     }
   }, [initDataUser]);
 
-  const user = useRegister();
+  const [user, bucket, updateRegisterData] = useRegister();
 
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
       platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
     >
-      <UserContext.Provider value={user}>{children}</UserContext.Provider>
+      <UserContext.Provider value={{ user, update: updateRegisterData }}>
+        <BucketContext.Provider value={{ bucket, update: updateRegisterData }}>
+          {children}
+        </BucketContext.Provider>
+      </UserContext.Provider>
     </AppRoot>
   );
 }

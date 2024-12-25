@@ -1,11 +1,9 @@
 "use client";
 
-import { FC, useContext } from "react";
+import { FC } from "react";
 import Slider, { Settings } from "react-slick";
 import "./PhotoGallery.css";
 import ImageWithSkeleton from "@/components/ImageWithSkeleton";
-import { useMainButton } from "@/hooks/useMainButton";
-import { UserContext } from "@/contexts/userContext";
 
 interface PhotoGalleryPros {
   photoUrls: string[];
@@ -21,16 +19,6 @@ export const PhotoGallery: FC<PhotoGalleryPros> = ({ photoUrls }) => {
     dotsClass: "slick-dots photo-gallery-dots",
     className: "photo-gallery ",
   };
-
-  const user = useContext(UserContext);
-
-  useMainButton({
-    main: true,
-    text: "Добавить авто в список желаемого",
-    mainButtonOnClick: () => {
-      console.log(user);
-    },
-  });
 
   return (
     <Slider {...settings}>

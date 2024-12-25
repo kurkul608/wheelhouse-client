@@ -9,7 +9,7 @@ interface UseMainButtonProps {
   text: string;
   textColor?: RGBType;
   backgroundColor?: RGBType;
-  mainButtonOnClick?: () => void;
+  mainButtonOnClick?: (e: any) => void;
 }
 export const useMainButton = ({
   main,
@@ -51,19 +51,30 @@ export const useMainButton = ({
         mainButton.setParams({
           text: text,
           isVisible: false,
+          textColor: undefined,
+          backgroundColor: undefined,
         });
       }
     }
-  }, [main, isMainButtonMounted, text]);
+  }, [
+    main,
+    isMainButtonMounted,
+    text,
+    backgroundColor,
+    textColor,
+    isLoaderVisible,
+  ]);
 
   useEffect(() => {
     if (isMainButtonMounted) {
       const unsubscribe = mainButton.onClick(() => {
-        // router.back();
         mainButton.setParams({
           text: text,
           isVisible: false,
         });
+        // mainButton.
+        // mainButton.unmount();
+        // mainButton.mount();
       });
 
       return () => {
