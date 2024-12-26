@@ -1,10 +1,11 @@
 "use client";
 
-import "./navigation.css";
-import mainSvg from "@/app/_assets/main.svg";
-import bucketSvg from "@/app/_assets/bucket.svg";
-import wishlistSvg from "@/app/_assets/wishlist.svg";
 import { NavigationIcon } from "@/components/Navigation/NavigationIcon";
+import {
+  BucketSvg,
+  MainSvg,
+  WishlistSvg,
+} from "@/components/Navigation/NavigationIcon/Icons";
 
 export const Navigation = () => {
   const autoSearchParams = new URLSearchParams({
@@ -22,17 +23,13 @@ export const Navigation = () => {
     >
       <NavigationIcon
         href={`/cars?${autoSearchParams.toString()}`}
-        svrSrc={mainSvg.src}
+        icon={<MainSvg />}
         text={"Главная"}
       />
-      <NavigationIcon
-        href={`/bucket`}
-        svrSrc={bucketSvg.src}
-        text={"Корзина"}
-      />
+      <NavigationIcon href={`/bucket`} icon={<BucketSvg />} text={"Корзина"} />
       <NavigationIcon
         href={`/wishlist`}
-        svrSrc={wishlistSvg.src}
+        icon={<WishlistSvg />}
         text={"Избранное"}
       />
     </nav>

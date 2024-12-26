@@ -1,9 +1,9 @@
 import { Page } from "@/components/Page";
-import { Bucket as BucketComponent } from "@/components/Bucket";
 import { getCarsPageUrl } from "@/utils/getCarsPageUrl";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Wishlist } from "@/components/Wishlist";
 
-export default async function Bucket() {
+export default async function WishlistPage() {
   return (
     <Page>
       <div
@@ -16,10 +16,11 @@ export default async function Bucket() {
               name: "Главная",
               href: getCarsPageUrl(),
             },
-            { name: "Корзина" },
+            { name: "Избранное" },
           ]}
         />
-        <BucketComponent />
+
+        <Wishlist />
       </div>
     </Page>
   );

@@ -75,8 +75,8 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
       setShowWishlistSnackBar({
         state: true,
         text: isCarCardInWishlist
-          ? "Удалено из списока желаемого"
-          : "Добавлено в список желаемого",
+          ? "Удалено из избранного"
+          : "Добавлено в избранное",
       });
     }
 
@@ -172,7 +172,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
           }
           link={
             <Link href={"/wishlist"} className={"text-xs"}>
-              Открыть список желаемого
+              Открыть избранное
             </Link>
           }
         >

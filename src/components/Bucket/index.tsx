@@ -3,13 +3,12 @@
 import { useContext } from "react";
 import { BucketContext } from "@/contexts/bucketContext";
 import { Avatar, Cell, Section } from "@telegram-apps/telegram-ui";
-import trashSvg from "@/app/_assets/trash.svg";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { deleteFromBucket } from "@/actions/bucket/deleteTo";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { useMainButton } from "@/hooks/useMainButton";
+import { TrashSvg } from "@/components/Bucket/Icons";
 
 export const Bucket = () => {
   const lp = useLaunchParams();
@@ -59,7 +58,7 @@ export const Bucket = () => {
             }
             onClick={onCellClick}
             after={
-              <Image
+              <TrashSvg
                 onClick={async (e) => {
                   e.stopPropagation();
                   const headers = getAuthorization(lp);
@@ -68,10 +67,6 @@ export const Bucket = () => {
                     await update();
                   }
                 }}
-                src={trashSvg.src}
-                alt={"Trash icon"}
-                width={22}
-                height={22}
               />
             }
           >

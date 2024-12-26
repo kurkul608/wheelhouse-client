@@ -140,5 +140,9 @@ export const CarCardListItem = (props: CarCard) => {
 };
 
 export const CarCardItemList = ({ list }: { list: CarCard[] }) => {
-  return <List>{list.map(CarCardListItem)}</List>;
+  return (
+    <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+      {list.map(CarCardListItem)}
+    </List>
+  );
 };
