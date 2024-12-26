@@ -3,7 +3,7 @@
 import wishlistSvg from "@/app/_assets/wishlist.svg";
 import wishlistActiveSvg from "@/app/_assets/wishlistActive.svg";
 import wishlistDisableSvg from "@/app/_assets/wishlistDisable.svg";
-import bucketSvg from "@/app/_assets/bucker.svg";
+import bucketSvg from "@/app/_assets/bucket.svg";
 import shareButtonSvg from "@/app/_assets/shareButton.svg";
 import Image from "next/image";
 import { FC, useContext, useEffect, useMemo, useState } from "react";
@@ -171,7 +171,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
             </Snackbar.Button>
           }
           link={
-            <Link href={"/wishlist"} className={"size-3"}>
+            <Link href={"/wishlist"} className={"text-xs"}>
               Открыть список желаемого
             </Link>
           }
@@ -196,7 +196,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
             });
           }}
           link={
-            <Link href={"/bucket"} className={"size-3"}>
+            <Link href={"/bucket"} className={"text-xs"}>
               Открыть корзину
             </Link>
           }

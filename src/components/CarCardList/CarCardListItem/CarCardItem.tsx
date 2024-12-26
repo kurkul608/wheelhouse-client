@@ -13,11 +13,10 @@ import { getAuthorization } from "@/utils/getAuthorization";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { deleteFromBucket } from "@/actions/bucket/deleteTo";
 import { getIsCarInBucket } from "@/utils/getIsCarInBucket";
-import { throttle } from "@/utils/throttle";
-import bucketSvg from "@/app/_assets/bucker.svg";
+import bucketSvg from "@/app/_assets/bucket.svg";
 import { Link } from "@/components/Link/Link";
 
-export const CarCardItem = (props: CarCard) => {
+export const CarCardListItem = (props: CarCard) => {
   const [loading, setIsLoading] = useState(false);
   const [showBucketSnackBar, setShowBucketSnackBar] = useState({
     state: false,
@@ -128,7 +127,7 @@ export const CarCardItem = (props: CarCard) => {
             });
           }}
           link={
-            <Link href={"/bucket"} className={"size-3"}>
+            <Link href={"/bucket"} className={"text-xs"}>
               Открыть корзину
             </Link>
           }
@@ -141,5 +140,5 @@ export const CarCardItem = (props: CarCard) => {
 };
 
 export const CarCardItemList = ({ list }: { list: CarCard[] }) => {
-  return <List>{list.map(CarCardItem)}</List>;
+  return <List>{list.map(CarCardListItem)}</List>;
 };

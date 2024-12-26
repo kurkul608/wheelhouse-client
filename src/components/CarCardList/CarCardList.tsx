@@ -1,5 +1,5 @@
 import { getCarCardsList } from "@/actions/carCard/getList";
-import { CarCardItemList } from "@/components/CarCardItem/CarCardItem";
+import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItem";
 
 interface CarCardListProps {
   filters?: {

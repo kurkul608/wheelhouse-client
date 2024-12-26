@@ -18,6 +18,7 @@ import { useRegister } from "@/hooks/useRegister";
 import { UserContext } from "@/contexts/userContext";
 import { BucketContext } from "@/contexts/bucketContext";
 import { WishlistContext } from "@/contexts/wishlistContext";
+import { Navigation } from "@/components/Navigation";
 
 function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
@@ -50,6 +51,7 @@ function RootInner({ children }: PropsWithChildren) {
             value={{ wishlist, update: updateRegisterData }}
           >
             {children}
+            <Navigation />
           </WishlistContext.Provider>
         </BucketContext.Provider>
       </UserContext.Provider>

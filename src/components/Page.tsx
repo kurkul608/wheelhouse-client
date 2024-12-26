@@ -54,5 +54,5 @@ export function Page({
     }
   }, [router, isBackButtonMounted]);
 
-  return <>{children}</>;
+  return <div className={"pb-[62px]"}>{children}</div>;
 }

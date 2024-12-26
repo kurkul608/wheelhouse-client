@@ -31,6 +31,7 @@ const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
         alt={alt}
         width={width}
         height={height}
+        unoptimized
         onLoad={() => setLoading(false)}
         style={loading ? { display: "none" } : {}}
         priority

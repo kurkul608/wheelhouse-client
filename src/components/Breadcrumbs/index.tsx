@@ -2,10 +2,9 @@
 
 import { Breadcrumbs as TGBreadcrumbs } from "@telegram-apps/telegram-ui";
 import { BreadCrumbsItem } from "@telegram-apps/telegram-ui/dist/components/Navigation/Breadcrumbs/components/BreadCrumbsItem/BreadCrumbsItem";
-import { FC } from "react";
+import { FC, PropsWithChildren } from "react";
 import { useRouter } from "next/navigation";
 import "./breadcrumbs.css";
-import { CarItemActions } from "@/components/CarItemActions";
 
 interface IBreadcrumbsItem {
   name: string;
@@ -15,10 +14,16 @@ interface IBreadcrumbsItem {
 interface BreadcrumbsProps {
   items: IBreadcrumbsItem[];
 }
-export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
+export const Breadcrumbs: FC<PropsWithChildren<BreadcrumbsProps>> = ({
+  items,
+  children,
+}) => {
   const router = useRouter();
   return (
-    <div className={"mb-2 breadcrumbs-container relative w-full"}>
+    <div
+      className={"breadcrumbs-container relative w-full"}
+      style={{ backgroundColor: "var(--tgui--bg_color)" }}
+    >
       <TGBreadcrumbs>
         {items.map((item) => (
           <BreadCrumbsItem
@@ -38,7 +43,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
           </BreadCrumbsItem>
         ))}
       </TGBreadcrumbs>
-      <CarItemActions />
+      {children}
     </div>
   );
 };

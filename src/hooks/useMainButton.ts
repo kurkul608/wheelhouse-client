@@ -72,6 +72,9 @@ export const useMainButton = ({
           text: text,
           isVisible: false,
         });
+        if (mainButtonOnClick) {
+          mainButton.offClick(mainButtonOnClick);
+        }
         // mainButton.
         // mainButton.unmount();
         // mainButton.mount();
