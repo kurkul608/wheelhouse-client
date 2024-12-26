@@ -1,6 +1,6 @@
 "use client";
 
-import { backButton } from "@telegram-apps/sdk-react";
+import { backButton, mainButton } from "@telegram-apps/sdk-react";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -41,6 +41,10 @@ export function Page({
   useEffect(() => {
     if (isBackButtonMounted) {
       const unsubscribe = backButton.onClick(() => {
+        if (mainButton.isMounted() && mainButton.isVisible()) {
+          mainButton.setParams({ isVisible: false });
+          mainButton.onClick(() => {});
+        }
         router.back();
       });
 

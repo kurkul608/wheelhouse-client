@@ -14,6 +14,10 @@ import { setLocale } from "@/core/i18n/locale";
 import { useDidMount } from "@/hooks/useDidMount";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ErrorPage } from "@/components/ErrorPage";
+import { useRegister } from "@/hooks/useRegister";
+import { UserContext } from "@/contexts/userContext";
+import { BucketContext } from "@/contexts/bucketContext";
+import { WishlistContext } from "@/contexts/wishlistContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
@@ -33,12 +37,22 @@ function RootInner({ children }: PropsWithChildren) {
     }
   }, [initDataUser]);
 
+  const [user, bucket, wishlist, updateRegisterData] = useRegister();
+
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
       platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
     >
-      {children}
+      <UserContext.Provider value={{ user, update: updateRegisterData }}>
+        <BucketContext.Provider value={{ bucket, update: updateRegisterData }}>
+          <WishlistContext.Provider
+            value={{ wishlist, update: updateRegisterData }}
+          >
+            {children}
+          </WishlistContext.Provider>
+        </BucketContext.Provider>
+      </UserContext.Provider>
     </AppRoot>
   );
 }

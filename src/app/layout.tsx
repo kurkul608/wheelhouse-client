@@ -6,6 +6,8 @@ import "normalize.css/normalize.css";
 import { Root } from "@/components/Root/Root";
 
 import "./_assets/globals.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
