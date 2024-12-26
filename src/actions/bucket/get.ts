@@ -1,3 +1,5 @@
+"use server";
+
 import { Bucket } from "@/models/bucket";
 
 export async function getBucket(

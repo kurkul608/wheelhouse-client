@@ -17,6 +17,7 @@ import { ErrorPage } from "@/components/ErrorPage";
 import { useRegister } from "@/hooks/useRegister";
 import { UserContext } from "@/contexts/userContext";
 import { BucketContext } from "@/contexts/bucketContext";
+import { WishlistContext } from "@/contexts/wishlistContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
@@ -36,7 +37,7 @@ function RootInner({ children }: PropsWithChildren) {
     }
   }, [initDataUser]);
 
-  const [user, bucket, updateRegisterData] = useRegister();
+  const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
   return (
     <AppRoot
@@ -45,7 +46,11 @@ function RootInner({ children }: PropsWithChildren) {
     >
       <UserContext.Provider value={{ user, update: updateRegisterData }}>
         <BucketContext.Provider value={{ bucket, update: updateRegisterData }}>
-          {children}
+          <WishlistContext.Provider
+            value={{ wishlist, update: updateRegisterData }}
+          >
+            {children}
+          </WishlistContext.Provider>
         </BucketContext.Provider>
       </UserContext.Provider>
     </AppRoot>

@@ -3,18 +3,24 @@
 import wishlistSvg from "@/app/_assets/wishlist.svg";
 import wishlistActiveSvg from "@/app/_assets/wishlistActive.svg";
 import wishlistDisableSvg from "@/app/_assets/wishlistDisable.svg";
-import wishlistButtonSvg from "@/app/_assets/shareButton.svg";
+import bucketSvg from "@/app/_assets/bucker.svg";
+import shareButtonSvg from "@/app/_assets/shareButton.svg";
 import Image from "next/image";
-import { FC, useContext, useMemo, useState } from "react";
-import { UserContext } from "@/contexts/userContext";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
 import { useMainButton } from "@/hooks/useMainButton";
 import { useParams } from "next/navigation";
 import { BucketContext } from "@/contexts/bucketContext";
 import { addToBucket as addToBucketAction } from "@/actions/bucket/addTo";
+import { addToWishlist as addToWishlistAction } from "@/actions/wishlist/addTo";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { getIsCarInBucket } from "@/utils/getIsCarInBucket";
 import { deleteFromBucket } from "@/actions/bucket/deleteTo";
+import { WishlistContext } from "@/contexts/wishlistContext";
+import { deleteFromWishlist } from "@/actions/wishlist/deleteTo";
+import { getIsCarInWishlist } from "@/utils/getIsCarInWishlist";
+import { Snackbar } from "@telegram-apps/telegram-ui";
+import { Link } from "@/components/Link/Link";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
@@ -23,6 +29,15 @@ interface CarItemActionsProps {
 export const CarItemActions: FC<CarItemActionsProps> = ({
   wishlistDefaultState,
 }) => {
+  const [showBucketSnackBar, setShowBucketSnackBar] = useState({
+    state: false,
+    text: "",
+  });
+  const [showWishlistSnackBar, setShowWishlistSnackBar] = useState({
+    state: false,
+    text: "",
+  });
+
   const [wishListSrc, setWishListSrc] = useState(
     wishlistDefaultState ? wishlistActiveSvg.src : wishlistSvg.src,
   );
@@ -30,24 +45,58 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   const params = useParams();
   const carId = params.slug;
 
-  const { user } = useContext(UserContext);
   const { bucket, update: bucketUpdate } = useContext(BucketContext);
+  const { wishlist, update: wishlistUpdate } = useContext(WishlistContext);
+
+  useEffect(() => {
+    const isCarCardInWishlist = getIsCarInWishlist(carId as string, wishlist);
+    console.log(isCarCardInWishlist);
+    if (isCarCardInWishlist) {
+      setWishListSrc(wishlistActiveSvg.src);
+    } else {
+      setWishListSrc(wishlistSvg.src);
+    }
+  }, [carId, wishlist]);
 
   const lp = useLaunchParams();
 
-  // console.log(bucket);
-  // console.log(bucketUpdate);
+  const addToWishList = async (ignoreShowSnackbar?: boolean) => {
+    setWishListSrc(wishlistDisableSvg.src);
+    const headers = getAuthorization(lp);
+    const isCarCardInWishlist = getIsCarInWishlist(carId as string, wishlist);
 
-  const addToWishList = () => {
-    console.log("user: ", user);
-    console.log("add to wishlist: ", carId);
+    if (isCarCardInWishlist) {
+      await deleteFromWishlist(carId as string, headers);
+    } else {
+      await addToWishlistAction(carId as string, headers);
+    }
+
+    if (!ignoreShowSnackbar) {
+      setShowWishlistSnackBar({
+        state: true,
+        text: isCarCardInWishlist
+          ? "Удалено из списока желаемого"
+          : "Добавлено в список желаемого",
+      });
+    }
+
+    if (wishlistUpdate) {
+      await wishlistUpdate();
+    }
   };
 
-  const addToBucket = async () => {
+  const addToBucket = async (ignoreShowSnackbar?: boolean) => {
     const headers = getAuthorization(lp);
     await addToBucketAction(carId as string, headers);
     if (bucketUpdate) {
       await bucketUpdate();
+    }
+
+    if (!ignoreShowSnackbar) {
+      setShowBucketSnackBar({
+        state: true,
+        text: "Добавлено в корзину",
+      });
     }
   };
 
@@ -81,14 +130,80 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
         alt={"wishlist-icon"}
         width={16}
         height={16}
-        onClick={addToWishList}
+        onClick={() => {
+          addToWishList();
+        }}
       />
       <Image
-        src={wishlistButtonSvg.src}
+        src={shareButtonSvg.src}
         alt={"share-button-icon"}
         width={16}
         height={16}
       />
+      {showWishlistSnackBar.state && (
+        <Snackbar
+          before={
+            <Image
+              src={wishlistActiveSvg.src}
+              alt={"wishlist-icon"}
+              width={20}
+              height={20}
+            />
+          }
+          onClose={() => {
+            setShowWishlistSnackBar({
+              state: false,
+              text: "",
+            });
+          }}
+          after={
+            <Snackbar.Button
+              onClick={() => {
+                addToWishList(true).then(() => {
+                  setShowWishlistSnackBar({
+                    state: false,
+                    text: "",
+                  });
+                });
+              }}
+            >
+              Отменить
+            </Snackbar.Button>
+          }
+          link={
+            <Link href={"/wishlist"} className={"size-3"}>
+              Открыть список желаемого
+            </Link>
+          }
+        >
+          <div className={"size-4 w-full"}>{showWishlistSnackBar.text}</div>
+        </Snackbar>
+      )}
+      {showBucketSnackBar.state && (
+        <Snackbar
+          before={
+            <Image
+              src={bucketSvg.src}
+              alt={"bucket-icon"}
+              width={20}
+              height={20}
+            />
+          }
+          onClose={() => {
+            setShowBucketSnackBar({
+              state: false,
+              text: "",
+            });
+          }}
+          link={
+            <Link href={"/bucket"} className={"size-3"}>
+              Открыть корзину
+            </Link>
+          }
+        >
+          <div className={"size-4 w-full"}>{showBucketSnackBar.text}</div>
+        </Snackbar>
+      )}
     </div>
   );
 };

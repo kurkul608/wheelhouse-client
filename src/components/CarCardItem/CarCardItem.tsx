@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, Card, List } from "@telegram-apps/telegram-ui";
+import { Button, Card, List, Snackbar } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import { CarCard } from "@/models/carCard";
 import { BucketContext } from "@/contexts/bucketContext";
@@ -14,9 +14,16 @@ import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { deleteFromBucket } from "@/actions/bucket/deleteTo";
 import { getIsCarInBucket } from "@/utils/getIsCarInBucket";
 import { throttle } from "@/utils/throttle";
+import bucketSvg from "@/app/_assets/bucker.svg";
+import { Link } from "@/components/Link/Link";
 
 export const CarCardItem = (props: CarCard) => {
   const [loading, setIsLoading] = useState(false);
+  const [showBucketSnackBar, setShowBucketSnackBar] = useState({
+    state: false,
+    text: "",
+  });
+
   const router = useRouter();
   const lp = useLaunchParams();
 
@@ -61,42 +68,75 @@ export const CarCardItem = (props: CarCard) => {
         await update();
       }
     }
-    await throttle();
+
+    setShowBucketSnackBar({
+      state: true,
+      text: isCardInBucket ? "Удалено из корзины" : "Добавлено в корзину",
+    });
+
     setIsLoading(false);
   };
 
   return (
-    <Card key={props.id} className={"w-full"} onClick={onCardClick}>
-      <>
-        <CardChip>{props.inStock ? "В наличии" : "Под заказ"}</CardChip>
-        <Image
-          src={props.importedPhotos[0] || props.photos[0]}
-          alt={"Фото авто"}
-          width={254}
-          height={308}
-          style={{
-            display: "block",
-            objectFit: "cover",
+    <Fragment key={props.id}>
+      <Card className={"w-full"} onClick={onCardClick}>
+        <>
+          <CardChip>{props.inStock ? "В наличии" : "Под заказ"}</CardChip>
+          <Image
+            src={props.importedPhotos[0] || props.photos[0]}
+            alt={"Фото авто"}
+            width={254}
+            height={308}
+            style={{
+              display: "block",
+              objectFit: "cover",
+            }}
+            className={"w-full"}
+          />
+          <CardCell readOnly subtitle={modelName}>
+            {!!props.externalId || !props.price
+              ? "Узнать цену"
+              : `${props.price} ${props.currency}`}
+          </CardCell>
+          <Button
+            mode={isCardInBucket ? "gray" : "filled"}
+            size="m"
+            stretched
+            disabled={loading}
+            loading={loading}
+            onClick={buttonClick}
+          >
+            {isCardInBucket ? "Убрать из корзины" : "Добавить в корзину"}
+          </Button>
+        </>
+      </Card>
+
+      {showBucketSnackBar.state && (
+        <Snackbar
+          before={
+            <Image
+              src={bucketSvg.src}
+              alt={"bucket-icon"}
+              width={20}
+              height={20}
+            />
+          }
+          onClose={() => {
+            setShowBucketSnackBar({
+              state: false,
+              text: "",
+            });
           }}
-          className={"w-full"}
-        />
-        <CardCell readOnly subtitle={modelName}>
-          {!!props.externalId || !props.price
-            ? "Узнать цену"
-            : `${props.price} ${props.currency}`}
-        </CardCell>
-        <Button
-          mode={isCardInBucket ? "gray" : "filled"}
-          size="m"
-          stretched
-          disabled={loading}
-          loading={loading}
-          onClick={buttonClick}
+          link={
+            <Link href={"/bucket"} className={"size-3"}>
+              Открыть корзину
+            </Link>
+          }
         >
-          {isCardInBucket ? "Убрать из корзины" : "Добавить в корзину"}
-        </Button>
-      </>
-    </Card>
+          <div className={"size-4 w-full"}>{showBucketSnackBar.text}</div>
+        </Snackbar>
+      )}
+    </Fragment>
   );
 };
 

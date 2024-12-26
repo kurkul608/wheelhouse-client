@@ -1,3 +1,5 @@
+"use server";
+
 import { User } from "@/models/user";
 
 export async function registerUser(headers: HeadersInit): Promise<User> {
