@@ -14,7 +14,7 @@ import { classNames, RGB as RGBType } from "@telegram-apps/sdk-react";
 import { RGB } from "@/components/RGB/RGB";
 import { FC } from "react";
 import { CarCard } from "@/models/carCard";
-import { CarItemActions } from "@/components/CarCardList/CarItemActions";
+import { CarItemActions } from "@/components/CarCardItem/CarItemActions";
 
 interface CarCardItemProps {
   carCard: CarCard;

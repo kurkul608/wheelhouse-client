@@ -7,7 +7,7 @@ import {
   useSignal,
   initData,
 } from "@telegram-apps/sdk-react";
-import { AppRoot } from "@telegram-apps/telegram-ui";
+import { AppRoot, Spinner } from "@telegram-apps/telegram-ui";
 import { useClientOnce } from "@/hooks/useClientOnce";
 import { init } from "@/core/init";
 import { setLocale } from "@/core/i18n/locale";
@@ -19,8 +19,12 @@ import { UserContext } from "@/contexts/userContext";
 import { BucketContext } from "@/contexts/bucketContext";
 import { WishlistContext } from "@/contexts/wishlistContext";
 import { Navigation } from "@/components/Navigation";
+import { usePathname } from "next/navigation";
+import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
+import { useCarCardsFilters } from "@/hooks/useCarCardsFilters";
 
 function RootInner({ children }: PropsWithChildren) {
+  const pathname = usePathname();
   const isDev = process.env.NODE_ENV === "development";
   const lp = useLaunchParams();
   const debug = isDev || lp.startParam === "debug";
@@ -40,6 +44,8 @@ function RootInner({ children }: PropsWithChildren) {
 
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
+  const { stockFilter, update: updateCarCardsFilter } = useCarCardsFilters();
+
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
@@ -50,8 +56,20 @@ function RootInner({ children }: PropsWithChildren) {
           <WishlistContext.Provider
             value={{ wishlist, update: updateRegisterData }}
           >
-            {children}
-            <Navigation />
+            <CarCardsFiltersContext.Provider
+              value={{ stockFilter, update: updateCarCardsFilter }}
+            >
+              {user == null || bucket === null || wishlist === null ? (
+                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                  <Spinner size="l" />
+                </div>
+              ) : (
+                <>
+                  {children}
+                  {pathname !== "/" && <Navigation />}
+                </>
+              )}
+            </CarCardsFiltersContext.Provider>
           </WishlistContext.Provider>
         </BucketContext.Provider>
       </UserContext.Provider>

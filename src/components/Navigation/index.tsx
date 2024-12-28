@@ -2,7 +2,6 @@
 
 import { NavigationIcon } from "@/components/Navigation/NavigationIcon";
 import {
-  BucketSvg,
   MainSvg,
   WishlistSvg,
 } from "@/components/Navigation/NavigationIcon/Icons";
@@ -26,7 +25,6 @@ export const Navigation = () => {
         icon={<MainSvg />}
         text={"Главная"}
       />
-      <NavigationIcon href={`/bucket`} icon={<BucketSvg />} text={"Корзина"} />
       <NavigationIcon
         href={`/wishlist`}
         icon={<WishlistSvg />}

@@ -1,14 +1,8 @@
 import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItem";
 
-interface CarCardListProps {
-  filters?: {
-    [x: string]: string;
-  };
-  page: number;
-}
+export async function CarCardList() {
+  const initialUsers = await getCarCardsList(0, { stockFilter: "all" });
 
-export async function CarCardList({ page }: CarCardListProps) {
-  const data = await getCarCardsList(page);
-  return data.length ? <CarCardItemList list={data} /> : null;
+  return <CarCardItemList initialList={initialUsers} isScrollActive={true} />;
 }

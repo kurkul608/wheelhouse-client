@@ -9,5 +9,5 @@ export const Wishlist = () => {
   const carCardsList = wishlist?.WishlistCarCard.map(
     (carCard) => carCard.carCard,
   );
-  return carCardsList ? <CarCardItemList list={carCardsList} /> : null;
+  return carCardsList ? <CarCardItemList initialList={carCardsList} /> : null;
 };

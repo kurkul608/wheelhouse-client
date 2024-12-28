@@ -29,10 +29,6 @@ interface CarItemActionsProps {
 export const CarItemActions: FC<CarItemActionsProps> = ({
   wishlistDefaultState,
 }) => {
-  const [showBucketSnackBar, setShowBucketSnackBar] = useState({
-    state: false,
-    text: "",
-  });
   const [showWishlistSnackBar, setShowWishlistSnackBar] = useState({
     state: false,
     text: "",
@@ -45,12 +41,10 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   const params = useParams();
   const carId = params.slug;
 
-  const { bucket, update: bucketUpdate } = useContext(BucketContext);
   const { wishlist, update: wishlistUpdate } = useContext(WishlistContext);
 
   useEffect(() => {
     const isCarCardInWishlist = getIsCarInWishlist(carId as string, wishlist);
-    console.log(isCarCardInWishlist);
     if (isCarCardInWishlist) {
       setWishListSrc(wishlistActiveSvg.src);
     } else {
@@ -85,42 +79,12 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
     }
   };
 
-  const addToBucket = async (ignoreShowSnackbar?: boolean) => {
-    const headers = getAuthorization(lp);
-    await addToBucketAction(carId as string, headers);
-    if (bucketUpdate) {
-      await bucketUpdate();
-    }
-
-    if (!ignoreShowSnackbar) {
-      setShowBucketSnackBar({
-        state: true,
-        text: "Добавлено в корзину",
-      });
-    }
-  };
-
-  const removeFromBucket = async () => {
-    const headers = getAuthorization(lp);
-    await deleteFromBucket(carId as string, headers);
-    if (bucketUpdate) {
-      await bucketUpdate();
-    }
-  };
-
-  const isCarInBucket = useMemo(
-    () => getIsCarInBucket(carId as string, bucket),
-    [bucket, carId],
-  );
-
   useMainButton({
-    main: isCarInBucket ? false : !!carId,
-    text: isCarInBucket ? "Убрать из корзины" : "Добавить в корзину",
-    ...(isCarInBucket ? {} : {}),
-    backgroundColor: isCarInBucket
-      ? lp.themeParams.hintColor
-      : lp.themeParams.buttonColor,
-    mainButtonOnClick: isCarInBucket ? removeFromBucket : addToBucket,
+    main: true,
+    text: "Нажать, чтобы менеджер связался с вами",
+    mainButtonOnClick: () => {
+      "Кнпока для свзяи с менеджером";
+    },
   });
 
   return (
@@ -177,31 +141,6 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
           }
         >
           <div className={"size-4 w-full"}>{showWishlistSnackBar.text}</div>
-        </Snackbar>
-      )}
-      {showBucketSnackBar.state && (
-        <Snackbar
-          before={
-            <Image
-              src={bucketSvg.src}
-              alt={"bucket-icon"}
-              width={20}
-              height={20}
-            />
-          }
-          onClose={() => {
-            setShowBucketSnackBar({
-              state: false,
-              text: "",
-            });
-          }}
-          link={
-            <Link href={"/bucket"} className={"text-xs"}>
-              Открыть корзину
-            </Link>
-          }
-        >
-          <div className={"size-4 w-full"}>{showBucketSnackBar.text}</div>
         </Snackbar>
       )}
     </div>

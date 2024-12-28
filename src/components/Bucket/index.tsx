@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import { BucketContext } from "@/contexts/bucketContext";
-import { Avatar, Cell, Section } from "@telegram-apps/telegram-ui";
+import { Avatar, Cell, Section, Text } from "@telegram-apps/telegram-ui";
 import { useRouter } from "next/navigation";
 import { deleteFromBucket } from "@/actions/bucket/deleteTo";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
@@ -16,14 +16,14 @@ export const Bucket = () => {
   const router = useRouter();
 
   useMainButton({
-    main: true,
+    main: !!(bucket && bucket.BucketCarCard.length),
     text: "Продолжить оформление",
     mainButtonOnClick: () => {
       console.log("Продолжить оформление нажато ");
     },
   });
 
-  return (
+  return bucket && bucket.BucketCarCard.length ? (
     <Section
       header={"Ваша корзина:"}
       footer={
@@ -75,5 +75,9 @@ export const Bucket = () => {
         );
       })}
     </Section>
+  ) : (
+    <div className={"h-full flex items-center justify-center"}>
+      <Text>Ваша корзина пуста</Text>
+    </div>
   );
 };

@@ -1,32 +1,24 @@
 "use client";
 
-import { Button, Card, List, Snackbar } from "@telegram-apps/telegram-ui";
+import {
+  Button,
+  Card,
+  CircularProgress,
+  List,
+  Text,
+} from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
-import { useContext, useMemo, useState, Fragment } from "react";
+import { useMemo, Fragment, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { CarCard } from "@/models/carCard";
-import { BucketContext } from "@/contexts/bucketContext";
-import { addToBucket } from "@/actions/bucket/addTo";
-import { getAuthorization } from "@/utils/getAuthorization";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { deleteFromBucket } from "@/actions/bucket/deleteTo";
-import { getIsCarInBucket } from "@/utils/getIsCarInBucket";
-import bucketSvg from "@/app/_assets/bucket.svg";
-import { Link } from "@/components/Link/Link";
+import { WishlistButton } from "@/components/CarCardList/CarCardListItem/WishlistButton/imdex";
+import { getCarCardsList } from "@/actions/carCard/getList";
+import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 
 export const CarCardListItem = (props: CarCard) => {
-  const [loading, setIsLoading] = useState(false);
-  const [showBucketSnackBar, setShowBucketSnackBar] = useState({
-    state: false,
-    text: "",
-  });
-
   const router = useRouter();
-  const lp = useLaunchParams();
-
-  const { bucket, update } = useContext(BucketContext);
 
   const modelName = useMemo(() => {
     let modelName = "";
@@ -47,102 +39,86 @@ export const CarCardListItem = (props: CarCard) => {
     router.push(`/cars/${props.id}`);
   };
 
-  const isCardInBucket = useMemo(
-    () => getIsCarInBucket(props.id, bucket),
-    [props.id, bucket],
-  );
-
-  const buttonClick = async (e: any) => {
-    e.stopPropagation();
-    const headers = getAuthorization(lp);
-    setIsLoading(true);
-    if (isCardInBucket) {
-      await deleteFromBucket(props.id, headers);
-      if (update) {
-        await update();
-      }
-    } else {
-      await addToBucket(props.id, headers);
-      if (update) {
-        await update();
-      }
-    }
-
-    setShowBucketSnackBar({
-      state: true,
-      text: isCardInBucket ? "Удалено из корзины" : "Добавлено в корзину",
-    });
-
-    setIsLoading(false);
-  };
-
   return (
     <Fragment key={props.id}>
       <Card className={"w-full"} onClick={onCardClick}>
-        <>
-          <CardChip>{props.inStock ? "В наличии" : "Под заказ"}</CardChip>
-          <Image
-            src={props.importedPhotos[0] || props.photos[0]}
-            alt={"Фото авто"}
-            width={254}
-            height={308}
-            style={{
-              display: "block",
-              objectFit: "cover",
-            }}
-            className={"w-full"}
-          />
-          <CardCell readOnly subtitle={modelName}>
-            {!!props.externalId || !props.price
-              ? "Узнать цену"
-              : `${props.price} ${props.currency}`}
-          </CardCell>
-          <Button
-            mode={isCardInBucket ? "gray" : "filled"}
-            size="m"
-            stretched
-            disabled={loading}
-            loading={loading}
-            onClick={buttonClick}
-          >
-            {isCardInBucket ? "Убрать из корзины" : "Добавить в корзину"}
-          </Button>
-        </>
-      </Card>
-
-      {showBucketSnackBar.state && (
-        <Snackbar
-          before={
-            <Image
-              src={bucketSvg.src}
-              alt={"bucket-icon"}
-              width={20}
-              height={20}
-            />
-          }
-          onClose={() => {
-            setShowBucketSnackBar({
-              state: false,
-              text: "",
-            });
+        <CardChip after={<WishlistButton carCardId={props.id} />}>
+          {props.inStock ? "В наличии" : "Под заказ"}
+        </CardChip>
+        <Image
+          src={props.importedPhotos[0] || props.photos[0]}
+          alt={"Фото авто"}
+          width={254}
+          height={308}
+          style={{
+            display: "block",
+            objectFit: "cover",
           }}
-          link={
-            <Link href={"/bucket"} className={"text-xs"}>
-              Открыть корзину
-            </Link>
-          }
-        >
-          <div className={"size-4 w-full"}>{showBucketSnackBar.text}</div>
-        </Snackbar>
-      )}
+          className={"w-full"}
+        />
+        <CardCell readOnly subtitle={modelName}>
+          {!!props.externalId || !props.price
+            ? "Узнать цену"
+            : `${props.price} ${props.currency}`}
+        </CardCell>
+      </Card>
     </Fragment>
   );
 };
 
-export const CarCardItemList = ({ list }: { list: CarCard[] }) => {
-  return (
+export const CarCardItemList = ({
+  initialList,
+  isScrollActive,
+}: {
+  initialList: CarCard[];
+  isScrollActive: boolean;
+}) => {
+  const { stockFilter } = useContext(CarCardsFiltersContext);
+
+  const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [list, setList] = useState<CarCard[]>(initialList);
+
+  const loadMoreCars = async (newPage?: number, newList?: CarCard[]) => {
+    setIsLoading(true);
+    const apiCarCards = await getCarCardsList(newPage ?? page, { stockFilter });
+    setList([...(newList ?? list), ...apiCarCards]);
+    setPage(newPage ?? page + 1);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (isScrollActive) {
+      setList([]);
+      setPage(0);
+      loadMoreCars(0, []);
+    }
+  }, [isScrollActive, stockFilter]);
+
+  return list.length ? (
     <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
-      {list.map(CarCardListItem)}
+      {list.map((carCard, index) => (
+        <CarCardListItem {...carCard} key={`car-card-${index}`} />
+      ))}
+      {isScrollActive && (
+        <div className={"flex justify-center items-center"}>
+          <Button
+            onClick={() => {
+              loadMoreCars();
+            }}
+          >
+            Загрузить еще
+          </Button>
+        </div>
+      )}
     </List>
+  ) : isLoading ? (
+    <div className={"h-full flex items-center justify-center"}>
+      <CircularProgress />
+    </div>
+  ) : (
+    <div className={"h-full flex items-center justify-center"}>
+      <Text>Ниего не найдено</Text>
+    </div>
   );
 };
