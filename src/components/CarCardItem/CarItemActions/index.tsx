@@ -3,24 +3,21 @@
 import wishlistSvg from "@/app/_assets/wishlist.svg";
 import wishlistActiveSvg from "@/app/_assets/wishlistActive.svg";
 import wishlistDisableSvg from "@/app/_assets/wishlistDisable.svg";
-import bucketSvg from "@/app/_assets/bucket.svg";
 import shareButtonSvg from "@/app/_assets/shareButton.svg";
 import Image from "next/image";
-import { FC, useContext, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useMainButton } from "@/hooks/useMainButton";
 import { useParams } from "next/navigation";
-import { BucketContext } from "@/contexts/bucketContext";
-import { addToBucket as addToBucketAction } from "@/actions/bucket/addTo";
 import { addToWishlist as addToWishlistAction } from "@/actions/wishlist/addTo";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { useLaunchParams, shareURL } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
-import { getIsCarInBucket } from "@/utils/getIsCarInBucket";
-import { deleteFromBucket } from "@/actions/bucket/deleteTo";
 import { WishlistContext } from "@/contexts/wishlistContext";
 import { deleteFromWishlist } from "@/actions/wishlist/deleteTo";
 import { getIsCarInWishlist } from "@/utils/getIsCarInWishlist";
 import { Snackbar } from "@telegram-apps/telegram-ui";
 import { Link } from "@/components/Link/Link";
+import { writeToClipboard } from "@/utils/writeToClipboard";
+import { getMiniAppLink } from "@/utils/getMiniAppLink";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
@@ -29,6 +26,10 @@ interface CarItemActionsProps {
 export const CarItemActions: FC<CarItemActionsProps> = ({
   wishlistDefaultState,
 }) => {
+  const [showClipBoard, setShowClipBoard] = useState({
+    state: false,
+    text: "",
+  });
   const [showWishlistSnackBar, setShowWishlistSnackBar] = useState({
     state: false,
     text: "",
@@ -87,6 +88,26 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
     },
   });
 
+  const shareClick = async () => {
+    const res = await writeToClipboard(
+      getMiniAppLink({ carId: carId as string }),
+    );
+
+    shareURL(getMiniAppLink({ carId: carId as string }));
+
+    if (res) {
+      setShowClipBoard({
+        text: "Скопировано в буфер обмена",
+        state: true,
+      });
+    } else {
+      setShowClipBoard({
+        text: "Не удалось скопировать в буфер обмена",
+        state: true,
+      });
+    }
+  };
+
   return (
     <div className={"flex gap-2 top-[8px] right-[10px] absolute"}>
       <Image
@@ -101,6 +122,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
       <Image
         src={shareButtonSvg.src}
         alt={"share-button-icon"}
+        onClick={shareClick}
         width={16}
         height={16}
       />
@@ -141,6 +163,18 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
           }
         >
           <div className={"size-4 w-full"}>{showWishlistSnackBar.text}</div>
+        </Snackbar>
+      )}
+      {showClipBoard.state && (
+        <Snackbar
+          onClose={() => {
+            setShowClipBoard({
+              state: false,
+              text: "",
+            });
+          }}
+        >
+          <div className={"size-4 w-full"}>{showClipBoard.text}</div>
         </Snackbar>
       )}
     </div>

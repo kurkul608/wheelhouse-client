@@ -22,6 +22,7 @@ import { Navigation } from "@/components/Navigation";
 import { usePathname } from "next/navigation";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 import { useCarCardsFilters } from "@/hooks/useCarCardsFilters";
+import { useStartParams } from "@/hooks/useStartParams";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -45,6 +46,8 @@ function RootInner({ children }: PropsWithChildren) {
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
   const { stockFilter, update: updateCarCardsFilter } = useCarCardsFilters();
+
+  useStartParams(user !== null && bucket !== null && wishlist !== null);
 
   return (
     <AppRoot
