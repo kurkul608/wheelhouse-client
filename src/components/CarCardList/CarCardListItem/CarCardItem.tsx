@@ -71,7 +71,7 @@ export const CarCardItemList = ({
   isScrollActive,
 }: {
   initialList: CarCard[];
-  isScrollActive: boolean;
+  isScrollActive?: boolean;
 }) => {
   const { stockFilter } = useContext(CarCardsFiltersContext);
 

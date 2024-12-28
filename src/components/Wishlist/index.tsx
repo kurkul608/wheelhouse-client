@@ -6,8 +6,6 @@ import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCar
 
 export const Wishlist = () => {
   const { wishlist } = useContext(WishlistContext);
-  const carCardsList = wishlist?.WishlistCarCard.map(
-    (carCard) => carCard.carCard,
-  );
+  const carCardsList = wishlist?.carCards ?? [];
   return carCardsList ? <CarCardItemList initialList={carCardsList} /> : null;
 };

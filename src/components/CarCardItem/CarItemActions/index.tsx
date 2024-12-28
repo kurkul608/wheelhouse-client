@@ -18,6 +18,7 @@ import { Snackbar } from "@telegram-apps/telegram-ui";
 import { Link } from "@/components/Link/Link";
 import { writeToClipboard } from "@/utils/writeToClipboard";
 import { getMiniAppLink } from "@/utils/getMiniAppLink";
+import { createOrder } from "@/actions/order/create";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
@@ -83,8 +84,9 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   useMainButton({
     main: true,
     text: "Нажать, чтобы менеджер связался с вами",
-    mainButtonOnClick: () => {
-      "Кнпока для свзяи с менеджером";
+    mainButtonOnClick: async () => {
+      const order = await createOrder(carId as string, getAuthorization(lp));
+      console.log(order);
     },
   });
 
