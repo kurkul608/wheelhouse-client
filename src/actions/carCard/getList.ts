@@ -11,15 +11,19 @@ export interface GetCardListFilters {
 export const getCarCardsList = async (
   page: number,
   filters: GetCardListFilters,
-): Promise<CarCard[]> => {
-  const offset = `${page * CARS_LIMIT}`;
-  const searchParams = new URLSearchParams({
-    limit: `${CARS_LIMIT}`,
-    offset: offset,
-    stockFilter: filters.stockFilter,
-  });
-  const list = await fetch(
-    `${process.env.API_URL}cars?${searchParams.toString()}`,
-  );
-  return list.json();
+): Promise<CarCard[] | undefined> => {
+  try {
+    const offset = `${page * CARS_LIMIT}`;
+    const searchParams = new URLSearchParams({
+      limit: `${CARS_LIMIT}`,
+      offset: offset,
+      stockFilter: filters.stockFilter,
+    });
+    const list = await fetch(
+      `${process.env.API_URL}cars?${searchParams.toString()}`,
+    );
+    return list.json();
+  } catch (error) {
+    console.error(error);
+  }
 };

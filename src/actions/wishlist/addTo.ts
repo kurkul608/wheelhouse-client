@@ -1,16 +1,22 @@
 "use server";
 
+import { Wishlist } from "@/models/wishlist";
+
 export const addToWishlist = async (
   carCardId: string,
   headers: HeadersInit,
-) => {
-  const wishlist = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}wishlist/add/${carCardId}`,
-    {
-      method: "POST",
-      headers,
-    },
-  );
+): Promise<Wishlist | undefined> => {
+  try {
+    const wishlist = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}wishlist/add/${carCardId}`,
+      {
+        method: "POST",
+        headers,
+      },
+    );
 
-  return wishlist.json();
+    return wishlist.json();
+  } catch (error) {
+    console.error(error);
+  }
 };

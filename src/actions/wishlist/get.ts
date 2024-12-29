@@ -5,14 +5,18 @@ import { Wishlist } from "@/models/wishlist";
 export async function getWishlist(
   userId: string,
   headers: HeadersInit,
-): Promise<Wishlist> {
-  const wishlist = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}wishlist/user/${userId}`,
-    {
-      method: "GET",
-      headers,
-    },
-  );
+): Promise<Wishlist | undefined> {
+  try {
+    const wishlist = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}wishlist/user/${userId}`,
+      {
+        method: "GET",
+        headers,
+      },
+    );
 
-  return wishlist.json();
+    return wishlist.json();
+  } catch (error) {
+    console.error(error);
+  }
 }

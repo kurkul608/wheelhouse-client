@@ -5,11 +5,49 @@ import {
   MainSvg,
   WishlistSvg,
 } from "@/components/Navigation/NavigationIcon/Icons";
+import { useContext } from "react";
+import { UserContext } from "@/contexts/userContext";
+import Image from "next/image";
+import listSvg from "@/app/_assets/list.svg";
 
 export const Navigation = () => {
   const autoSearchParams = new URLSearchParams({
     page: "0",
   });
+
+  const { user } = useContext(UserContext);
+  const navElements = [
+    <NavigationIcon
+      key={"navigation-main"}
+      href={`/cars?${autoSearchParams.toString()}`}
+      icon={<MainSvg />}
+      text={"Главная"}
+    />,
+    <NavigationIcon
+      key={"navigation-wishlist"}
+      href={`/wishlist`}
+      icon={<WishlistSvg />}
+      text={"Избранное"}
+    />,
+  ];
+
+  if (user?.roles.some((role) => role === "MANAGER")) {
+    navElements.push(
+      <NavigationIcon
+        key={"navigation-manager"}
+        href={`/manager`}
+        icon={
+          <Image
+            src={listSvg.src}
+            alt={"listSvg icon"}
+            width={24}
+            height={24}
+          />
+        }
+        text={"Менеджер меню"}
+      />,
+    );
+  }
   return (
     <nav
       className={
@@ -20,16 +58,7 @@ export const Navigation = () => {
         borderColor: "var(--tgui--secondary_bg_color)",
       }}
     >
-      <NavigationIcon
-        href={`/cars?${autoSearchParams.toString()}`}
-        icon={<MainSvg />}
-        text={"Главная"}
-      />
-      <NavigationIcon
-        href={`/wishlist`}
-        icon={<WishlistSvg />}
-        text={"Избранное"}
-      />
+      {navElements}
     </nav>
   );
 };

@@ -1,16 +1,22 @@
 "use server";
 
+import { Bucket } from "@/models/bucket";
+
 export const deleteFromBucket = async (
   carCardId: string,
   headers: HeadersInit,
-) => {
-  const bucket = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}bucket/delete/${carCardId}`,
-    {
-      method: "DELETE",
-      headers,
-    },
-  );
+): Promise<Bucket | undefined> => {
+  try {
+    const bucket = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}bucket/delete/${carCardId}`,
+      {
+        method: "DELETE",
+        headers,
+      },
+    );
 
-  return bucket.json();
+    return bucket.json();
+  } catch (error) {
+    console.error(error);
+  }
 };

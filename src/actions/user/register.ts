@@ -1,12 +1,29 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { User } from "@/models/user";
 
-export async function registerUser(headers: HeadersInit): Promise<User> {
-  const user = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users/register`, {
-    method: "POST",
-    headers,
-  });
+export async function registerUser(
+  headers: HeadersInit,
+): Promise<User | undefined> {
+  try {
+    const user = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}users/register`,
+      {
+        method: "POST",
+        headers,
+      },
+    );
 
-  return user.json();
+    const userData: User = await user.json();
+    const cookieStore = await cookies();
+
+    if (userData.roles.some((role) => role === "MANAGER")) {
+      cookieStore.set("roleManager", "true");
+    }
+
+    return userData;
+  } catch (error) {
+    console.error(error);
+  }
 }
