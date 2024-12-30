@@ -46,7 +46,7 @@ export const CarCardListItem = (props: CarCard) => {
           {props.inStock ? "В наличии" : "Под заказ"}
         </CardChip>
         <Image
-          src={props.importedPhotos[0] || props.photos[0]}
+          src={props.importedPhotos?.[0] || props.photos?.[0] || ""}
           alt={"Фото авто"}
           width={254}
           height={308}
