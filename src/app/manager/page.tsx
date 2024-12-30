@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function ManagerPage() {
   const cookiesStorage = await cookies();
-  console.log(cookiesStorage.get("roleManager")?.value);
+
   if (!cookiesStorage.get("roleManager")?.value) {
     redirect("/");
   }
@@ -24,6 +24,20 @@ export default async function ManagerPage() {
             }}
           >
             <Cell subtitle="Нажать для перехода">Список авто</Cell>
+          </Link>
+        </Section>
+        <Section
+          header="Добавить новый автомобиль"
+          footer="На этой страницу вы можете создать новое авто"
+        >
+          <Link
+            href={"/manager/cars/create"}
+            style={{
+              textDecoration: "none",
+              color: "var(--tgui--link_color)",
+            }}
+          >
+            <Cell subtitle="Нажать для перехода">Добавить новое авто</Cell>
           </Link>
         </Section>
       </List>

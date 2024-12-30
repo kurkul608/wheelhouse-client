@@ -25,8 +25,8 @@ export interface CarCard {
   id: string;
   externalId: string | null;
   inStock: boolean;
-  importedPhotos: string[];
-  photos: string[];
+  importedPhotos?: string[];
+  photos?: string[];
   description: string;
   price: string | null;
   currency: FiatAsset | null;

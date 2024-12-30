@@ -6,7 +6,7 @@ import "./PhotoGallery.css";
 import ImageWithSkeleton from "@/components/ImageWithSkeleton";
 
 interface PhotoGalleryPros {
-  photoUrls: string[];
+  photoUrls?: string[];
 }
 export const PhotoGallery: FC<PhotoGalleryPros> = ({ photoUrls }) => {
   const settings: Settings = {
@@ -22,7 +22,7 @@ export const PhotoGallery: FC<PhotoGalleryPros> = ({ photoUrls }) => {
 
   return (
     <Slider {...settings}>
-      {photoUrls.map((photoUrl) => (
+      {photoUrls?.map((photoUrl) => (
         <ImageWithSkeleton
           src={photoUrl}
           alt={photoUrl}
