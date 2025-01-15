@@ -85,7 +85,7 @@ export const CarCardItemList = ({
   const loadMoreCars = async (newPage?: number, newList?: CarCard[]) => {
     setIsLoading(true);
     const apiCarCards = await getCarCardsList(newPage ?? page, { stockFilter });
-    setList([...(newList ?? list), ...apiCarCards]);
+    setList([...(newList ?? list), ...(apiCarCards ?? [])]);
     setPage(newPage ?? page + 1);
     setIsLoading(false);
   };

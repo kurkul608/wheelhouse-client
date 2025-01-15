@@ -20,20 +20,20 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
     (spec) => spec.field === "specification",
   );
 
-  const colorExt = carCard.specifications?.find(
-    (spec) => spec.field === "color_ext",
-  );
-  const colorInt = carCard.specifications?.find(
-    (spec) => spec.field === "color_int",
-  );
-
-  const otherSpecs = carCard.specifications?.filter(
-    (spec) =>
-      spec.field !== "model" &&
-      spec.field !== "color_ext" &&
-      spec.field !== "specification" &&
-      spec.field !== "color_int",
-  );
+  // const colorExt = carCard.specifications?.find(
+  //   (spec) => spec.field === "color_ext",
+  // );
+  // const colorInt = carCard.specifications?.find(
+  //   (spec) => spec.field === "color_int",
+  // );
+  //
+  // const otherSpecs = carCard.specifications?.filter(
+  //   (spec) =>
+  //     spec.field !== "model" &&
+  //     spec.field !== "color_ext" &&
+  //     spec.field !== "specification" &&
+  //     spec.field !== "color_int",
+  // );
 
   return (
     <>

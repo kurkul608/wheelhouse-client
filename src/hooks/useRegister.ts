@@ -24,17 +24,19 @@ export const useRegister = (): [
   const headers = getAuthorization(lp);
 
   const register = async () => {
-    const user: User = await registerUser(headers);
+    const user: User | undefined = await registerUser(headers);
 
-    setUser(user);
+    if (user) {
+      setUser(user);
 
-    const bucket = await getBucket(user.id, headers);
+      const bucket = await getBucket(user.id, headers);
 
-    setBucket(bucket);
+      if (bucket) setBucket(bucket);
 
-    const wishlist = await getWishlist(user.id, headers);
+      const wishlist = await getWishlist(user.id, headers);
 
-    setWishlist(wishlist);
+      if (wishlist) setWishlist(wishlist);
+    }
   };
 
   useEffect(() => {

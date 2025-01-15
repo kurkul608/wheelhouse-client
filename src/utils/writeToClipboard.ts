@@ -4,6 +4,7 @@ export const writeToClipboard = async (text: string): Promise<boolean> => {
       await navigator.clipboard.writeText(text);
       return true;
     } catch (err) {
+      console.error(err);
       return false;
     }
   } else {
@@ -27,6 +28,7 @@ export const writeToClipboard = async (text: string): Promise<boolean> => {
         return false;
       }
     } catch (err) {
+      console.error(err);
       return false;
     } finally {
       document.body.removeChild(textArea);

@@ -53,7 +53,7 @@ export const Bucket = () => {
             before={
               <Avatar
                 size={48}
-                src={bucket.carCard?.importedPhotos[0] ?? undefined}
+                src={bucket.carCard?.importedPhotos?.[0] ?? undefined}
               />
             }
             onClick={onCellClick}

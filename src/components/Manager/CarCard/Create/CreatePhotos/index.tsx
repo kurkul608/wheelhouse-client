@@ -1,4 +1,4 @@
-import { Badge, Button, Cell, FileInput } from "@telegram-apps/telegram-ui";
+import { Button, Cell, FileInput } from "@telegram-apps/telegram-ui";
 import { useState } from "react";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";

@@ -4,5 +4,7 @@ import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCar
 export async function CarCardList() {
   const initialUsers = await getCarCardsList(0, { stockFilter: "all" });
 
-  return <CarCardItemList initialList={initialUsers} isScrollActive={true} />;
+  return (
+    <CarCardItemList initialList={initialUsers ?? []} isScrollActive={true} />
+  );
 }

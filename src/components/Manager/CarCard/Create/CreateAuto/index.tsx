@@ -15,7 +15,7 @@ import Image from "next/image";
 import gearSvg from "@/app/_assets/gear.svg";
 import { AddNewSpec } from "@/components/Manager/CarCard/Create/AddNewSpec";
 import { IconAddCircle } from "@/components/Icons/AddCircle";
-import { FormikValues, useFormik } from "formik";
+import { useFormik } from "formik";
 import { SpecificationCreateDto } from "@/constants/specifications";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { createCard, CreateCardDto } from "@/actions/manager/cars/createCard";

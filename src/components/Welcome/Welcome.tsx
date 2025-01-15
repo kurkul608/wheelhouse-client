@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export const Welcome = () => {
   const router = useRouter();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const buttonClick = (e: any) => {
     const path = "/cars";
     const params = new URLSearchParams({

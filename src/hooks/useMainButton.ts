@@ -9,6 +9,7 @@ interface UseMainButtonProps {
   text: string;
   textColor?: RGBType;
   backgroundColor?: RGBType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mainButtonOnClick?: (e: any) => void;
 }
 export const useMainButton = ({
