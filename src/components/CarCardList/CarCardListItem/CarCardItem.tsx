@@ -16,6 +16,7 @@ import { CarCard } from "@/models/carCard";
 import { WishlistButton } from "@/components/CarCardList/CarCardListItem/WishlistButton/imdex";
 import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
+import { getFileLink } from "@/utils/getFileLink";
 
 export const CarCardListItem = (props: CarCard) => {
   const router = useRouter();
@@ -46,7 +47,9 @@ export const CarCardListItem = (props: CarCard) => {
           {props.inStock ? "В наличии" : "Под заказ"}
         </CardChip>
         <Image
-          src={props.importedPhotos?.[0] || props.photos?.[0] || ""}
+          src={
+            props.importedPhotos?.[0] || getFileLink(props.photos?.[0]) || ""
+          }
           alt={"Фото авто"}
           width={254}
           height={308}

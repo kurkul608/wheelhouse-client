@@ -5,8 +5,10 @@ import { List, Text, Title } from "@telegram-apps/telegram-ui";
 import { classNames } from "@telegram-apps/sdk-react";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
+import { getFileLink } from "@/utils/getFileLink";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
+  if (!id) return null;
   const carCard = await getCarCard(id);
 
   if (!carCard) {
@@ -38,7 +40,9 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
       <ActiveSwitch id={carCard.id} isActive={carCard.isActive} />
       <PhotoGallery
         photoUrls={
-          carCard.photos?.length ? carCard.photos : carCard.importedPhotos
+          carCard.photos?.length
+            ? carCard.photos.map(getFileLink)
+            : carCard.importedPhotos
         }
       />
       <List

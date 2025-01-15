@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
         hostname: "weltcar.s3.eu-central-1.amazonaws.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "s3.regru.cloud",
+        pathname: "/**",
+      },
     ],
   },
 };

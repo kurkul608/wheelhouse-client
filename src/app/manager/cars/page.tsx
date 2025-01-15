@@ -9,6 +9,7 @@ import { Avatar, Cell, Select, Text } from "@telegram-apps/telegram-ui";
 import { CarCardsStockFilter } from "@/contexts/carCardsFiltersContext";
 import { useRouter } from "next/navigation";
 import { Page } from "@/components/Page";
+import { getFileLink } from "@/utils/getFileLink";
 
 export type ActiveFilter = "all" | "active" | "disabled";
 
@@ -33,6 +34,8 @@ export default function ManagerCarsPage() {
   useEffect(() => {
     getCars();
   }, [stockFilter, activeFilter]);
+
+  console.log(list);
 
   return (
     <Page>
@@ -80,7 +83,7 @@ export default function ManagerCarsPage() {
                     src={
                       car.externalId
                         ? (car?.importedPhotos?.[0] ?? "")
-                        : (car?.photos?.[0] ?? "")
+                        : (getFileLink(car?.photos?.[0]) ?? "")
                     }
                   />
                 }

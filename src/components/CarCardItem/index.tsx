@@ -15,6 +15,7 @@ import { RGB } from "@/components/RGB/RGB";
 import { FC } from "react";
 import { CarCard } from "@/models/carCard";
 import { CarItemActions } from "@/components/CarCardItem/CarItemActions";
+import { getFileLink } from "@/utils/getFileLink";
 
 interface CarCardItemProps {
   carCard: CarCard;
@@ -56,7 +57,9 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
       </Breadcrumbs>
       <PhotoGallery
         photoUrls={
-          carCard.photos?.length ? carCard.photos : carCard.importedPhotos
+          carCard.photos?.length
+            ? carCard.photos.map(getFileLink)
+            : carCard.importedPhotos
         }
       />
       <List

@@ -12,7 +12,11 @@ export default async function Car({
 
   return (
     <Page>
-      <CarCardItem carCard={carCard} />
+      {carCard ? (
+        <CarCardItem carCard={carCard} />
+      ) : (
+        <div>Ничего не найдено</div>
+      )}
     </Page>
   );
 }

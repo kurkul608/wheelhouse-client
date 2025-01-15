@@ -1,4 +1,5 @@
 import { CarCardSpecifications } from "@/models/carCardSpecification";
+import { File } from "@/models/file";
 
 export type FiatAsset =
   | "EUR"
@@ -26,7 +27,7 @@ export interface CarCard {
   externalId: string | null;
   inStock: boolean;
   importedPhotos?: string[];
-  photos?: string[];
+  photos?: File[];
   description: string;
   price: string | null;
   currency: FiatAsset | null;
