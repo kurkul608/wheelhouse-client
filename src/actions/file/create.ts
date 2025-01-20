@@ -9,7 +9,7 @@ export const createFile = async (
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}files`, {
+  const response = await fetch(`${process.env.API_URL}files`, {
     method: "POST",
     body: formData,
     headers,

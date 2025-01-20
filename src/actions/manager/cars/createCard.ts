@@ -14,14 +14,11 @@ export const createCard = async (
   data: CreateCardDto,
   headers: HeadersInit,
 ): Promise<CarCard> => {
-  const carCard = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}manager/cars`,
-    {
-      method: "POST",
-      headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    },
-  );
+  const carCard = await fetch(`${process.env.API_URL}manager/cars`, {
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
 
   return carCard.json();
 };

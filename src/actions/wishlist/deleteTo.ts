@@ -8,7 +8,7 @@ export const deleteFromWishlist = async (
 ): Promise<Wishlist | undefined> => {
   try {
     const wishlist = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}wishlist/delete/${carCardId}`,
+      `${process.env.API_URL}wishlist/delete/${carCardId}`,
       {
         method: "DELETE",
         headers,

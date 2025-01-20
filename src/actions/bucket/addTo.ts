@@ -8,7 +8,7 @@ export const addToBucket = async (
 ): Promise<Bucket | undefined> => {
   try {
     const bucket = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}bucket/add/${carCardId}`,
+      `${process.env.API_URL}bucket/add/${carCardId}`,
       {
         method: "POST",
         headers,

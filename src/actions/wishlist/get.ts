@@ -8,7 +8,7 @@ export async function getWishlist(
 ): Promise<Wishlist | undefined> {
   try {
     const wishlist = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}wishlist/user/${userId}`,
+      `${process.env.API_URL}wishlist/user/${userId}`,
       {
         method: "GET",
         headers,

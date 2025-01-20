@@ -8,7 +8,7 @@ export const addToWishlist = async (
 ): Promise<Wishlist | undefined> => {
   try {
     const wishlist = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}wishlist/add/${carCardId}`,
+      `${process.env.API_URL}wishlist/add/${carCardId}`,
       {
         method: "POST",
         headers,

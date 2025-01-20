@@ -2,7 +2,7 @@
 
 export const createOrder = async (carId: string, headers: HeadersInit) => {
   try {
-    const order = await fetch(`${process.env.NEXT_PUBLIC_API_URL}orders`, {
+    const order = await fetch(`${process.env.API_URL}orders`, {
       method: "POST",
       headers: {
         ...headers,

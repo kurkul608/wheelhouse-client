@@ -8,7 +8,7 @@ export const deleteFromBucket = async (
 ): Promise<Bucket | undefined> => {
   try {
     const bucket = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}bucket/delete/${carCardId}`,
+      `${process.env.API_URL}bucket/delete/${carCardId}`,
       {
         method: "DELETE",
         headers,

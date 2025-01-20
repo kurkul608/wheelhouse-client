@@ -7,13 +7,10 @@ export async function getBucket(
   headers: HeadersInit,
 ): Promise<Bucket | undefined> {
   try {
-    const bucket = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}bucket/user/${userId}`,
-      {
-        method: "GET",
-        headers,
-      },
-    );
+    const bucket = await fetch(`${process.env.API_URL}bucket/user/${userId}`, {
+      method: "GET",
+      headers,
+    });
 
     return bucket.json();
   } catch (error) {
