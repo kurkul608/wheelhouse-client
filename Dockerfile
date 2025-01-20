@@ -29,6 +29,7 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/eslint.config.mjs ./
 COPY --from=builder /app/next-env.d.ts ./
 COPY --from=builder /app/postcss.config.mjs ./
+COPY --from=builder /app/tsconfig.json ./
 
 EXPOSE 3000
 
