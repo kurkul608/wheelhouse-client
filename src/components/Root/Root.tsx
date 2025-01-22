@@ -7,6 +7,7 @@ import {
   useSignal,
   initData,
   disableVerticalSwipes,
+  swipeBehavior,
 } from "@telegram-apps/sdk-react";
 import { AppRoot, Spinner } from "@telegram-apps/telegram-ui";
 import { useClientOnce } from "@/hooks/useClientOnce";
@@ -45,8 +46,10 @@ function RootInner({ children }: PropsWithChildren) {
   }, [initDataUser]);
 
   useEffect(() => {
-    disableVerticalSwipes();
-  }, []);
+    if (swipeBehavior.isMounted()) {
+      disableVerticalSwipes();
+    }
+  }, [swipeBehavior.isMounted()]);
 
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
