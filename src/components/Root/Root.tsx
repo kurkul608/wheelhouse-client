@@ -6,6 +6,7 @@ import {
   useLaunchParams,
   useSignal,
   initData,
+  disableVerticalSwipes,
 } from "@telegram-apps/sdk-react";
 import { AppRoot, Spinner } from "@telegram-apps/telegram-ui";
 import { useClientOnce } from "@/hooks/useClientOnce";
@@ -42,6 +43,10 @@ function RootInner({ children }: PropsWithChildren) {
       setLocale(initDataUser.languageCode);
     }
   }, [initDataUser]);
+
+  useEffect(() => {
+    disableVerticalSwipes();
+  }, []);
 
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
