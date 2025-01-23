@@ -2,8 +2,8 @@
 
 import { getCarCard } from "@/actions/carCard/get";
 import {
-  Headline,
   List,
+  Section,
   Subheadline,
   Text,
   Title,
@@ -14,6 +14,9 @@ import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
 import { getFileLink } from "@/utils/getFileLink";
 import { CreatePhotos } from "@/components/Manager/CarCard/CreatePhotos";
 import { ManagePhotos } from "@/components/Manager/CarCard/ManagePhotos";
+import { SectionHeader } from "@telegram-apps/telegram-ui/dist/components/Blocks/Section/components/SectionHeader/SectionHeader";
+import { SpecList } from "@/components/Manager/CarCard/SpecList";
+import { AddNewSpec } from "@/components/Manager/CarCard/AddNewSpec";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -27,21 +30,6 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
   const specification = carCard.specifications?.find(
     (spec) => spec.field === "specification",
   );
-
-  // const colorExt = carCard.specifications?.find(
-  //   (spec) => spec.field === "color_ext",
-  // );
-  // const colorInt = carCard.specifications?.find(
-  //   (spec) => spec.field === "color_int",
-  // );
-  //
-  // const otherSpecs = carCard.specifications?.filter(
-  //   (spec) =>
-  //     spec.field !== "model" &&
-  //     spec.field !== "color_ext" &&
-  //     spec.field !== "specification" &&
-  //     spec.field !== "color_int",
-  // );
 
   return (
     <>
@@ -67,20 +55,22 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
           </Text>
         </div>
       </List>
-      <Headline className={"mt-2"} weight="3">
-        Загрузить фотографии
-      </Headline>
-      <Subheadline>
-        Внимание!! Нельзя загружать фото, весом более 1мб
-      </Subheadline>
-      <CreatePhotos carId={carCard.id} />
-      <Headline className={"mt-2"} weight="3">
-        Управление добавленными фотографиями
-      </Headline>
-      <ManagePhotos photos={carCard.photos ?? []} carId={carCard.id} />
-      {/*<Subheadline>*/}
-      {/*    Внимание!! Нельзя загружать фото, весом более 1мб*/}
-      {/*</Subheadline>*/}
+      <Section className={"mt-2"}>
+        <SectionHeader>Загрузить фотографии</SectionHeader>
+        <Subheadline>
+          Внимание!! Нельзя загружать фото, весом более 1мб
+        </Subheadline>
+        <CreatePhotos carId={carCard.id} />
+      </Section>
+      <Section className={"mt-2"}>
+        <SectionHeader>Управление добавленными фотографиями</SectionHeader>
+        <ManagePhotos photos={carCard.photos ?? []} carId={carCard.id} />
+      </Section>
+      <Section className={"mt-2"}>
+        <SectionHeader>Характеристики авто</SectionHeader>
+        <SpecList carCard={carCard} />
+        <AddNewSpec carCardId={carCard.id} />
+      </Section>
     </>
   );
 };

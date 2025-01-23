@@ -13,13 +13,12 @@ import { SpecificationCreateDto } from "@/constants/specifications";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { createCard, CreateCardDto } from "@/actions/manager/cars/createCard";
 import { getAuthorization } from "@/utils/getAuthorization";
-import { createSpecification } from "@/actions/manager/specifications/create";
 import { useRouter } from "next/navigation";
+import { createSpecification } from "@/actions/manager/specifications/create";
 
 export interface RequiredSpecs {
   model: SpecificationCreateDto;
   specification: SpecificationCreateDto;
-  specs: SpecificationCreateDto[];
 }
 
 type FormValues = CreateCardDto & RequiredSpecs;
@@ -34,21 +33,24 @@ export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
       inStock: false,
       isActive: false,
       price: undefined,
-      model: { field: "model", fieldName: "Модель", value: "" },
+      model: { field: "model", fieldName: "Модель", value: "", carCardId: "" },
       specification: {
         field: "specification",
         fieldName: "Спецификация",
         value: "",
+        carCardId: "",
       },
-      specs: [],
     },
     onSubmit: async ({ model, specification, ...values }) => {
       if (model.value && specification.value) {
         const card = await createCard(values, getAuthorization(lp));
         if (card.id) {
           await createSpecification(
-            [{ ...model }, { ...specification }],
-            card.id,
+            { ...model, carCardId: card.id },
+            getAuthorization(lp),
+          );
+          await createSpecification(
+            { ...specification, carCardId: card.id },
             getAuthorization(lp),
           );
 
@@ -57,10 +59,6 @@ export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
       }
     },
   });
-
-  // const addSpec = (dto: SpecificationCreateDto) => {
-  //   formik.setFieldValue("specs", [...formik.values.specs, dto]);
-  // };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -180,44 +178,6 @@ export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
           />
         </div>
       </List>
-
-      {/*<List*/}
-      {/*  style={{*/}
-      {/*    background: "var(--tgui--secondary_bg_color)",*/}
-      {/*    padding: 10,*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <Section header={"Характеристики авто"}>*/}
-      {/*    {formik.values.specs.map((spec: SpecificationCreateDto) => (*/}
-      {/*      <Cell*/}
-      {/*        key={spec.field}*/}
-      {/*        before={*/}
-      {/*          <Image*/}
-      {/*            src={gearSvg.src}*/}
-      {/*            alt={"gearsvg"}*/}
-      {/*            width={32}*/}
-      {/*            height={32}*/}
-      {/*          />*/}
-      {/*        }*/}
-      {/*        subtitle={spec.value}*/}
-      {/*      >*/}
-      {/*        {spec.fieldName}*/}
-      {/*      </Cell>*/}
-      {/*    ))}*/}
-      {/*    <AddNewSpec*/}
-      {/*      trigger={*/}
-      {/*        <ButtonCell before={<IconAddCircle />}>*/}
-      {/*          Добавить новую характеристику*/}
-      {/*        </ButtonCell>*/}
-      {/*      }*/}
-      {/*      addSpec={addSpec}*/}
-      {/*      usedSpecKeys={formik.values.specs.map(*/}
-      {/*        (spec: SpecificationCreateDto) => spec.field,*/}
-      {/*      )}*/}
-      {/*    />*/}
-      {/*  </Section>*/}
-      {/*</List>*/}
-
       <div className={"flex pt-4 justify-center items-center"}>
         <Button type={"submit"}>Перейти к следующему этапу </Button>
       </div>

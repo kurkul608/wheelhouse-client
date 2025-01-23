@@ -114,7 +114,7 @@ export const CreatePhotos = ({ carId }: { carId: string }) => {
         type={"button"}
         loading={loading}
       >
-        Прикрепить выбранные фото к карточке авто
+        Добавить выбранные фото к карточке авто
       </Button>
       {/*{loading && <Spinner size={"l"} />}*/}
     </>
