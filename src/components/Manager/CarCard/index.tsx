@@ -1,11 +1,19 @@
 "use server";
 
 import { getCarCard } from "@/actions/carCard/get";
-import { List, Text, Title } from "@telegram-apps/telegram-ui";
+import {
+  Headline,
+  List,
+  Subheadline,
+  Text,
+  Title,
+} from "@telegram-apps/telegram-ui";
 import { classNames } from "@telegram-apps/sdk-react";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
 import { getFileLink } from "@/utils/getFileLink";
+import { CreatePhotos } from "@/components/Manager/CarCard/CreatePhotos";
+import { ManagePhotos } from "@/components/Manager/CarCard/ManagePhotos";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -59,6 +67,20 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
           </Text>
         </div>
       </List>
+      <Headline className={"mt-2"} weight="3">
+        Загрузить фотографии
+      </Headline>
+      <Subheadline>
+        Внимание!! Нельзя загружать фото, весом более 1мб
+      </Subheadline>
+      <CreatePhotos carId={carCard.id} />
+      <Headline className={"mt-2"} weight="3">
+        Управление добавленными фотографиями
+      </Headline>
+      <ManagePhotos photos={carCard.photos ?? []} carId={carCard.id} />
+      {/*<Subheadline>*/}
+      {/*    Внимание!! Нельзя загружать фото, весом более 1мб*/}
+      {/*</Subheadline>*/}
     </>
   );
 };

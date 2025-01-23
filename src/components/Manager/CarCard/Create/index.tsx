@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CreateAuto } from "@/components/Manager/CarCard/Create/CreateAuto";
-import { CreatePhotos } from "@/components/Manager/CarCard/Create/CreatePhotos";
+import { CreatePhotos } from "../CreatePhotos";
 
 export const ManagerCarCardCreate = () => {
   const [stage, setStage] = useState<number>(1);

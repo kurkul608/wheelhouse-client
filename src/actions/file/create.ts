@@ -1,6 +1,7 @@
 "use server";
 
 import { File as FileModel } from "@/models/file";
+import axios, { AxiosHeaders } from "axios";
 
 export const createFile = async (
   file: File,
@@ -9,11 +10,14 @@ export const createFile = async (
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${process.env.API_URL}files`, {
-    method: "POST",
-    body: formData,
-    headers,
-  });
+  const response = await axios.post<FileModel>(
+    `${process.env.API_URL}files`,
+    formData,
+    {
+      headers: { ...headers } as AxiosHeaders,
+      timeout: 120000,
+    },
+  );
 
-  return response.json();
+  return response.data;
 };

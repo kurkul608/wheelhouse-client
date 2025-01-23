@@ -2,25 +2,19 @@
 
 import {
   Button,
-  ButtonCell,
-  Cell,
   Input,
   List,
-  Section,
   Select,
   Switch,
   Title,
 } from "@telegram-apps/telegram-ui";
-import Image from "next/image";
-import gearSvg from "@/app/_assets/gear.svg";
-import { AddNewSpec } from "@/components/Manager/CarCard/Create/AddNewSpec";
-import { IconAddCircle } from "@/components/Icons/AddCircle";
 import { useFormik } from "formik";
 import { SpecificationCreateDto } from "@/constants/specifications";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { createCard, CreateCardDto } from "@/actions/manager/cars/createCard";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { createSpecification } from "@/actions/manager/specifications/create";
+import { useRouter } from "next/navigation";
 
 export interface RequiredSpecs {
   model: SpecificationCreateDto;
@@ -30,12 +24,9 @@ export interface RequiredSpecs {
 
 type FormValues = CreateCardDto & RequiredSpecs;
 
-export const CreateAuto = ({
-  toNextStage,
-}: {
-  toNextStage(carId: string): void;
-}) => {
+export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
   const lp = useLaunchParams();
+  const router = useRouter();
   const formik = useFormik<FormValues>({
     initialValues: {
       description: "",
@@ -61,36 +52,20 @@ export const CreateAuto = ({
             getAuthorization(lp),
           );
 
-          toNextStage(card.id);
+          router.push(`/manager/cars/${card.id}`);
         }
       }
     },
   });
 
-  const addSpec = (dto: SpecificationCreateDto) => {
-    formik.setFieldValue("specs", [...formik.values.specs, dto]);
-  };
+  // const addSpec = (dto: SpecificationCreateDto) => {
+  //   formik.setFieldValue("specs", [...formik.values.specs, dto]);
+  // };
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <List style={{ backgroundColor: "var(--tgui--bg_color)" }}>
         <Title className={"mb-4"}>Созадние краточки автомобиля</Title>
-        {/*<div*/}
-        {/*  className={"flex justify-between items-center py-2 border-b-2 "}*/}
-        {/*  style={{ borderColor: "var(--tgui--section_separator_color)" }}*/}
-        {/*>*/}
-        {/*  <label*/}
-        {/*    htmlFor={"isActive"}*/}
-        {/*    style={{ color: "var(--tgui--subtitle_text_color)" }}*/}
-        {/*  >*/}
-        {/*    Авто активен **/}
-        {/*  </label>*/}
-        {/*  <Switch*/}
-        {/*    checked={formik.values.isActive}*/}
-        {/*    onChange={formik.handleChange}*/}
-        {/*    name={"isActive"}*/}
-        {/*  />*/}
-        {/*</div>*/}
         <div
           className={"flex justify-between items-center py-2 border-b-2 "}
           style={{ borderColor: "var(--tgui--section_separator_color)" }}
@@ -206,42 +181,42 @@ export const CreateAuto = ({
         </div>
       </List>
 
-      <List
-        style={{
-          background: "var(--tgui--secondary_bg_color)",
-          padding: 10,
-        }}
-      >
-        <Section header={"Характеристики авто"}>
-          {formik.values.specs.map((spec: SpecificationCreateDto) => (
-            <Cell
-              key={spec.field}
-              before={
-                <Image
-                  src={gearSvg.src}
-                  alt={"gearsvg"}
-                  width={32}
-                  height={32}
-                />
-              }
-              subtitle={spec.value}
-            >
-              {spec.fieldName}
-            </Cell>
-          ))}
-          <AddNewSpec
-            trigger={
-              <ButtonCell before={<IconAddCircle />}>
-                Добавить новую характеристику
-              </ButtonCell>
-            }
-            addSpec={addSpec}
-            usedSpecKeys={formik.values.specs.map(
-              (spec: SpecificationCreateDto) => spec.field,
-            )}
-          />
-        </Section>
-      </List>
+      {/*<List*/}
+      {/*  style={{*/}
+      {/*    background: "var(--tgui--secondary_bg_color)",*/}
+      {/*    padding: 10,*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  <Section header={"Характеристики авто"}>*/}
+      {/*    {formik.values.specs.map((spec: SpecificationCreateDto) => (*/}
+      {/*      <Cell*/}
+      {/*        key={spec.field}*/}
+      {/*        before={*/}
+      {/*          <Image*/}
+      {/*            src={gearSvg.src}*/}
+      {/*            alt={"gearsvg"}*/}
+      {/*            width={32}*/}
+      {/*            height={32}*/}
+      {/*          />*/}
+      {/*        }*/}
+      {/*        subtitle={spec.value}*/}
+      {/*      >*/}
+      {/*        {spec.fieldName}*/}
+      {/*      </Cell>*/}
+      {/*    ))}*/}
+      {/*    <AddNewSpec*/}
+      {/*      trigger={*/}
+      {/*        <ButtonCell before={<IconAddCircle />}>*/}
+      {/*          Добавить новую характеристику*/}
+      {/*        </ButtonCell>*/}
+      {/*      }*/}
+      {/*      addSpec={addSpec}*/}
+      {/*      usedSpecKeys={formik.values.specs.map(*/}
+      {/*        (spec: SpecificationCreateDto) => spec.field,*/}
+      {/*      )}*/}
+      {/*    />*/}
+      {/*  </Section>*/}
+      {/*</List>*/}
 
       <div className={"flex pt-4 justify-center items-center"}>
         <Button type={"submit"}>Перейти к следующему этапу </Button>
