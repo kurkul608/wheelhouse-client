@@ -11,7 +11,7 @@ export const deleteSpecification = async (
       `${process.env.API_URL}manager/specifications/${specificationId}`,
       { headers },
     );
-    return result;
+    return result.data;
   } catch (error) {
     console.error(error);
   }

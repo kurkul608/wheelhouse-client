@@ -7,11 +7,16 @@ import { createSpecification } from "@/actions/manager/specifications/create";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { useRouter } from "next/navigation";
+import { CarCardSpecifications } from "@/models/carCardSpecification";
 
 interface AddNewSpecProps {
   carCardId: string;
+  specifications: CarCardSpecifications[];
 }
-export const AddNewSpec: FC<AddNewSpecProps> = ({ carCardId }) => {
+export const AddNewSpec: FC<AddNewSpecProps> = ({
+  carCardId,
+  specifications,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [field, setField] = useState<null | string>(null);
@@ -44,7 +49,7 @@ export const AddNewSpec: FC<AddNewSpecProps> = ({ carCardId }) => {
       setShowForm(false);
       setIsLoading(false);
       setField(null);
-      setValue(null);
+      setValue("");
       router.refresh();
     }
   };
@@ -61,7 +66,13 @@ export const AddNewSpec: FC<AddNewSpecProps> = ({ carCardId }) => {
             }}
             value={field || undefined}
           >
-            {SPECIFICATIONS_TEMPLATE.map((spec) => (
+            <option>-</option>
+            {SPECIFICATIONS_TEMPLATE.filter(
+              (defaultSpec) =>
+                !specifications.some(
+                  (spec) => spec.field === defaultSpec.field,
+                ),
+            ).map((spec) => (
               <option value={spec.field} key={spec.field}>
                 {spec.fieldName}
               </option>

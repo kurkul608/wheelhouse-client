@@ -17,6 +17,7 @@ import { ManagePhotos } from "@/components/Manager/CarCard/ManagePhotos";
 import { SectionHeader } from "@telegram-apps/telegram-ui/dist/components/Blocks/Section/components/SectionHeader/SectionHeader";
 import { SpecList } from "@/components/Manager/CarCard/SpecList";
 import { AddNewSpec } from "@/components/Manager/CarCard/AddNewSpec";
+import { StockSwitch } from "@/components/Manager/CarCard/StockSwitch";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -34,6 +35,7 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
   return (
     <>
       <ActiveSwitch id={carCard.id} isActive={carCard.isActive} />
+      <StockSwitch id={carCard.id} inStock={carCard.inStock} />
       <PhotoGallery
         photoUrls={
           carCard.photos?.length
@@ -69,7 +71,10 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
       <Section className={"mt-2"}>
         <SectionHeader>Характеристики авто</SectionHeader>
         <SpecList carCard={carCard} />
-        <AddNewSpec carCardId={carCard.id} />
+        <AddNewSpec
+          carCardId={carCard.id}
+          specifications={carCard.specifications}
+        />
       </Section>
     </>
   );

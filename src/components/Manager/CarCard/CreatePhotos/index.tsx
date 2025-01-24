@@ -71,7 +71,6 @@ export const CreatePhotos = ({ carId }: { carId: string }) => {
     <>
       <FileInput
         title={"Добавить фото"}
-        multiple
         accept="image/jpeg,image/png,image/jpg"
         onChange={(event) => setFiles(event.target.files)}
       >
