@@ -2,7 +2,6 @@ import { CarCardSpecifications } from "@/models/carCardSpecification";
 import { FC } from "react";
 import { Avatar } from "@telegram-apps/telegram-ui";
 import { Generation } from "@/components/Icons/Generation";
-import { SPECIFICATIONS_TEMPLATE } from "@/constants/specifications";
 import { Year } from "@/components/Icons/Year";
 import { Body } from "@/components/Icons/Body";
 import { Engine } from "@/components/Icons/Engine";
