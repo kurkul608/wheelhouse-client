@@ -28,13 +28,6 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
     (spec) => spec.field === "specification",
   );
 
-  // const colorExt = carCard.specifications?.find(
-  //   (spec) => spec.field === "color_ext",
-  // );
-  // const colorInt = carCard.specifications?.find(
-  //   (spec) => spec.field === "color_int",
-  // );
-
   const otherSpecs = carCard.specifications?.filter(
     (spec) => spec.field !== "model" && spec.field !== "specification",
   );

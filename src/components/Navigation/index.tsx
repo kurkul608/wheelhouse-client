@@ -48,6 +48,24 @@ export const Navigation = () => {
       />,
     );
   }
+
+  if (user?.roles.some((role) => role === "ADMIN")) {
+    navElements.push(
+      <NavigationIcon
+        key={"navigation-admin"}
+        href={`/admin`}
+        icon={
+          <Image
+            src={listSvg.src}
+            alt={"listSvg icon"}
+            width={24}
+            height={24}
+          />
+        }
+        text={"Админ меню"}
+      />,
+    );
+  }
   return (
     <nav
       className={
