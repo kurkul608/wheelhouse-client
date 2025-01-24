@@ -89,7 +89,14 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
       console.log(order);
     },
   });
-
+  console.log(
+    "process.env.NEXT_PUBLIC_BOT_NAME: ",
+    process.env.NEXT_PUBLIC_BOT_NAME,
+  );
+  console.log(
+    "process.env.NEXT_PUBLIC_MINI_APP_NAME: ",
+    process.env.NEXT_PUBLIC_MINI_APP_NAME,
+  );
   const shareClick = async () => {
     const res = await writeToClipboard(
       getMiniAppLink({ carId: carId as string }),
