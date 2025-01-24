@@ -14,7 +14,7 @@ export const UsersList = () => {
   useEffect(() => {
     const getUsers = async () => {
       const users = await getUsersList(getAuthorization(lp) as AxiosHeaders);
-      setList(users);
+      if (users) setList(users);
     };
     getUsers();
   }, []);
