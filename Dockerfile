@@ -7,6 +7,11 @@ RUN yarn install --frozen-lockfile
 FROM node:22-alpine AS builder
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_BOT_NAME
+ARG NEXT_PUBLIC_MINI_APP_NAME
+ARG NEXT_PUBLIC_MINI_APP_URL
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -15,8 +20,10 @@ RUN yarn build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-#COPY --from=builder /app /app
-#COPY . .
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_BOT_NAME
+ARG NEXT_PUBLIC_MINI_APP_NAME
+ARG NEXT_PUBLIC_MINI_APP_URL
 
 COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/tailwind.config.ts ./
