@@ -10,12 +10,13 @@ import {
   Text,
   Title,
 } from "@telegram-apps/telegram-ui";
-import { classNames, RGB as RGBType } from "@telegram-apps/sdk-react";
-import { RGB } from "@/components/RGB/RGB";
+import { classNames } from "@telegram-apps/sdk-react";
 import { FC } from "react";
 import { CarCard } from "@/models/carCard";
 import { CarItemActions } from "@/components/CarCardItem/CarItemActions";
 import { getFileLink } from "@/utils/getFileLink";
+import { AvatarBySpecification } from "@/components/CarCardItem/AvatarBySpecification";
+import { Ruble } from "@/components/Icons/Ruble";
 
 interface CarCardItemProps {
   carCard: CarCard;
@@ -27,19 +28,15 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
     (spec) => spec.field === "specification",
   );
 
-  const colorExt = carCard.specifications?.find(
-    (spec) => spec.field === "color_ext",
-  );
-  const colorInt = carCard.specifications?.find(
-    (spec) => spec.field === "color_int",
-  );
+  // const colorExt = carCard.specifications?.find(
+  //   (spec) => spec.field === "color_ext",
+  // );
+  // const colorInt = carCard.specifications?.find(
+  //   (spec) => spec.field === "color_int",
+  // );
 
   const otherSpecs = carCard.specifications?.filter(
-    (spec) =>
-      spec.field !== "model" &&
-      spec.field !== "color_ext" &&
-      spec.field !== "specification" &&
-      spec.field !== "color_int",
+    (spec) => spec.field !== "model" && spec.field !== "specification",
   );
 
   return (
@@ -89,34 +86,21 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
                 : `${carCard.price} ${carCard.currency}`
             }
             titleBadge={<Badge type={"dot"} />}
-            before={<Avatar size={48} />}
+            before={
+              <Avatar size={48}>
+                <Ruble color={"var(--tgui--accent_text_color)"} />
+              </Avatar>
+            }
           >
             Цена
           </Cell>
-          <Cell
-            subtitle={`${colorExt?.value || "Неизвестно"}`}
-            titleBadge={<Badge type={"dot"} />}
-            before={
-              <RGB size={48} color={colorInt?.value as unknown as RGBType} />
-            }
-          >
-            Цвет экстерьера
-          </Cell>
-          <Cell
-            subtitle={`${colorInt?.value || "Неизвестно"}`}
-            titleBadge={<Badge type={"dot"} />}
-            before={
-              <RGB size={48} color={colorInt?.value as unknown as RGBType} />
-            }
-          >
-            Цвет интерьера
-          </Cell>
+
           {otherSpecs?.map((spec) => (
             <Cell
               key={`spec-${spec.field}`}
               subtitle={spec.value || "Неизвестно"}
               titleBadge={<Badge type={"dot"} />}
-              before={<Avatar size={48} />}
+              before={<AvatarBySpecification specification={spec} />}
             >
               {spec.fieldName}
             </Cell>

@@ -12,7 +12,6 @@ export const ManagerCarCardCreate = () => {
     setStage(2);
     setCardId(cardId);
   };
-  console.log(stage);
   return stage === 1 && !cardId ? (
     <CreateAuto toNextStage={toNextStage} />
   ) : (

@@ -35,8 +35,6 @@ export default function ManagerCarsPage() {
     getCars();
   }, [stockFilter, activeFilter]);
 
-  console.log(list);
-
   return (
     <Page>
       <div style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
