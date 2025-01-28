@@ -4,6 +4,7 @@ import axios, { AxiosHeaders } from "axios";
 import { User } from "@/models/user";
 
 export const getUsersList = async (
+  searchString: string,
   headers: AxiosHeaders,
 ): Promise<User[] | undefined> => {
   try {
@@ -11,6 +12,7 @@ export const getUsersList = async (
       `${process.env.API_URL}admin/users`,
       {
         headers: headers,
+        params: { searchString },
       },
     );
 

@@ -31,7 +31,9 @@ export const Navigation = () => {
     />,
   ];
 
-  if (user?.roles.some((role) => role === "MANAGER")) {
+  if (
+    user?.roles.some((role) => role === "MANAGER" || role === "SUPER_ADMIN")
+  ) {
     navElements.push(
       <NavigationIcon
         key={"navigation-manager"}
@@ -49,7 +51,7 @@ export const Navigation = () => {
     );
   }
 
-  if (user?.roles.some((role) => role === "ADMIN")) {
+  if (user?.roles.some((role) => role === "ADMIN" || role === "SUPER_ADMIN")) {
     navElements.push(
       <NavigationIcon
         key={"navigation-admin"}

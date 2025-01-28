@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Cell, List, Section } from "@telegram-apps/telegram-ui";
 import Link from "next/link";
+import { Page } from "@/components/Page";
 
 export default async function AdminPage() {
   const cookiesStorage = await cookies();
@@ -11,8 +12,8 @@ export default async function AdminPage() {
   }
 
   return (
-    <div style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
-      <List>
+    <Page>
+      <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
         <Section
           header={"Список пользователей"}
           footer={
@@ -30,6 +31,6 @@ export default async function AdminPage() {
           </Link>
         </Section>
       </List>
-    </div>
+    </Page>
   );
 }
