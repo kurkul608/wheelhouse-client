@@ -6,7 +6,7 @@ import wishlistDisableSvg from "@/app/_assets/wishlistDisable.svg";
 import shareButtonSvg from "@/app/_assets/shareButton.svg";
 import Image from "next/image";
 import { FC, useContext, useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { addToWishlist as addToWishlistAction } from "@/actions/wishlist/addTo";
 import { useLaunchParams, shareURL } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
