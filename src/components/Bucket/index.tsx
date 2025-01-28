@@ -7,21 +7,12 @@ import { useRouter } from "next/navigation";
 import { deleteFromBucket } from "@/actions/bucket/deleteTo";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
-import { useMainButton } from "@/hooks/useMainButton";
 import { TrashSvg } from "@/components/Bucket/Icons";
 
 export const Bucket = () => {
   const lp = useLaunchParams();
   const { bucket, update } = useContext(BucketContext);
   const router = useRouter();
-
-  useMainButton({
-    main: !!(bucket && bucket.BucketCarCard.length),
-    text: "Продолжить оформление",
-    mainButtonOnClick: () => {
-      console.log("Продолжить оформление нажато ");
-    },
-  });
 
   return bucket && bucket.BucketCarCard.length ? (
     <Section

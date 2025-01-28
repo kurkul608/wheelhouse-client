@@ -4,23 +4,50 @@ import { mainButton, type RGB as RGBType } from "@telegram-apps/sdk-react";
 import { useEffect, useState } from "react";
 
 interface UseMainButtonProps {
-  main: boolean;
   isLoaderVisible?: boolean;
-  text: string;
   textColor?: RGBType;
   backgroundColor?: RGBType;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mainButtonOnClick?: (e: any) => void;
 }
 export const useMainButton = ({
-  main,
-  text,
   isLoaderVisible,
   textColor,
   backgroundColor,
-  mainButtonOnClick,
 }: UseMainButtonProps) => {
   const [isMainButtonMounted, setIsMainButtonMounted] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [mainFn, setMainFn] = useState<(e: any) => void>(() => {});
+
+  const show = (text: string) => {
+    if (isMainButtonMounted && !isShow) {
+      mainButton.setParams({
+        text: text,
+        isEnabled: true,
+        isVisible: true,
+        hasShineEffect: true,
+        isLoaderVisible,
+        textColor,
+        backgroundColor,
+      });
+      setIsShow(true);
+    }
+  };
+
+  const hide = () => {
+    if (isShow) {
+      mainButton.setParams({
+        text: "",
+        isVisible: false,
+        textColor: undefined,
+        backgroundColor: undefined,
+      });
+      setIsShow(false);
+    }
+  };
+
+  const updateButtonClick = (cb: VoidFunction) => {
+    setMainFn(cb);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -35,55 +62,64 @@ export const useMainButton = ({
 
   useEffect(() => {
     if (isMainButtonMounted) {
-      if (main) {
-        mainButton.setParams({
-          text: text,
-          isEnabled: true,
-          isVisible: true,
-          hasShineEffect: true,
-          isLoaderVisible,
-          textColor,
-          backgroundColor,
-        });
-        if (mainButtonOnClick) {
-          mainButton.onClick(mainButtonOnClick);
-        }
-      } else {
-        mainButton.setParams({
-          text: text,
-          isVisible: false,
-          textColor: undefined,
-          backgroundColor: undefined,
-        });
-      }
+      mainButton.offClick(mainFn);
+      mainButton.onClick(mainFn);
     }
-  }, [
-    main,
-    isMainButtonMounted,
-    text,
-    backgroundColor,
-    textColor,
-    isLoaderVisible,
-  ]);
+    return () => {
+      mainButton.offClick(mainFn);
+    };
+  }, [isMainButtonMounted]);
 
-  useEffect(() => {
-    if (isMainButtonMounted) {
-      const unsubscribe = mainButton.onClick(() => {
-        mainButton.setParams({
-          text: text,
-          isVisible: false,
-        });
-        if (mainButtonOnClick) {
-          mainButton.offClick(mainButtonOnClick);
-        }
-        // mainButton.
-        // mainButton.unmount();
-        // mainButton.mount();
-      });
+  // useEffect(() => {
+  //   if (isMainButtonMounted) {
+  //     if (main) {
+  //       mainButton.setParams({
+  //         text: text,
+  //         isEnabled: true,
+  //         isVisible: true,
+  //         hasShineEffect: true,
+  //         isLoaderVisible,
+  //         textColor,
+  //         backgroundColor,
+  //       });
+  //       if (mainButtonOnClick) {
+  //         mainButton.onClick(mainButtonOnClick);
+  //       }
+  //     } else {
+  //       mainButton.setParams({
+  //         text: text,
+  //         isVisible: false,
+  //         textColor: undefined,
+  //         backgroundColor: undefined,
+  //       });
+  //     }
+  //   }
+  // }, [
+  //   main,
+  //   isMainButtonMounted,
+  //   text,
+  //   backgroundColor,
+  //   textColor,
+  //   isLoaderVisible,
+  // ]);
 
-      return () => {
-        if (unsubscribe) unsubscribe();
-      };
-    }
-  });
+  // useEffect(() => {
+  //   if (isMainButtonMounted) {
+  //     const unsubscribe = mainButton.onClick(() => {
+  //       mainButton.setParams({
+  //         text: text,
+  //         isVisible: false,
+  //       });
+  //       if (mainButtonOnClick) {
+  //         mainButton.offClick(mainButtonOnClick);
+  //       }
+  //     });
+  //
+  //     return () => {
+  //       if (unsubscribe) unsubscribe();
+  //     };
+  //   }
+  // });
+
+  return { show, hide, updateButtonClick, isShow };
 };

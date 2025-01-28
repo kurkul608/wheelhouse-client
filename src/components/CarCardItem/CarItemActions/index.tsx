@@ -6,7 +6,6 @@ import wishlistDisableSvg from "@/app/_assets/wishlistDisable.svg";
 import shareButtonSvg from "@/app/_assets/shareButton.svg";
 import Image from "next/image";
 import { FC, useContext, useEffect, useState } from "react";
-import { useMainButton } from "@/hooks/useMainButton";
 import { useParams } from "next/navigation";
 import { addToWishlist as addToWishlistAction } from "@/actions/wishlist/addTo";
 import { useLaunchParams, shareURL } from "@telegram-apps/sdk-react";
@@ -19,6 +18,8 @@ import { Link } from "@/components/Link/Link";
 import { writeToClipboard } from "@/utils/writeToClipboard";
 import { getMiniAppLink } from "@/utils/getMiniAppLink";
 import { createOrder } from "@/actions/order/create";
+import { MainButtonContext } from "@/contexts/mainButtonContext";
+import { MainButton } from "@/components/MainButton";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
@@ -81,14 +82,28 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
     }
   };
 
-  useMainButton({
-    main: true,
-    text: "Нажать, чтобы менеджер связался с вами",
-    mainButtonOnClick: async () => {
-      const order = await createOrder(carId as string, getAuthorization(lp));
-      console.log(order);
-    },
-  });
+  // useMainButton({
+  //   main: true,
+  //   text: "Нажать, чтобы менеджер связался с вами",
+  //   mainButtonOnClick: async () => {
+  //     const order = await createOrder(carId as string, getAuthorization(lp));
+  //     console.log(order);
+  //   },
+  // });
+
+  const { show, hide, updateButtonClick } = useContext(MainButtonContext);
+
+  useEffect(() => {
+    if (show) show("Нажать, чтобы менеджер связался с вами");
+    if (updateButtonClick)
+      updateButtonClick(async () => {
+        const order = await createOrder(carId as string, getAuthorization(lp));
+        console.log(order);
+      });
+    return () => {
+      if (hide) hide();
+    };
+  }, []);
   const shareClick = async () => {
     const res = await writeToClipboard(
       getMiniAppLink({ carId: carId as string }),
@@ -111,6 +126,16 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
 
   return (
     <div className={"flex gap-2 top-[8px] right-[10px] absolute"}>
+      <MainButton
+        text={"Нажать, чтобы менеджер связался с вами"}
+        onClick={async () => {
+          const order = await createOrder(
+            carId as string,
+            getAuthorization(lp),
+          );
+          console.log(order);
+        }}
+      />
       <Image
         src={wishListSrc}
         alt={"wishlist-icon"}

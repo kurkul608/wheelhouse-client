@@ -1,6 +1,6 @@
 "use client";
 
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect, useMemo } from "react";
 import {
   miniApp,
   useLaunchParams,
@@ -25,6 +25,11 @@ import { usePathname } from "next/navigation";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 import { useCarCardsFilters } from "@/hooks/useCarCardsFilters";
 import { useStartParams } from "@/hooks/useStartParams";
+import {
+  createSystemContextValue,
+  SystemContext,
+} from "@/contexts/systemContext";
+import { DEFAULT_OPTIONS, OptionsContext } from "@/contexts/OptionsContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -57,6 +62,8 @@ function RootInner({ children }: PropsWithChildren) {
 
   useStartParams(user !== null && bucket !== null && wishlist !== null);
 
+  const systemValue = useMemo(createSystemContextValue, []);
+
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
@@ -70,16 +77,20 @@ function RootInner({ children }: PropsWithChildren) {
             <CarCardsFiltersContext.Provider
               value={{ stockFilter, update: updateCarCardsFilter }}
             >
-              {user == null || bucket === null || wishlist === null ? (
-                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                  <Spinner size="l" />
-                </div>
-              ) : (
-                <>
-                  {children}
-                  {pathname !== "/" && <Navigation />}
-                </>
-              )}
+              <SystemContext.Provider value={systemValue}>
+                <OptionsContext.Provider value={DEFAULT_OPTIONS}>
+                  {user == null || bucket === null || wishlist === null ? (
+                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                      <Spinner size="l" />
+                    </div>
+                  ) : (
+                    <>
+                      {children}
+                      {pathname !== "/" && <Navigation />}
+                    </>
+                  )}
+                </OptionsContext.Provider>
+              </SystemContext.Provider>
             </CarCardsFiltersContext.Provider>
           </WishlistContext.Provider>
         </BucketContext.Provider>
