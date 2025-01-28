@@ -6,7 +6,7 @@ import wishlistDisableSvg from "@/app/_assets/wishlistDisable.svg";
 import shareButtonSvg from "@/app/_assets/shareButton.svg";
 import Image from "next/image";
 import { FC, useContext, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { addToWishlist as addToWishlistAction } from "@/actions/wishlist/addTo";
 import { useLaunchParams, shareURL } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
@@ -18,7 +18,6 @@ import { Link } from "@/components/Link/Link";
 import { writeToClipboard } from "@/utils/writeToClipboard";
 import { getMiniAppLink } from "@/utils/getMiniAppLink";
 import { createOrder } from "@/actions/order/create";
-import { MainButtonContext } from "@/contexts/mainButtonContext";
 import { MainButton } from "@/components/MainButton";
 
 interface CarItemActionsProps {
@@ -28,6 +27,11 @@ interface CarItemActionsProps {
 export const CarItemActions: FC<CarItemActionsProps> = ({
   wishlistDefaultState,
 }) => {
+  const [mainButtonText, setMainButtonText] = useState(
+    "Нажать, чтобы менеджер связался с вами",
+  );
+  const [isRequestSended, setIsRequestSended] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [showClipBoard, setShowClipBoard] = useState({
     state: false,
     text: "",
@@ -82,28 +86,6 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
     }
   };
 
-  // useMainButton({
-  //   main: true,
-  //   text: "Нажать, чтобы менеджер связался с вами",
-  //   mainButtonOnClick: async () => {
-  //     const order = await createOrder(carId as string, getAuthorization(lp));
-  //     console.log(order);
-  //   },
-  // });
-
-  const { show, hide, updateButtonClick } = useContext(MainButtonContext);
-
-  useEffect(() => {
-    if (show) show("Нажать, чтобы менеджер связался с вами");
-    if (updateButtonClick)
-      updateButtonClick(async () => {
-        const order = await createOrder(carId as string, getAuthorization(lp));
-        console.log(order);
-      });
-    return () => {
-      if (hide) hide();
-    };
-  }, []);
   const shareClick = async () => {
     const res = await writeToClipboard(
       getMiniAppLink({ carId: carId as string }),
@@ -127,13 +109,22 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   return (
     <div className={"flex gap-2 top-[8px] right-[10px] absolute"}>
       <MainButton
-        text={"Нажать, чтобы менеджер связался с вами"}
+        text={mainButtonText}
+        disabled={isRequestSended}
+        progress={loader}
+        color={isRequestSended ? "#22BB33" : undefined}
         onClick={async () => {
-          const order = await createOrder(
-            carId as string,
-            getAuthorization(lp),
-          );
-          console.log(order);
+          if (!isRequestSended) {
+            setLoader(true);
+            const order = await createOrder(
+              carId as string,
+              getAuthorization(lp),
+            );
+            setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
+            setIsRequestSended(true);
+            setLoader(false);
+            console.log(order);
+          }
         }}
       />
       <Image
