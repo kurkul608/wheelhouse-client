@@ -100,6 +100,17 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
           ))}
         </Section>
       </List>
+      {!!carCard.description && (
+        <List
+          style={{
+            background: "var(--tgui--secondary_bg_color)",
+          }}
+        >
+          <Section header={"Описание авто:"}>
+            <div className={"px-[16px]"}>{carCard.description}</div>
+          </Section>
+        </List>
+      )}
     </>
   );
 };
