@@ -9,6 +9,7 @@ import {
   Avatar,
   Cell,
   Headline,
+  Input,
   Select,
   Spinner,
   Text,
@@ -23,12 +24,14 @@ export type ActiveFilter = "all" | "active" | "disabled";
 export default function ManagerCarsPage() {
   const router = useRouter();
   const [list, setList] = useState<CarCard[]>([]);
+  const [search, setSearch] = useState("");
   const [stockFilter, setStockFilter] = useState<CarCardsStockFilter>("all");
   const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
   const [loading, setLoading] = useState(false);
   const lp = useLaunchParams();
   const getCars = async () => {
     const cars = await getManagerCarsList(
+      search,
       stockFilter,
       activeFilter,
       getAuthorization(lp),
@@ -44,11 +47,16 @@ export default function ManagerCarsPage() {
     setLoading(true);
     setList([]);
     getCars();
-  }, [stockFilter, activeFilter]);
+  }, [stockFilter, activeFilter, search]);
 
   return (
     <Page>
       <div style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={"Введите название авто"}
+        />
         <Text className={"flex  px-[10px] py-[8px]"}>Фильтр наличия авто:</Text>
         <Select
           onChange={(e) => {

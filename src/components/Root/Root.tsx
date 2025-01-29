@@ -58,7 +58,11 @@ function RootInner({ children }: PropsWithChildren) {
 
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
-  const { stockFilter, update: updateCarCardsFilter } = useCarCardsFilters();
+  const {
+    stockFilter,
+    update: updateCarCardsFilter,
+    search: searchFilter,
+  } = useCarCardsFilters();
 
   useStartParams(user !== null && bucket !== null && wishlist !== null);
 
@@ -75,7 +79,11 @@ function RootInner({ children }: PropsWithChildren) {
             value={{ wishlist, update: updateRegisterData }}
           >
             <CarCardsFiltersContext.Provider
-              value={{ stockFilter, update: updateCarCardsFilter }}
+              value={{
+                stockFilter,
+                update: updateCarCardsFilter,
+                search: searchFilter,
+              }}
             >
               <SystemContext.Provider value={systemValue}>
                 <OptionsContext.Provider value={DEFAULT_OPTIONS}>

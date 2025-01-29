@@ -2,9 +2,12 @@ import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItem";
 
 export async function CarCardList() {
-  const initialUsers = await getCarCardsList(0, { stockFilter: "all" });
+  const initialCars = await getCarCardsList(0, {
+    stockFilter: "all",
+    search: "",
+  });
 
   return (
-    <CarCardItemList initialList={initialUsers ?? []} isScrollActive={true} />
+    <CarCardItemList initialList={initialCars ?? []} isScrollActive={true} />
   );
 }

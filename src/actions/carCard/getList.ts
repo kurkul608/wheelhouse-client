@@ -6,6 +6,7 @@ import { CarCardsStockFilter } from "@/contexts/carCardsFiltersContext";
 
 export interface GetCardListFilters {
   stockFilter: CarCardsStockFilter;
+  search: string;
 }
 
 export const getCarCardsList = async (
@@ -18,6 +19,7 @@ export const getCarCardsList = async (
       limit: `${CARS_LIMIT}`,
       offset: offset,
       stockFilter: filters.stockFilter,
+      search: filters.search,
     });
     const list = await fetch(
       `${process.env.API_URL}cars?${searchParams.toString()}`,

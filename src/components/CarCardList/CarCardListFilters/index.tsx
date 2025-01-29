@@ -1,15 +1,22 @@
 "use client";
 
-import { TabsList } from "@telegram-apps/telegram-ui";
+import { Input, TabsList } from "@telegram-apps/telegram-ui";
 import { TabsItem } from "@telegram-apps/telegram-ui/dist/components/Navigation/TabsList/components/TabsItem/TabsItem";
 import { useContext } from "react";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 
 export const CarCardListFilters = () => {
-  const { stockFilter, update } = useContext(CarCardsFiltersContext);
+  const { stockFilter, update, search } = useContext(CarCardsFiltersContext);
 
   return (
     <div>
+      <Input
+        value={search}
+        onChange={(event) => {
+          if (update) update({ search: event.target.value ?? "" });
+        }}
+        placeholder={"Введите название авто"}
+      />
       <TabsList>
         <TabsItem
           onClick={() => {
