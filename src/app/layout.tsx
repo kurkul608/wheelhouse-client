@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { I18nProvider } from "@/core/i18n/provider";
 
 import "@telegram-apps/telegram-ui/dist/styles.css";
-import "normalize.css/normalize.css";
+// import "normalize.css/normalize.css";
 import { Root } from "@/components/Root/Root";
 
 import "./_assets/globals.css";

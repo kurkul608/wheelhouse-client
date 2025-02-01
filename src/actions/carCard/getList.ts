@@ -2,24 +2,39 @@
 
 import { CarCard } from "@/models/carCard";
 import { CARS_LIMIT } from "@/constants/carsLimit";
-import { CarCardsStockFilter } from "@/contexts/carCardsFiltersContext";
-
-export interface GetCardListFilters {
-  stockFilter: CarCardsStockFilter;
-  search: string;
-}
+import { ICarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 
 export const getCarCardsList = async (
   page: number,
-  filters: GetCardListFilters,
+  filters: Partial<ICarCardsFiltersContext>,
 ): Promise<CarCard[] | undefined> => {
   try {
     const offset = `${page * CARS_LIMIT}`;
     const searchParams = new URLSearchParams({
       limit: `${CARS_LIMIT}`,
       offset: offset,
-      stockFilter: filters.stockFilter,
-      search: filters.search,
+      ...(filters.stockFilter !== undefined
+        ? { stockFilter: filters.stockFilter }
+        : {}),
+      ...(filters.search !== undefined ? { search: filters.search } : {}),
+      ...(filters.minDateFilter !== undefined
+        ? { minDateFilter: String(filters.minDateFilter) }
+        : {}),
+      ...(filters.maxDateFilter !== undefined
+        ? { maxDateFilter: String(filters.maxDateFilter) }
+        : {}),
+      ...(filters.sortBy !== undefined
+        ? { sortBy: String(filters.sortBy) }
+        : {}),
+      ...(filters.sortOrder !== undefined
+        ? { sortOrder: String(filters.sortOrder) }
+        : {}),
+    });
+    filters.carModelFilter?.forEach((filter) => {
+      searchParams.append("carModelFilter", filter);
+    });
+    filters.carBrandFilter?.forEach((filter) => {
+      searchParams.append("carBrandFilter", filter);
     });
     const list = await fetch(
       `${process.env.API_URL}cars?${searchParams.toString()}`,

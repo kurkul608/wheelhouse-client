@@ -1,6 +1,10 @@
 "use server";
 
-export const createOrder = async (carId: string, headers: HeadersInit) => {
+export const createOrder = async (
+  carId: string,
+  isInquiresAboutPrice: boolean,
+  headers: HeadersInit,
+) => {
   try {
     const order = await fetch(`${process.env.API_URL}orders`, {
       method: "POST",
@@ -10,6 +14,7 @@ export const createOrder = async (carId: string, headers: HeadersInit) => {
       },
       body: JSON.stringify({
         carId,
+        isInquiresAboutPrice,
       }),
     });
 

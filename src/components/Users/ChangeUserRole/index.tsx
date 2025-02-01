@@ -2,12 +2,13 @@
 
 import { Select } from "@telegram-apps/telegram-ui";
 import { User, UserRole } from "@/models/user";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { updateUserRole } from "@/admin/users/updateRole";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
+import { UserContext } from "@/contexts/userContext";
 
 interface ChangeUserRoleProps {
   user: User;
@@ -17,8 +18,9 @@ interface ChangeUserRoleProps {
 export const ChangeUserRole: FC<ChangeUserRoleProps> = ({ user, refresh }) => {
   const router = useRouter();
   const lp = useLaunchParams();
+  const { user: adminUser } = useContext(UserContext);
 
-  const isAdminActive = user.roles.some(
+  const isAdminActive = adminUser?.roles.some(
     (role) => role === "ADMIN" || role === "SUPER_ADMIN",
   );
   const onRoleChange = async (role: UserRole) => {

@@ -76,7 +76,16 @@ export const CarCardItemList = ({
   initialList: CarCard[];
   isScrollActive?: boolean;
 }) => {
-  const { stockFilter, search } = useContext(CarCardsFiltersContext);
+  const {
+    stockFilter,
+    search,
+    minDateFilter,
+    maxDateFilter,
+    carModelFilter,
+    carBrandFilter,
+    sortBy,
+    sortOrder,
+  } = useContext(CarCardsFiltersContext);
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState<CarCard[]>(initialList);
@@ -86,6 +95,12 @@ export const CarCardItemList = ({
     const apiCarCards = await getCarCardsList(newPage ?? page, {
       stockFilter,
       search,
+      minDateFilter,
+      maxDateFilter,
+      carModelFilter,
+      carBrandFilter,
+      sortOrder,
+      sortBy,
     });
     setList([...(newList ?? list), ...(apiCarCards ?? [])]);
     setPage(newPage ?? page + 1);
@@ -98,7 +113,17 @@ export const CarCardItemList = ({
       setPage(0);
       loadMoreCars(0, []);
     }
-  }, [isScrollActive, stockFilter, search]);
+  }, [
+    isScrollActive,
+    stockFilter,
+    search,
+    minDateFilter,
+    maxDateFilter,
+    carModelFilter,
+    carBrandFilter,
+    sortOrder,
+    sortBy,
+  ]);
 
   return list.length ? (
     <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>

@@ -22,15 +22,19 @@ import { MainButton } from "@/components/MainButton";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
+  isRequestAlreadySend: boolean;
+  existMainButtonText?: string | null;
 }
 
 export const CarItemActions: FC<CarItemActionsProps> = ({
   wishlistDefaultState,
+  isRequestAlreadySend,
+  existMainButtonText,
 }) => {
   const [mainButtonText, setMainButtonText] = useState(
     "Нажать, чтобы менеджер связался с вами",
   );
-  const [isRequestSended, setIsRequestSended] = useState(false);
+  const [isRequestSend, setIsRequestSend] = useState(isRequestAlreadySend);
   const [loader, setLoader] = useState(false);
   const [showClipBoard, setShowClipBoard] = useState({
     state: false,
@@ -58,6 +62,12 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
       setWishListSrc(wishlistSvg.src);
     }
   }, [carId, wishlist]);
+
+  useEffect(() => {
+    if (isRequestAlreadySend && !isRequestSend) {
+      setIsRequestSend(true);
+    }
+  }, [isRequestAlreadySend]);
 
   const lp = useLaunchParams();
 
@@ -106,26 +116,29 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
     }
   };
 
+  const sendUserRequest = async () => {
+    if (!isRequestSend) {
+      setLoader(true);
+      const order = await createOrder(
+        carId as string,
+        false,
+        getAuthorization(lp),
+      );
+      setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
+      setIsRequestSend(true);
+      setLoader(false);
+      console.log(order);
+    }
+  };
+
   return (
     <div className={"flex gap-2 top-[8px] right-[10px] absolute"}>
       <MainButton
-        text={mainButtonText}
-        disabled={isRequestSended}
+        text={existMainButtonText ?? mainButtonText}
+        disabled={isRequestSend}
         progress={loader}
-        color={isRequestSended ? "#22BB33" : undefined}
-        onClick={async () => {
-          if (!isRequestSended) {
-            setLoader(true);
-            const order = await createOrder(
-              carId as string,
-              getAuthorization(lp),
-            );
-            setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
-            setIsRequestSended(true);
-            setLoader(false);
-            console.log(order);
-          }
-        }}
+        color={isRequestSend ? "#22BB33" : undefined}
+        onClick={sendUserRequest}
       />
       <Image
         src={wishListSrc}

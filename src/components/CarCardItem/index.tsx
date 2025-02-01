@@ -1,3 +1,5 @@
+"use client";
+
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { getCarsPageUrl } from "@/utils/getCarsPageUrl";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
@@ -10,19 +12,24 @@ import {
   Text,
   Title,
 } from "@telegram-apps/telegram-ui";
-import { classNames } from "@telegram-apps/sdk-react";
-import { FC } from "react";
+import { classNames, useLaunchParams } from "@telegram-apps/sdk-react";
+import { FC, useState } from "react";
 import { CarCard } from "@/models/carCard";
 import { CarItemActions } from "@/components/CarCardItem/CarItemActions";
 import { getFileLink } from "@/utils/getFileLink";
 import { AvatarBySpecification } from "@/components/CarCardItem/AvatarBySpecification";
 import { Ruble } from "@/components/Icons/Ruble";
+import { createOrder } from "@/actions/order/create";
+import { getAuthorization } from "@/utils/getAuthorization";
 
 interface CarCardItemProps {
   carCard: CarCard;
 }
 
 export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
+  const [isRequestSend, setIsRequestSend] = useState(false);
+  const [mainButtonText, setMainButtonText] = useState<string | null>(null);
+  const lp = useLaunchParams();
   const model = carCard.specifications?.find((spec) => spec.field === "model");
   const specification = carCard.specifications?.find(
     (spec) => spec.field === "specification",
@@ -31,6 +38,19 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
   const otherSpecs = carCard.specifications?.filter(
     (spec) => spec.field !== "model" && spec.field !== "specification",
   );
+
+  const sendUserRequest = async () => {
+    if (!isRequestSend) {
+      const order = await createOrder(
+        carCard.id as string,
+        true,
+        getAuthorization(lp),
+      );
+      setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
+      setIsRequestSend(true);
+      console.log(order);
+    }
+  };
 
   return (
     <>
@@ -43,7 +63,10 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
           { name: model?.value || "" },
         ]}
       >
-        <CarItemActions />
+        <CarItemActions
+          isRequestAlreadySend={isRequestSend}
+          existMainButtonText={mainButtonText}
+        />
       </Breadcrumbs>
       <PhotoGallery
         photoUrls={
@@ -73,6 +96,11 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
       >
         <Section header={"Хакартеристики авто:"}>
           <Cell
+            onClick={() => {
+              if (!!carCard.externalId) {
+                sendUserRequest();
+              }
+            }}
             subtitle={
               !!carCard.externalId || !carCard.price
                 ? "Узнать цену"

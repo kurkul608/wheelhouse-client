@@ -62,6 +62,12 @@ function RootInner({ children }: PropsWithChildren) {
     stockFilter,
     update: updateCarCardsFilter,
     search: searchFilter,
+    carBrandFilter,
+    carModelFilter,
+    minDateFilter,
+    maxDateFilter,
+    sortOrder,
+    sortBy,
   } = useCarCardsFilters();
 
   useStartParams(user !== null && bucket !== null && wishlist !== null);
@@ -83,6 +89,12 @@ function RootInner({ children }: PropsWithChildren) {
                 stockFilter,
                 update: updateCarCardsFilter,
                 search: searchFilter,
+                carBrandFilter: carBrandFilter,
+                carModelFilter,
+                maxDateFilter,
+                minDateFilter,
+                sortBy,
+                sortOrder,
               }}
             >
               <SystemContext.Provider value={systemValue}>
