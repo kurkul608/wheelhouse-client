@@ -18,6 +18,7 @@ import { SectionHeader } from "@telegram-apps/telegram-ui/dist/components/Blocks
 import { SpecList } from "@/components/Manager/CarCard/SpecList";
 import { AddNewSpec } from "@/components/Manager/CarCard/AddNewSpec";
 import { StockSwitch } from "@/components/Manager/CarCard/StockSwitch";
+import { Description } from "@/components/Manager/CarCard/Description";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -75,6 +76,10 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
           carCardId={carCard.id}
           specifications={carCard.specifications}
         />
+      </Section>
+      <Section className={"mt-2"}>
+        <SectionHeader>Описание карточки авто</SectionHeader>
+        <Description carCard={carCard} />
       </Section>
     </>
   );

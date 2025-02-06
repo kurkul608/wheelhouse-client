@@ -21,6 +21,7 @@ import { AvatarBySpecification } from "@/components/CarCardItem/AvatarBySpecific
 import { Ruble } from "@/components/Icons/Ruble";
 import { createOrder } from "@/actions/order/create";
 import { getAuthorization } from "@/utils/getAuthorization";
+import parse from "html-react-parser";
 
 interface CarCardItemProps {
   carCard: CarCard;
@@ -135,7 +136,7 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
           }}
         >
           <Section header={"Описание авто:"}>
-            <div className={"px-[16px]"}>{carCard.description}</div>
+            <div className={"px-[16px]"}>{parse(carCard.description)}</div>
           </Section>
         </List>
       )}

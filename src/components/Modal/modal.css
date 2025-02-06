@@ -1,0 +1,4 @@
+
+.modal-content {
+    background-color: var(--tgui--secondary_bg_color, white);
+}

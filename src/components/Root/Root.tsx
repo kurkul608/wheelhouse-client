@@ -115,6 +115,7 @@ function RootInner({ children }: PropsWithChildren) {
           </WishlistContext.Provider>
         </BucketContext.Provider>
       </UserContext.Provider>
+      <div id="modal-root"></div>
     </AppRoot>
   );
 }
