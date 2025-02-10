@@ -34,8 +34,10 @@ export function init(debug: boolean): void {
     themeParams.bindCssVars();
   }
 
-  if (!swipeBehavior.isMounted()) {
-    swipeBehavior.mount();
+  if (!swipeBehavior?.isMounted()) {
+    if (swipeBehavior.mount) {
+      swipeBehavior.mount();
+    }
   }
 
   initData.restore();
