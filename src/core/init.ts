@@ -7,7 +7,6 @@ import {
   $debug,
   init as initSDK,
   mainButton,
-  swipeBehavior,
 } from "@telegram-apps/sdk-react";
 
 /**
