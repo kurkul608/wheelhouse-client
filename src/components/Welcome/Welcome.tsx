@@ -1,31 +1,35 @@
-"use client";
+"use server";
 
-import { Button } from "@telegram-apps/telegram-ui";
-import React from "react";
-import { useRouter } from "next/navigation";
+// import { Button } from "@telegram-apps/telegram-ui";
+// import React from "react";
+// import { useRouter } from "next/navigation";
 
-export const Welcome = () => {
-  const router = useRouter();
+// import { redirect } from "next/navigation";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const buttonClick = (e: any) => {
-    const path = "/cars";
-    const params = new URLSearchParams({
-      page: "0",
-    });
-    const targetURL = new URL(path, window.location.toString());
-    e.preventDefault();
-    router.push(`${targetURL.toString()}?${params.toString()}`);
-  };
+export const Welcome = async () => {
+  // redirect("/cars");
+  // const router = useRouter();
 
-  return (
-    <div
-      className="w-full h-[100vh] flex items-center justify-center"
-      style={{ background: "var(--tgui--bg_color)" }}
-    >
-      <Button mode="filled" size="l" onClick={buttonClick}>
-        Просмотр каталога авто
-      </Button>
-    </div>
-  );
+  // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // const buttonClick = (e: any) => {
+  //   const path = "/cars";
+  //   const params = new URLSearchParams({
+  //     page: "0",
+  //   });
+  //   const targetURL = new URL(path, window.location.toString());
+  //   e.preventDefault();
+  //   router.push(`${targetURL.toString()}?${params.toString()}`);
+  // };
+  return null;
+
+  // return (
+  //   <div
+  //     className="w-full h-[100vh] flex items-center justify-center"
+  //     style={{ background: "var(--tgui--bg_color)" }}
+  //   >
+  //     <Button mode="filled" size="l" onClick={buttonClick}>
+  //       Просмотр каталога авто
+  //     </Button>
+  //   </div>
+  // );
 };

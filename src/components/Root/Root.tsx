@@ -21,7 +21,7 @@ import { UserContext } from "@/contexts/userContext";
 import { BucketContext } from "@/contexts/bucketContext";
 import { WishlistContext } from "@/contexts/wishlistContext";
 import { Navigation } from "@/components/Navigation";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 import { useCarCardsFilters } from "@/hooks/useCarCardsFilters";
 import { useStartParams } from "@/hooks/useStartParams";
@@ -36,6 +36,7 @@ function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
   const lp = useLaunchParams();
   const debug = isDev || lp.startParam === "debug";
+  const router = useRouter();
 
   useClientOnce(() => {
     init(debug);
@@ -57,6 +58,12 @@ function RootInner({ children }: PropsWithChildren) {
   }, [swipeBehavior.isMounted()]);
 
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
+
+  useEffect(() => {
+    if (user !== null && bucket !== null && wishlist !== null) {
+      router.push("/cars");
+    }
+  }, [user, bucket, wishlist]);
 
   const {
     stockFilter,
