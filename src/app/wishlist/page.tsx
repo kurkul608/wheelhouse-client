@@ -19,7 +19,6 @@ export default async function WishlistPage() {
             { name: "Избранное" },
           ]}
         />
-
         <Wishlist />
       </div>
     </Page>

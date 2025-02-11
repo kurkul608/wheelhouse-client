@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CircularProgress,
-  List,
-  Spinner,
-  Text,
-} from "@telegram-apps/telegram-ui";
+import { Button, Card, List, Spinner, Text } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
@@ -148,7 +141,7 @@ export const CarCardItemList = ({
     </List>
   ) : isLoading ? (
     <div className={"h-full flex items-center justify-center"}>
-      <Spinner />
+      <Spinner size={"m"} />
     </div>
   ) : (
     <div className={"h-full flex items-center justify-center"}>
