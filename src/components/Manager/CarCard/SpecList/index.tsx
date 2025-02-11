@@ -12,7 +12,7 @@ interface SpecListProps {
 export const SpecList: FC<SpecListProps> = async ({ carCard }) => {
   return (
     <List>
-      {carCard.specifications.map((spec) => (
+      {carCard.specifications?.map((spec) => (
         <div className={"flex justify-between"} key={spec.id}>
           <Info subtitle={spec.fieldName} type="text" className={"text-left"}>
             {spec.value}
