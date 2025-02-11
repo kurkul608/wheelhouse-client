@@ -104,7 +104,7 @@ export const CarCardItemList = ({
   };
 
   useEffect(() => {
-    if (!isInitLoading && isScrollActive) {
+    if (isScrollActive) {
       setList([]);
       setPage(0);
       loadMoreCars(0, []);
