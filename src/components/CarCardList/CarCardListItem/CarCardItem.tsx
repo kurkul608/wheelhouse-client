@@ -77,6 +77,7 @@ export const CarCardItemList = ({
   initialList: CarCard[];
   isScrollActive?: boolean;
 }) => {
+  console.log("initialList: ", initialList);
   const {
     stockFilter,
     search,
@@ -90,6 +91,7 @@ export const CarCardItemList = ({
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState<CarCard[]>(initialList);
+  const [isInitLoading, setIsInitLoading] = useState(true);
 
   const loadMoreCars = async (newPage?: number, newList?: CarCard[]) => {
     setIsLoading(true);
@@ -109,10 +111,11 @@ export const CarCardItemList = ({
   };
 
   useEffect(() => {
-    if (isScrollActive) {
+    if (!isInitLoading && isScrollActive) {
       setList([]);
       setPage(0);
       loadMoreCars(0, []);
+      setIsInitLoading(true);
     }
   }, [
     isScrollActive,
