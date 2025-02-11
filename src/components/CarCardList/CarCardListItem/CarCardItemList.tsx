@@ -5,6 +5,7 @@ import {
   Card,
   CircularProgress,
   List,
+  Spinner,
   Text,
 } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
@@ -13,7 +14,7 @@ import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card
 import { useMemo, Fragment, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { CarCard } from "@/models/carCard";
-import { WishlistButton } from "@/components/CarCardList/CarCardListItem/WishlistButton/imdex";
+import { WishlistButton } from "@/components/CarCardList/CarCardListItem/WishlistButton";
 import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 import { getFileLink } from "@/utils/getFileLink";
@@ -147,7 +148,7 @@ export const CarCardItemList = ({
     </List>
   ) : isLoading ? (
     <div className={"h-full flex items-center justify-center"}>
-      <CircularProgress />
+      <Spinner />
     </div>
   ) : (
     <div className={"h-full flex items-center justify-center"}>
