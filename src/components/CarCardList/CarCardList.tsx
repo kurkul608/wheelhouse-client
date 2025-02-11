@@ -1,13 +1,11 @@
-import { getCarCardsList } from "@/actions/carCard/getList";
+// import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItem";
 
 export async function CarCardList() {
-  const initialCars = await getCarCardsList(0, {
-    stockFilter: "all",
-    search: "",
-  });
+  // const initialCars = await getCarCardsList(0, {
+  //   stockFilter: "all",
+  //   search: "",
+  // });
 
-  return (
-    <CarCardItemList initialList={initialCars ?? []} isScrollActive={true} />
-  );
+  return <CarCardItemList initialList={[]} isScrollActive={true} />;
 }

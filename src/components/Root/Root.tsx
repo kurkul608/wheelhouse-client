@@ -33,10 +33,10 @@ import { DEFAULT_OPTIONS, OptionsContext } from "@/contexts/OptionsContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
+  const router = useRouter();
   const isDev = process.env.NODE_ENV === "development";
   const lp = useLaunchParams();
   const debug = isDev || lp.startParam === "debug";
-  const router = useRouter();
 
   useClientOnce(() => {
     init(debug);
@@ -106,7 +106,10 @@ function RootInner({ children }: PropsWithChildren) {
             >
               <SystemContext.Provider value={systemValue}>
                 <OptionsContext.Provider value={DEFAULT_OPTIONS}>
-                  {user == null || bucket === null || wishlist === null ? (
+                  {user == null ||
+                  bucket === null ||
+                  wishlist === null ||
+                  pathname === "/" ? (
                     <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
                       <Spinner size="l" />
                     </div>

@@ -44,6 +44,7 @@ export const Navigation = () => {
             alt={"listSvg icon"}
             width={24}
             height={24}
+            unoptimized
           />
         }
         text={"Менеджер меню"}
@@ -62,6 +63,7 @@ export const Navigation = () => {
             alt={"listSvg icon"}
             width={24}
             height={24}
+            unoptimized
           />
         }
         text={"Админ меню"}

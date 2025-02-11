@@ -91,6 +91,7 @@ export const WishlistButton = ({ carCardId }: { carCardId: string }) => {
               alt={"bucket-icon"}
               width={20}
               height={20}
+              unoptimized
             />
           }
           onClose={() => {

@@ -58,6 +58,7 @@ export const CarCardListItem = (props: CarCard) => {
             objectFit: "cover",
           }}
           className={"w-full"}
+          unoptimized
         />
         <CardCell readOnly subtitle={modelName}>
           {!!props.externalId || !props.price

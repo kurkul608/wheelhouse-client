@@ -86,6 +86,7 @@ export const CreatePhotos = ({ carId }: { carId: string }) => {
                   height={100}
                   style={{ objectFit: "cover", borderRadius: "8px" }}
                   onLoad={() => URL.revokeObjectURL(URL.createObjectURL(file))}
+                  unoptimized
                 />
               }
               subtitle={`${file.size} bytes`}

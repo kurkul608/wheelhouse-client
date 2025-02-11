@@ -32,6 +32,7 @@ export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
             height={100}
             style={{ objectFit: "cover", borderRadius: "8px" }}
             onLoad={() => URL.revokeObjectURL(getFileLink(photo))}
+            unoptimized
           />
         }
         subtitle={`${photo.file_size} bytes`}

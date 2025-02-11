@@ -148,6 +148,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
         onClick={() => {
           addToWishList();
         }}
+        unoptimized
       />
       <Image
         src={shareButtonSvg.src}
@@ -155,6 +156,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
         onClick={shareClick}
         width={16}
         height={16}
+        unoptimized
       />
       {showWishlistSnackBar.state && (
         <Snackbar
@@ -164,6 +166,7 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
               alt={"wishlist-icon"}
               width={20}
               height={20}
+              unoptimized
             />
           }
           onClose={() => {
