@@ -1,6 +1,6 @@
 "use client";
 
-import { PropsWithChildren, useEffect, useMemo } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import {
   miniApp,
   useLaunchParams,
@@ -37,6 +37,7 @@ function RootInner({ children }: PropsWithChildren) {
   const isDev = process.env.NODE_ENV === "development";
   const lp = useLaunchParams();
   const debug = isDev || lp.startParam === "debug";
+  const [isInitLoading, setIsInitLoading] = useState(true);
 
   useClientOnce(() => {
     init(debug);
@@ -60,8 +61,14 @@ function RootInner({ children }: PropsWithChildren) {
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
 
   useEffect(() => {
-    if (user !== null && bucket !== null && wishlist !== null) {
+    if (
+      user !== null &&
+      bucket !== null &&
+      wishlist !== null &&
+      isInitLoading
+    ) {
       router.push("/cars");
+      setIsInitLoading(false);
     }
   }, [user, bucket, wishlist]);
 

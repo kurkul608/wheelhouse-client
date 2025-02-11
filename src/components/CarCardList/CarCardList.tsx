@@ -1,5 +1,4 @@
-// import { getCarCardsList } from "@/actions/carCard/getList";
-import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItem";
+import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItemList";
 import { getCarCardsList } from "@/actions/carCard/getList";
 
 export async function CarCardList() {

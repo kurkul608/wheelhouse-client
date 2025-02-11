@@ -77,7 +77,6 @@ export const CarCardItemList = ({
   initialList: CarCard[];
   isScrollActive?: boolean;
 }) => {
-  console.log("initialList: ", initialList);
   const {
     stockFilter,
     search,

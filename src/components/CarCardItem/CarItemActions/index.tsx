@@ -119,15 +119,10 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   const sendUserRequest = async () => {
     if (!isRequestSend) {
       setLoader(true);
-      const order = await createOrder(
-        carId as string,
-        false,
-        getAuthorization(lp),
-      );
+      await createOrder(carId as string, false, getAuthorization(lp));
       setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
       setIsRequestSend(true);
       setLoader(false);
-      console.log(order);
     }
   };
 
