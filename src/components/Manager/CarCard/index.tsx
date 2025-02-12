@@ -32,6 +32,7 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
   const specification = carCard.specifications?.find(
     (spec) => spec.field === "specification",
   );
+  console.log(carCard);
 
   return (
     <>
