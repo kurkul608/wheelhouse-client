@@ -1,7 +1,6 @@
-export const CAR_MODELS_FILTER_OPTIONS: {
-  value: CarModelsFilterType;
-  label: string;
-}[] = [
+import { SelectOption } from "@/components/MultiSelectWithSearch";
+
+export const CAR_MODELS_FILTER_OPTIONS: SelectOption<unknown>[] = [
   { value: "3", label: "3" },
   { value: "740", label: "740" },
   { value: "i7", label: "i7" },

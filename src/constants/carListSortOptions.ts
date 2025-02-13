@@ -1,16 +1,20 @@
-export const CAR_LIST_SORT_OPTIONS = [
+import { SelectOption } from "@/components/MultiSelectWithSearch";
+
+export const CAR_LIST_SORT_OPTIONS: SelectOption<{
+  sortOrder: SORT_ORDER;
+}>[] = [
   {
-    id: 1,
-    sortBy: "date",
-    sortOrder: "desc",
+    value: "date",
+    sortOrder: "desc" as SORT_ORDER,
     label: "По дате размещения - новее",
   },
   {
-    id: 2,
-    sortBy: "date",
-    sortOrder: "asc",
+    value: "date",
+    sortOrder: "asc" as SORT_ORDER,
     label: "По дате размещения - старее",
   },
 ];
+
+export type SORT_ORDER = "asc" | "desc";
 
 export type CarListSortOptionsType = "date";

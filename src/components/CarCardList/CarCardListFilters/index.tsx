@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Multiselect,
-  Select,
-  Subheadline,
-} from "@telegram-apps/telegram-ui";
+import { Button, Subheadline } from "@telegram-apps/telegram-ui";
 import { FormEvent, useContext, useState } from "react";
 import {
   CarCardsFiltersContext,
@@ -23,7 +18,11 @@ import { STOCK_FILTER_OPTIONS } from "@/constants/stockFilterOptions";
 import { CAR_LIST_SORT_OPTIONS } from "@/constants/carListSortOptions";
 import { Modal } from "@/components/Modal";
 import { Parameters } from "@/components/Icons/Parameters";
-import MultiSelectWithSearch from "@/components/MultiSelectWithSearch";
+import MultiSelectWithSearch, {
+  SelectOption,
+} from "@/components/MultiSelectWithSearch";
+import SingleSelectWithSearch from "@/components/SingleSelectWithSearch";
+import { YearFilter } from "@/components/YearFilter";
 
 export const CarCardListFilters = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,26 +60,22 @@ export const CarCardListFilters = () => {
       >
         <form onSubmit={formHandler}>
           <div className={"mb-2"}>
-            <Subheadline className={"px-[22px]"}>Наличие авто</Subheadline>
-            <Select
-              header={"Наличие авто"}
-              onChange={(event) => {
+            <SingleSelectWithSearch
+              options={STOCK_FILTER_OPTIONS}
+              onChange={(option) => {
                 if (update)
                   update({
-                    stockFilter: event.target.value as CarCardsStockFilter,
+                    stockFilter: option?.value as CarCardsStockFilter,
                   });
               }}
-              value={stockFilter}
-            >
-              {STOCK_FILTER_OPTIONS.map((option) => (
-                <option
-                  value={option.value}
-                  key={`stock-filter-${option.value}`}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </Select>
+              defaultSelectedOption={STOCK_FILTER_OPTIONS.find(
+                (opt) => opt.value === stockFilter,
+              )}
+              placeholder={"Наличие авто"}
+              head={
+                <Subheadline className={"px-[22px]"}>Наличие авто</Subheadline>
+              }
+            />
           </div>
           <div className={"mb-2"}>
             <MultiSelectWithSearch
@@ -100,6 +95,7 @@ export const CarCardListFilters = () => {
               defaultSelectedOptions={CAR_BRANDS_FILTER_OPTIONS.filter(
                 (option) => carBrandFilter.some((opt) => opt === option.value),
               )}
+              targetPortalId={"cars-filters"}
             />
           </div>
           <div className={"mb-2"}>
@@ -120,71 +116,56 @@ export const CarCardListFilters = () => {
               defaultSelectedOptions={CAR_MODELS_FILTER_OPTIONS.filter(
                 (option) => carModelFilter.some((opt) => opt === option.value),
               )}
+              targetPortalId={"cars-filters"}
             />
           </div>
-          <div>
-            <Subheadline className={"px-[22px]"}>Год</Subheadline>
-            <div className={"flex items-center justify-between mb-1"}>
-              <Select
-                header={"Мин"}
-                onChange={(event) => {
-                  if (update) update({ minDateFilter: +event.target.value });
+          <div className={"mb-2"}>
+            <YearFilter
+              onMinChange={(selectedOption: SelectOption<unknown> | null) => {
+                if (update && selectedOption)
+                  update({
+                    minDateFilter: +selectedOption.value,
+                  });
+              }}
+              onMaxChange={(selectedOption: SelectOption<unknown> | null) => {
+                if (update && selectedOption)
+                  update({
+                    maxDateFilter: +selectedOption.value,
+                  });
+              }}
+              defaultMinOption={{
+                value: String(minDateFilter),
+                label: String(minDateFilter),
+              }}
+              defaultMaxOption={{
+                value: String(maxDateFilter),
+                label: String(maxDateFilter),
+              }}
+              targetPortalId={"cars-filters"}
+            />
+
+            <div className={"mb-2"}>
+              <SingleSelectWithSearch
+                options={CAR_LIST_SORT_OPTIONS}
+                onChange={(option) => {
+                  if (option && update)
+                    update({
+                      sortBy: option.value,
+                      sortOrder: option.sortOrder,
+                    });
                 }}
-                value={minDateFilter}
-              >
-                {Array.from(
-                  { length: new Date().getFullYear() - 2004 + 1 },
-                  (_, i) => 2004 + i,
-                ).map((option) => (
-                  <option key={`min-year-${option}`}>{option}</option>
-                ))}
-              </Select>{" "}
-              -{" "}
-              <Select
-                header={"Макс"}
-                onChange={(event) => {
-                  if (update) update({ maxDateFilter: +event.target.value });
-                }}
-                value={maxDateFilter}
-              >
-                {Array.from(
-                  { length: new Date().getFullYear() - 2004 + 1 },
-                  (_, i) => 2004 + i,
-                ).map((option) => (
-                  <option key={`max-year-${option}`}>{option}</option>
-                ))}
-              </Select>
-            </div>
-            <div className={"mb-1"}>
-              <Subheadline className={"px-[22px]"}>Сортировать по</Subheadline>
-              <div className={"flex justify-end"}>
-                <Select
-                  header={"Сортировка"}
-                  value={
-                    CAR_LIST_SORT_OPTIONS.find(
-                      (option) =>
-                        option.sortBy === sortBy &&
-                        option.sortOrder === sortOrder,
-                    )?.id
-                  }
-                  onChange={(event) => {
-                    const sort = CAR_LIST_SORT_OPTIONS.find(
-                      (option) => option.id === +event.target.value,
-                    );
-                    if (sort && update)
-                      update({
-                        sortBy: sort.sortBy,
-                        sortOrder: sort.sortOrder,
-                      });
-                  }}
-                >
-                  {CAR_LIST_SORT_OPTIONS.map((option) => (
-                    <option value={option.id} key={`sort-${option.id}`}>
-                      {option.label}
-                    </option>
-                  ))}
-                </Select>
-              </div>
+                defaultSelectedOption={CAR_LIST_SORT_OPTIONS.find(
+                  (option) =>
+                    option.value === sortBy && option.sortOrder === sortOrder,
+                )}
+                placeholder={"Наличие авто"}
+                head={
+                  <Subheadline className={"px-[22px]"}>
+                    Сортировать по
+                  </Subheadline>
+                }
+                targetPortalId={"cars-filters"}
+              />
             </div>
           </div>
           <div className={"mt-2 flex justify-center"}>

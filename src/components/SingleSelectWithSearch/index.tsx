@@ -1,10 +1,6 @@
 import React, { ReactNode, useState } from "react";
-import Select, { ActionMeta, MultiValue, StylesConfig } from "react-select";
-
-export type SelectOption<T> = {
-  value: string;
-  label: string;
-} & T;
+import Select, { ActionMeta, StylesConfig } from "react-select";
+import { SelectOption } from "@/components/MultiSelectWithSearch";
 
 const textStyles = {
   fontSize: "var(--tgui--text--font_size)",
@@ -14,7 +10,7 @@ const textStyles = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const customStyles: StylesConfig<SelectOption<any>, true> = {
+const customStyles: StylesConfig<SelectOption<any>, false> = {
   control: (provided, state) => ({
     ...provided,
     backgroundColor: "var(--tgui--bg_color)",
@@ -37,23 +33,6 @@ const customStyles: StylesConfig<SelectOption<any>, true> = {
   singleValue: (provided) => ({
     ...provided,
     ...textStyles,
-  }),
-  multiValue: (provided) => ({
-    ...provided,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-    borderRadius: "12px",
-  }),
-  multiValueLabel: (provided) => ({
-    ...provided,
-    ...textStyles,
-  }),
-  multiValueRemove: (provided) => ({
-    ...provided,
-    ...textStyles,
-    ":hover": {
-      backgroundColor: "var(--tgui--text_color)",
-      color: "var(--tgui--bg_color)",
-    },
   }),
   menu: (provided) => ({
     ...provided,
@@ -86,45 +65,44 @@ const customStyles: StylesConfig<SelectOption<any>, true> = {
   }),
 };
 
-export type MultiSelectWithSearchProps<T> = {
-  options: MultiValue<SelectOption<T>>;
-  defaultSelectedOptions: MultiValue<SelectOption<T>>;
+export type SingleSelectWithSearchProps<T> = {
+  options: SelectOption<T>[];
+  defaultSelectedOption?: SelectOption<T> | null;
   placeholder?: string;
   onChange: (
-    selectedOptions: MultiValue<SelectOption<T>>,
+    selectedOption: SelectOption<T> | null,
     actionMeta: ActionMeta<SelectOption<T>>,
   ) => void;
   head?: ReactNode;
   targetPortalId?: string;
 };
 
-function MultiSelectWithSearch<T>({
+function SingleSelectWithSearch<T>({
   options,
-  defaultSelectedOptions,
+  defaultSelectedOption = null,
   placeholder,
   onChange,
   head,
   targetPortalId,
-}: MultiSelectWithSearchProps<T>) {
-  const [selectedOptions, setSelectedOptions] = useState<
-    MultiValue<SelectOption<T>>
-  >(defaultSelectedOptions);
+}: SingleSelectWithSearchProps<T>) {
+  const [selectedOption, setSelectedOption] = useState<SelectOption<T> | null>(
+    defaultSelectedOption,
+  );
 
   const handleChange = (
-    newValue: MultiValue<SelectOption<T>>,
+    newValue: SelectOption<T> | null,
     actionMeta: ActionMeta<SelectOption<T>>,
   ) => {
-    setSelectedOptions(newValue || []);
+    setSelectedOption(newValue);
     onChange(newValue, actionMeta);
   };
 
   return (
     <div>
-      {head ? <div className={"mb-1"}>{head}</div> : null}
+      {head ? <div className="mb-1">{head}</div> : null}
       <Select
-        isMulti
         options={options}
-        value={selectedOptions}
+        value={selectedOption}
         onChange={handleChange}
         placeholder={placeholder}
         styles={customStyles}
@@ -144,4 +122,4 @@ function MultiSelectWithSearch<T>({
   );
 }
 
-export default MultiSelectWithSearch;
+export default SingleSelectWithSearch;

@@ -1,6 +1,6 @@
 import { SelectOption } from "@/components/MultiSelectWithSearch";
 
-export const CAR_BRANDS_FILTER_OPTIONS: SelectOption[] = [
+export const CAR_BRANDS_FILTER_OPTIONS: SelectOption<unknown>[] = [
   { value: "Aston Martin", label: "Aston Martin" },
   { value: "Audi", label: "Audi" },
   { value: "Bentley", label: "Bentley" },
