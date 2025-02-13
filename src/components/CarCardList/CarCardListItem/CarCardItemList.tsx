@@ -120,30 +120,36 @@ export const CarCardItemList = ({
     sortBy,
   ]);
 
-  return list.length ? (
-    <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
-      {list.map((carCard, index) => (
-        <CarCardListItem {...carCard} key={`car-card-${index}`} />
-      ))}
-      {isScrollActive && (
-        <div className={"flex justify-center items-center"}>
-          <Button
-            onClick={() => {
-              loadMoreCars();
-            }}
-          >
-            Загрузить еще
-          </Button>
-        </div>
-      )}
-    </List>
-  ) : isLoading ? (
-    <div className={"h-full flex items-center justify-center"}>
-      <Spinner size={"m"} />
-    </div>
-  ) : (
+  const isEmptyList = !list.length && !isLoading;
+
+  return isEmptyList ? (
     <div className={"h-full flex items-center justify-center"}>
       <Text>Ниего не найдено</Text>
     </div>
+  ) : (
+    <>
+      <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+        {list.map((carCard, index) => (
+          <CarCardListItem {...carCard} key={`car-card-${index}`} />
+        ))}
+        {isLoading ? (
+          <div className={"h-full flex items-center justify-center"}>
+            <Spinner size={"m"} />
+          </div>
+        ) : null}
+        {isScrollActive && (
+          <div className={"flex justify-center items-center"}>
+            <Button
+              loading={isLoading}
+              onClick={() => {
+                loadMoreCars();
+              }}
+            >
+              Загрузить еще
+            </Button>
+          </div>
+        )}
+      </List>
+    </>
   );
 };
