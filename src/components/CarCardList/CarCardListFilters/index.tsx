@@ -75,6 +75,7 @@ export const CarCardListFilters = () => {
               head={
                 <Subheadline className={"px-[22px]"}>Наличие авто</Subheadline>
               }
+              targetPortalId={"cars-filters"}
             />
           </div>
           <div className={"mb-2"}>
