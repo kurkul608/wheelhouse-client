@@ -26,7 +26,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 
   if (typeof window === "undefined" || !isOpen) return null;
 
-  const modalRoot = document.getElementById("modal-root");
+  const modalRoot = document.getElementById("cars-filters");
 
   if (!modalRoot) return null;
 

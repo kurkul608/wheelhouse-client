@@ -23,6 +23,7 @@ import { STOCK_FILTER_OPTIONS } from "@/constants/stockFilterOptions";
 import { CAR_LIST_SORT_OPTIONS } from "@/constants/carListSortOptions";
 import { Modal } from "@/components/Modal";
 import { Parameters } from "@/components/Icons/Parameters";
+import MultiSelectWithSearch from "@/components/MultiSelectWithSearch";
 
 export const CarCardListFilters = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,8 +43,8 @@ export const CarCardListFilters = () => {
   };
 
   return (
-    <div>
-      <div className={"flex justify-end items-center mb-1"}>
+    <div id={"cars-filters"}>
+      <div className={"flex justify-end items-center mb-2"}>
         <Button
           mode={"outline"}
           onClick={() => setIsModalOpen(true)}
@@ -59,7 +60,7 @@ export const CarCardListFilters = () => {
         }}
       >
         <form onSubmit={formHandler}>
-          <div className={"mb-1"}>
+          <div className={"mb-2"}>
             <Subheadline className={"px-[22px]"}>Наличие авто</Subheadline>
             <Select
               header={"Наличие авто"}
@@ -81,15 +82,12 @@ export const CarCardListFilters = () => {
               ))}
             </Select>
           </div>
-          <div className={"mb-1"}>
-            <Subheadline className={"px-[22px]"}>Марка авто</Subheadline>
-            <Multiselect
-              header={"Марка авто"}
-              placeholder={"Марка авто"}
+          <div className={"mb-2"}>
+            <MultiSelectWithSearch
+              head={
+                <Subheadline className={"px-[22px]"}>Марка авто</Subheadline>
+              }
               options={CAR_BRANDS_FILTER_OPTIONS}
-              value={CAR_BRANDS_FILTER_OPTIONS.filter((option) =>
-                carBrandFilter.some((opt) => opt === option.value),
-              )}
               onChange={(newOptions) => {
                 if (update)
                   update({
@@ -98,17 +96,18 @@ export const CarCardListFilters = () => {
                     ) as CarBrandsFilterType[],
                   });
               }}
+              placeholder={"Марка авто"}
+              defaultSelectedOptions={CAR_BRANDS_FILTER_OPTIONS.filter(
+                (option) => carBrandFilter.some((opt) => opt === option.value),
+              )}
             />
           </div>
-          <div className={"mb-1"}>
-            <Subheadline className={"px-[22px]"}>Модель авто</Subheadline>
-            <Multiselect
-              header="Модель авто"
-              placeholder="Модель авто"
+          <div className={"mb-2"}>
+            <MultiSelectWithSearch
+              head={
+                <Subheadline className={"px-[22px]"}>Модель авто</Subheadline>
+              }
               options={CAR_MODELS_FILTER_OPTIONS}
-              value={CAR_MODELS_FILTER_OPTIONS.filter((option) =>
-                carModelFilter.some((opt) => opt === option.value),
-              )}
               onChange={(newOptions) => {
                 if (update)
                   update({
@@ -117,6 +116,10 @@ export const CarCardListFilters = () => {
                     ) as CarModelsFilterType[],
                   });
               }}
+              placeholder={"Модель авто"}
+              defaultSelectedOptions={CAR_MODELS_FILTER_OPTIONS.filter(
+                (option) => carModelFilter.some((opt) => opt === option.value),
+              )}
             />
           </div>
           <div>

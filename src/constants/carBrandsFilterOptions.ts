@@ -1,7 +1,6 @@
-export const CAR_BRANDS_FILTER_OPTIONS: {
-  value: CarBrandsFilterType;
-  label: string;
-}[] = [
+import { SelectOption } from "@/components/MultiSelectWithSearch";
+
+export const CAR_BRANDS_FILTER_OPTIONS: SelectOption[] = [
   { value: "Aston Martin", label: "Aston Martin" },
   { value: "Audi", label: "Audi" },
   { value: "Bentley", label: "Bentley" },
