@@ -1,28 +1,22 @@
 "use server";
 
-import { getCarCard } from "@/actions/carCard/get";
-import {
-  List,
-  Section,
-  Subheadline,
-  Text,
-  Title,
-} from "@telegram-apps/telegram-ui";
+import { List, Section, Text, Title } from "@telegram-apps/telegram-ui";
 import { classNames } from "@telegram-apps/sdk-react";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
 import { getFileLink } from "@/utils/getFileLink";
-import { CreatePhotos } from "@/components/Manager/CarCard/CreatePhotos";
 import { ManagePhotos } from "@/components/Manager/CarCard/ManagePhotos";
 import { SectionHeader } from "@telegram-apps/telegram-ui/dist/components/Blocks/Section/components/SectionHeader/SectionHeader";
 import { SpecList } from "@/components/Manager/CarCard/SpecList";
 import { AddNewSpec } from "@/components/Manager/CarCard/AddNewSpec";
 import { StockSwitch } from "@/components/Manager/CarCard/StockSwitch";
 import { Description } from "@/components/Manager/CarCard/Description";
+import { MultiPhotoUpload } from "@/components/Manager/CarCard/MultiPhotoUpload";
+import { getCarManager } from "@/actions/manager/cars/getCar";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
-  const carCard = await getCarCard(id);
+  const carCard = await getCarManager(id);
 
   if (!carCard) {
     return <div>Автомобиль не найден</div>;
@@ -61,10 +55,7 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
       </List>
       <Section className={"mt-2"}>
         <SectionHeader>Загрузить фотографии</SectionHeader>
-        <Subheadline>
-          Внимание!! Нельзя загружать фото, весом более 1мб
-        </Subheadline>
-        <CreatePhotos carId={carCard.id} />
+        <MultiPhotoUpload carCardId={carCard.id} />
       </Section>
       <Section className={"mt-2"}>
         <SectionHeader>Управление добавленными фотографиями</SectionHeader>

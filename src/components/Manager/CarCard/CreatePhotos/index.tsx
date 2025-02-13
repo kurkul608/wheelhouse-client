@@ -2,58 +2,53 @@
 
 import { Button, Cell, FileInput } from "@telegram-apps/telegram-ui";
 import { useState } from "react";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { getAuthorization } from "@/utils/getAuthorization";
-import { createFile } from "@/actions/file/create";
 import Image from "next/image";
-import { addToCarCard } from "@/actions/file/addToCarCard";
-import { useRouter } from "next/navigation";
 
-export const CreatePhotos = ({ carId }: { carId: string }) => {
+export const CreatePhotos = ({}: { carId: string }) => {
   const [files, setFiles] = useState<FileList | null>(null);
   const [loading, setLoading] = useState(false);
-  const lp = useLaunchParams();
-  const router = useRouter();
+  // const lp = useLaunchParams();
+  // const router = useRouter();
+  //
+  // const isSuitableSize = (file: File) => {
+  //   const maxSize = 1024 * 1024;
+  //   if (file.size > maxSize) {
+  //     alert("Размер файла не должен превышать 1 МБ");
+  //   }
+  //   return file.size <= maxSize;
+  // };
+  //
+  // const isSuitableType = (file: File) => {
+  //   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+  //   // alert("Файл должен быть изображением (jpg, jpeg, png)");
+  //   console.log(allowedTypes.includes(file.type));
+  //   return true;
+  // };
 
-  const isSuitableSize = (file: File) => {
-    const maxSize = 1024 * 1024;
-    if (file.size > maxSize) {
-      alert("Размер файла не должен превышать 1 МБ");
-    }
-    return file.size <= maxSize;
-  };
-
-  const isSuitableType = (file: File) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-    // alert("Файл должен быть изображением (jpg, jpeg, png)");
-    console.log(allowedTypes.includes(file.type));
-    return true;
-  };
-
-  const handleUpload = async () => {
-    if (!loading && files) {
-      let isCorrectFile = true;
-      for (const file of files) {
-        if (!isSuitableSize(file) || !isSuitableType(file)) {
-          isCorrectFile = false;
-        }
-      }
-      if (isCorrectFile) {
-        const fileResponse: string[] = [];
-        for (const file of files) {
-          const f = await createFile(file, getAuthorization(lp));
-          fileResponse.push(f.id);
-        }
-
-        for (const fileId of fileResponse) {
-          await addToCarCard(fileId, carId, getAuthorization(lp));
-        }
-        setFiles(null);
-        router.refresh();
-      }
-    }
-    setLoading(false);
-  };
+  // const handleUpload = async () => {
+  //   if (!loading && files) {
+  //     let isCorrectFile = true;
+  //     for (const file of files) {
+  //       if (!isSuitableSize(file) || !isSuitableType(file)) {
+  //         isCorrectFile = false;
+  //       }
+  //     }
+  //     if (isCorrectFile) {
+  //       const fileResponse: string[] = [];
+  //       for (const file of files) {
+  //         const f = await createFile(file, getAuthorization(lp));
+  //         fileResponse.push(f.id);
+  //       }
+  //
+  //       for (const fileId of fileResponse) {
+  //         await addToCarCard(fileId, carId, getAuthorization(lp));
+  //       }
+  //       setFiles(null);
+  //       router.refresh();
+  //     }
+  //   }
+  //   setLoading(false);
+  // };
 
   const removeFile = (fileIndex: number) => {
     if (files) {
@@ -109,7 +104,7 @@ export const CreatePhotos = ({ carId }: { carId: string }) => {
       <Button
         onClick={() => {
           setLoading(true);
-          handleUpload();
+          // handleUpload();
         }}
         type={"button"}
         loading={loading}

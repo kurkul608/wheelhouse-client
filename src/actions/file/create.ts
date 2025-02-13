@@ -4,17 +4,23 @@ import { File as FileModel } from "@/models/file";
 import axios, { AxiosHeaders } from "axios";
 
 export const createFile = async (
-  file: File,
-  headers: HeadersInit,
+  key: string,
+  bucket: string,
+  fileSize: string,
+  headers: AxiosHeaders,
 ): Promise<FileModel> => {
-  const formData = new FormData();
-  formData.append("file", file);
-
   const response = await axios.post<FileModel>(
     `${process.env.API_URL}files`,
-    formData,
     {
-      headers: { ...headers } as AxiosHeaders,
+      key,
+      bucket,
+      fileSize,
+    },
+    {
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
       timeout: 120000,
     },
   );
