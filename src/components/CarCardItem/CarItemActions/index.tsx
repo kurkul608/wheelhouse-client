@@ -8,7 +8,11 @@ import Image from "next/image";
 import { FC, useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { addToWishlist as addToWishlistAction } from "@/actions/wishlist/addTo";
-import { useLaunchParams, shareURL } from "@telegram-apps/sdk-react";
+import {
+  useLaunchParams,
+  shareURL,
+  requestContact,
+} from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { WishlistContext } from "@/contexts/wishlistContext";
 import { deleteFromWishlist } from "@/actions/wishlist/deleteTo";
@@ -19,6 +23,7 @@ import { writeToClipboard } from "@/utils/writeToClipboard";
 import { getMiniAppLink } from "@/utils/getMiniAppLink";
 import { createOrder } from "@/actions/order/create";
 import { MainButton } from "@/components/MainButton";
+import { RequestedContact } from "@telegram-apps/sdk";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
@@ -118,11 +123,27 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
 
   const sendUserRequest = async () => {
     if (!isRequestSend) {
-      setLoader(true);
-      await createOrder(carId as string, false, getAuthorization(lp));
-      setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
-      setIsRequestSend(true);
-      setLoader(false);
+      try {
+        setLoader(true);
+        let contact: null | RequestedContact = null;
+        if (requestContact.isAvailable() && requestContact.isSupported()) {
+          contact = await requestContact();
+        }
+        if (contact) {
+          await createOrder(
+            carId as string,
+            false,
+            contact.contact,
+            getAuthorization(lp),
+          );
+          setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
+          setIsRequestSend(true);
+        }
+        setLoader(false);
+      } catch (error) {
+        console.log("error: ", error);
+        setLoader(false);
+      }
     }
   };
 
@@ -132,7 +153,8 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
         text={existMainButtonText ?? mainButtonText}
         disabled={isRequestSend}
         progress={loader}
-        color={isRequestSend ? "#22BB33" : undefined}
+        textColor={"#FFFFFF"}
+        color={isRequestSend ? "#22BB33" : "#f73c00"}
         onClick={sendUserRequest}
       />
       <Image

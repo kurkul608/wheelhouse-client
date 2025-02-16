@@ -12,7 +12,11 @@ import {
   Text,
   Title,
 } from "@telegram-apps/telegram-ui";
-import { classNames, useLaunchParams } from "@telegram-apps/sdk-react";
+import {
+  classNames,
+  requestContact,
+  useLaunchParams,
+} from "@telegram-apps/sdk-react";
 import { FC, useState } from "react";
 import { CarCard } from "@/models/carCard";
 import { CarItemActions } from "@/components/CarCardItem/CarItemActions";
@@ -22,6 +26,7 @@ import { Ruble } from "@/components/Icons/Ruble";
 import { createOrder } from "@/actions/order/create";
 import { getAuthorization } from "@/utils/getAuthorization";
 import parse from "html-react-parser";
+import { RequestedContact } from "@telegram-apps/sdk";
 
 interface CarCardItemProps {
   carCard: CarCard;
@@ -42,14 +47,22 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
 
   const sendUserRequest = async () => {
     if (!isRequestSend) {
-      const order = await createOrder(
-        carCard.id as string,
-        true,
-        getAuthorization(lp),
-      );
-      setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
-      setIsRequestSend(true);
-      console.log(order);
+      let contact: null | RequestedContact = null;
+      if (requestContact.isAvailable() && requestContact.isSupported()) {
+        contact = await requestContact();
+      }
+
+      if (contact) {
+        const order = await createOrder(
+          carCard.id as string,
+          true,
+          contact.contact,
+          getAuthorization(lp),
+        );
+        setMainButtonText("Менеджер свяжится с вами в ближайшее время!");
+        setIsRequestSend(true);
+        console.log(order);
+      }
     }
   };
 
