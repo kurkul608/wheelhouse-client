@@ -1,13 +1,7 @@
 "use server";
 
 import { CARS_LIMIT } from "@/constants/carsLimit";
-import { CarCard } from "@/models/carCard";
-
-export interface CarPage {
-  items: CarCard[];
-  page: number;
-  hasMore: boolean;
-}
+import { CarPage } from "@/actions/carCard/getList";
 
 export const getCarCardsListWithNoFilters = async ({
   pageParam = 1,

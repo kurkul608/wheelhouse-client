@@ -4,12 +4,18 @@ import { CarCard } from "@/models/carCard";
 import { CARS_LIMIT } from "@/constants/carsLimit";
 import { ICarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 
+export interface CarPage {
+  items: CarCard[];
+  page: number;
+  hasMore: boolean;
+}
+
 export const getCarCardsList = async (
   page: number,
   filters: Partial<ICarCardsFiltersContext>,
-): Promise<CarCard[] | undefined> => {
+): Promise<CarPage | undefined> => {
   try {
-    const offset = `${page * CARS_LIMIT}`;
+    const offset = `${(page - 1) * CARS_LIMIT}`;
     const searchParams = new URLSearchParams({
       limit: `${CARS_LIMIT}`,
       offset: offset,
