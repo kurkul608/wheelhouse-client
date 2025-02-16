@@ -1,11 +1,20 @@
 "use client";
 
-import { FC, useContext, useEffect, useMemo, useRef } from "react";
+import React, {
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { CarCardListItem } from "@/components/CarCardList/CarCardListItem/CarCardListItem";
 import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
+import { Spinner } from "@telegram-apps/telegram-ui";
+import { CarCardListFilters } from "@/components/CarCardList/CarCardListFilters";
 
 interface CarListProps {
   initialIndex: number;
@@ -13,6 +22,7 @@ interface CarListProps {
 
 export const CarList: FC<CarListProps> = ({ initialIndex = 0 }) => {
   const virtuosoRef = useRef<VirtuosoHandle>(null);
+  const [initialScrolled, setInitialScrolled] = useState(false);
 
   const {
     stockFilter,
@@ -84,19 +94,22 @@ export const CarList: FC<CarListProps> = ({ initialIndex = 0 }) => {
   );
 
   useEffect(() => {
-    if (initialIndex !== null && cars.length > initialIndex) {
-      virtuosoRef.current?.scrollToIndex({
-        index: initialIndex,
-        align: "start",
-        behavior: "auto",
-      });
-      sessionStorage.removeItem("carsListScrollIndex");
-      console.log("virtuosoRef.current: ", virtuosoRef.current);
-      console.log("Scroll to index: ", initialIndex);
-    } else {
-      fetchNextPage();
+    if (!initialScrolled) {
+      if (initialIndex !== null && cars.length > initialIndex) {
+        virtuosoRef.current?.scrollToIndex({
+          index: initialIndex,
+          align: "start",
+          behavior: "auto",
+        });
+        sessionStorage.removeItem("carsListScrollIndex");
+        console.log("virtuosoRef.current: ", virtuosoRef.current);
+        console.log("Scroll to index: ", initialIndex);
+        setInitialScrolled(true);
+      } else {
+        fetchNextPage();
+      }
     }
-  }, [initialIndex, cars.length]);
+  }, [initialIndex, cars.length, initialScrolled]);
 
   return (
     <Virtuoso
@@ -116,6 +129,15 @@ export const CarList: FC<CarListProps> = ({ initialIndex = 0 }) => {
         }
       }}
       style={{ height: "calc(100vh - 140px)" }}
+      components={{
+        Header: () => (
+          <>
+            <CarCardListFilters />
+            {isFetchingPreviousPage ? <Spinner size="l" /> : null}
+          </>
+        ),
+        Footer: () => (isFetchingNextPage ? <Spinner size="l" /> : null),
+      }}
     />
   );
 };
