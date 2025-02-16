@@ -1,13 +1,23 @@
-import { CarCardItemList } from "@/components/CarCardList/CarCardListItem/CarCardItemList";
-import { getCarCardsList } from "@/actions/carCard/getList";
+"use client";
 
-export async function CarCardList() {
-  const initialCars = await getCarCardsList(0, {
-    stockFilter: "all",
-    search: "",
-  });
+import { useEffect, useState } from "react";
+import { CarList } from "@/components/CarCardList/InfiniteCarCardsScroll";
 
-  return (
-    <CarCardItemList initialList={initialCars ?? []} isScrollActive={true} />
-  );
+export function CarCardList() {
+  const [initialIndex, setInitialIndex] = useState<null | number>(null);
+
+  useEffect(() => {
+    const savedIndex = sessionStorage.getItem("carsListScrollIndex");
+    if (savedIndex) {
+      setInitialIndex(parseInt(savedIndex, 10));
+    } else {
+      setInitialIndex(0);
+    }
+  }, []);
+
+  if (initialIndex === null) {
+    return null;
+  }
+
+  return <CarList initialIndex={initialIndex} />;
 }

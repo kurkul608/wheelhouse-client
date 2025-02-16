@@ -11,5 +11,6 @@
 
 body {
   background: var(--tg-theme-secondary-bg-color, white);
+  overflow: hidden;
 }
 

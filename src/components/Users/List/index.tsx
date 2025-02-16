@@ -36,7 +36,10 @@ export const UsersList = () => {
   }, [refreshFlag, searchString]);
 
   return (
-    <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+    <List
+      style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
+      className={"h-[calc(100vh-62px)] overflow-auto"}
+    >
       <Input
         placeholder={"Введите логин пользователя"}
         value={searchString}

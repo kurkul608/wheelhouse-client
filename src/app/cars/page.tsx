@@ -17,7 +17,7 @@ export default async function Home(
     <Page>
       <div
         style={{ background: "var(--tgui--secondary_bg_color)" }}
-        className={"min-h-[calc(100vh-62px)]"}
+        className={"min-h-[calc(100vh-62px)] overflow-hidden"}
       >
         <Breadcrumbs
           items={[

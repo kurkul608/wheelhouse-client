@@ -30,6 +30,7 @@ import {
   SystemContext,
 } from "@/contexts/systemContext";
 import { DEFAULT_OPTIONS, OptionsContext } from "@/contexts/OptionsContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -65,7 +66,8 @@ function RootInner({ children }: PropsWithChildren) {
       user !== null &&
       bucket !== null &&
       wishlist !== null &&
-      isInitLoading
+      isInitLoading &&
+      pathname === "/"
     ) {
       router.push("/cars");
       setIsInitLoading(false);
@@ -88,50 +90,56 @@ function RootInner({ children }: PropsWithChildren) {
 
   const systemValue = useMemo(createSystemContextValue, []);
 
+  const queryClient = new QueryClient();
+
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
       platform={["macos", "ios"].includes(lp.platform) ? "ios" : "base"}
     >
-      <UserContext.Provider value={{ user, update: updateRegisterData }}>
-        <BucketContext.Provider value={{ bucket, update: updateRegisterData }}>
-          <WishlistContext.Provider
-            value={{ wishlist, update: updateRegisterData }}
+      <QueryClientProvider client={queryClient}>
+        <UserContext.Provider value={{ user, update: updateRegisterData }}>
+          <BucketContext.Provider
+            value={{ bucket, update: updateRegisterData }}
           >
-            <CarCardsFiltersContext.Provider
-              value={{
-                stockFilter,
-                update: updateCarCardsFilter,
-                search: searchFilter,
-                carBrandFilter: carBrandFilter,
-                carModelFilter,
-                maxDateFilter,
-                minDateFilter,
-                sortBy,
-                sortOrder,
-              }}
+            <WishlistContext.Provider
+              value={{ wishlist, update: updateRegisterData }}
             >
-              <SystemContext.Provider value={systemValue}>
-                <OptionsContext.Provider value={DEFAULT_OPTIONS}>
-                  {user == null ||
-                  bucket === null ||
-                  wishlist === null ||
-                  pathname === "/" ? (
-                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                      <Spinner size="l" />
-                    </div>
-                  ) : (
-                    <>
-                      {children}
-                      {pathname !== "/" && <Navigation />}
-                    </>
-                  )}
-                </OptionsContext.Provider>
-              </SystemContext.Provider>
-            </CarCardsFiltersContext.Provider>
-          </WishlistContext.Provider>
-        </BucketContext.Provider>
-      </UserContext.Provider>
+              <CarCardsFiltersContext.Provider
+                value={{
+                  stockFilter,
+                  update: updateCarCardsFilter,
+                  search: searchFilter,
+                  carBrandFilter: carBrandFilter,
+                  carModelFilter,
+                  maxDateFilter,
+                  minDateFilter,
+                  sortBy,
+                  sortOrder,
+                }}
+              >
+                <SystemContext.Provider value={systemValue}>
+                  <OptionsContext.Provider value={DEFAULT_OPTIONS}>
+                    {user == null ||
+                    bucket === null ||
+                    wishlist === null ||
+                    pathname === "/" ? (
+                      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                        <Spinner size="l" />
+                      </div>
+                    ) : (
+                      <>
+                        {children}
+                        {pathname !== "/" && <Navigation />}
+                      </>
+                    )}
+                  </OptionsContext.Provider>
+                </SystemContext.Provider>
+              </CarCardsFiltersContext.Provider>
+            </WishlistContext.Provider>
+          </BucketContext.Provider>
+        </UserContext.Provider>
+      </QueryClientProvider>
       <div id="modal-root"></div>
     </AppRoot>
   );

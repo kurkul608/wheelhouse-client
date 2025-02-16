@@ -10,7 +10,10 @@ export default async function ManagerCarsPage({
 
   return (
     <Page>
-      <div style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+      <div
+        style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
+        className={"h-[calc(100vh-62px)] overflow-auto"}
+      >
         <ManagerCarCard id={slug} />
       </div>
     </Page>
