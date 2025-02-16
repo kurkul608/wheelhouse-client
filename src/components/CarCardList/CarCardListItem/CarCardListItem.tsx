@@ -42,7 +42,10 @@ export const CarCardListItem: FC<CarCardItemListProps> = ({
   return (
     <Fragment key={props.id}>
       <Card className={"w-full"} onClick={onCardClick}>
-        <CardChip after={<WishlistButton carCardId={props.id} />}>
+        <CardChip
+          after={<WishlistButton carCardId={props.id} />}
+          className={"z-10"}
+        >
           {props.inStock ? "В наличии" : "Под заказ"}
         </CardChip>
         <div className="relative w-full h-[308px] overflow-hidden">
