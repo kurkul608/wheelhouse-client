@@ -7,6 +7,9 @@ import {
   $debug,
   init as initSDK,
   mainButton,
+  expandViewport,
+  $version,
+  swipeBehavior,
 } from "@telegram-apps/sdk-react";
 
 /**
@@ -33,11 +36,15 @@ export function init(debug: boolean): void {
     themeParams.bindCssVars();
   }
 
-  // if (!swipeBehavior?.isMounted()) {
-  //   if (swipeBehavior.mount) {
-  //     swipeBehavior.mount();
-  //   }
-  // }
+  if (expandViewport) {
+    expandViewport();
+  }
+
+  if (Number($version()) > 8 && !swipeBehavior?.isMounted()) {
+    if (swipeBehavior.mount) {
+      swipeBehavior.mount();
+    }
+  }
 
   initData.restore();
 

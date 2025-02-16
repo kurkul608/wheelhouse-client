@@ -3,6 +3,12 @@
 export const createOrder = async (
   carId: string,
   isInquiresAboutPrice: boolean,
+  contact: {
+    userId: number;
+    phoneNumber: string;
+    firstName: string;
+    lastName?: string;
+  },
   headers: HeadersInit,
 ) => {
   try {
@@ -15,6 +21,7 @@ export const createOrder = async (
       body: JSON.stringify({
         carId,
         isInquiresAboutPrice,
+        contact,
       }),
     });
 
