@@ -67,7 +67,7 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
   };
 
   return (
-    <>
+    <div className={"h-[calc(100vh-62px)] overflow-auto"}>
       <Breadcrumbs
         items={[
           {
@@ -153,6 +153,6 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
           </Section>
         </List>
       )}
-    </>
+    </div>
   );
 };

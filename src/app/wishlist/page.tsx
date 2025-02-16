@@ -8,7 +8,9 @@ export default async function WishlistPage() {
     <Page>
       <div
         style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
-        className={"min-h-[calc(100vh-62px)]"}
+        className={
+          "min-h-[calc(100vh-62px)] h-[calc(100vh-62px)] overflow-auto"
+        }
       >
         <Breadcrumbs
           items={[

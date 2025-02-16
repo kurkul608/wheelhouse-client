@@ -4,7 +4,6 @@ import { Page } from "@/components/Page";
 import React from "react";
 import { CarCardList } from "@/components/CarCardList/CarCardList";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { CarCardListFilters } from "@/components/CarCardList/CarCardListFilters";
 
 export default async function Home(
   {
@@ -17,7 +16,7 @@ export default async function Home(
     <Page>
       <div
         style={{ background: "var(--tgui--secondary_bg_color)" }}
-        className={"min-h-[calc(100vh-62px)]"}
+        className={"min-h-[calc(100vh-62px)] overflow-hidden"}
       >
         <Breadcrumbs
           items={[
@@ -25,9 +24,7 @@ export default async function Home(
               name: "Главная",
             },
           ]}
-        >
-          <CarCardListFilters />
-        </Breadcrumbs>
+        ></Breadcrumbs>
         <CarCardList />
       </div>
     </Page>

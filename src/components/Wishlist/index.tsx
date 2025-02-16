@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import { WishlistContext } from "@/contexts/wishlistContext";
-import { CarCardListItem } from "@/components/CarCardList/CarCardListItem/CarCardItemList";
+import { CarCardListItem } from "@/components/CarCardList/CarCardListItem/CarCardListItem";
 import { List, Subheadline } from "@telegram-apps/telegram-ui";
 
 export const Wishlist = () => {
