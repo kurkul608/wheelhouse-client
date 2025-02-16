@@ -13,7 +13,10 @@ export default async function AdminPage() {
 
   return (
     <Page>
-      <List style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+      <List
+        style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
+        className={"h-[calc(100vh-62px)] overflow-auto"}
+      >
         <Section
           header={"Список пользователей"}
           footer={

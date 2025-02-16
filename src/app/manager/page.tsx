@@ -10,7 +10,10 @@ export default async function ManagerPage() {
     redirect("/");
   }
   return (
-    <div style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}>
+    <div
+      style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
+      className={"h-[calc(100vh-62px)] overflow-auto"}
+    >
       <List>
         <Section
           header="Список авто для менеджеров"

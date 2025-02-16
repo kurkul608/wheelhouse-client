@@ -6,15 +6,14 @@ import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import {
   CarPage,
   getCarCardsListWithNoFilters,
-} from "@/actions/carCard/getListWithNoFolters";
-import { CarCard } from "@/models/carCard";
+} from "@/actions/carCard/getListWithNoFilters";
+import { CarCardListItem } from "@/components/CarCardList/CarCardListItem/CarCardItemList";
 
 export const CarList: FC = () => {
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const [initialIndex, setInitialIndex] = useState(0);
 
   useEffect(() => {
-    // При монтировании пытаемся восстановить сохранённый индекс прокрутки
     const savedIndex = sessionStorage.getItem("carsListScrollIndex");
     if (savedIndex) {
       setInitialIndex(parseInt(savedIndex, 10));
@@ -29,54 +28,51 @@ export const CarList: FC = () => {
     hasPreviousPage,
     isFetchingNextPage,
     isFetchingPreviousPage,
-  } = useInfiniteQuery<CarPage, Error, CarPage, [string]>({
-    queryKey: ["cars"],
-    queryFn: getCarCardsListWithNoFilters,
-    getNextPageParam: (lastPage) =>
-      lastPage.hasMore ? lastPage.page + 1 : undefined,
-    getPreviousPageParam: (firstPage) =>
-      firstPage.page > 1 ? firstPage.page - 1 : undefined,
-  });
-  // Объединяем все загруженные страницы в один массив
-  // const cars = data ? data.pages.flatMap((page) => page.items) : [];
-  console.log(data);
-  return null;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+  } = useInfiniteQuery<CarPage, Error, InfiniteData<CarPage, unknown>, unknown>(
+    {
+      queryKey: ["cars"],
+      queryFn: ({ pageParam = 1 }) =>
+        getCarCardsListWithNoFilters({
+          pageParam: pageParam as unknown as number,
+        }),
+      getNextPageParam: (lastPage) =>
+        lastPage.hasMore ? lastPage.page + 1 : undefined,
+      getPreviousPageParam: (firstPage) =>
+        firstPage.page > 1 ? firstPage.page - 1 : undefined,
+    },
+  );
+  const cars = data ? data.pages.flatMap((page) => page.items) : [];
+  console.log("cars: ", cars);
+  console.log("initialIndex: ", initialIndex);
+  console.log("hasNextPage: ", hasNextPage);
+  console.log("hasPreviousPage: ", hasPreviousPage);
+  // console.log(cars);
 
-  // return (
-  //   <Virtuoso
-  //     ref={virtuosoRef}
-  //     data={cars}
-  //     // При монтировании скролл устанавливается на сохранённый индекс
-  //     initialTopMostItemIndex={initialIndex}
-  //     // Отрисовка каждой карточки: оборачиваем в Link для перехода на страницу деталей
-  //     itemContent={(index, car) => (
-  //       <Link href={`/cars/${car.id}`}>
-  //         <a>
-  //           <CarCard car={car} />
-  //         </a>
-  //       </Link>
-  //     )}
-  //     // При изменении диапазона видимых элементов сохраняем индекс первого видимого элемента
-  //     onRangeChanged={(range) => {
-  //       sessionStorage.setItem(
-  //         "carsListScrollIndex",
-  //         range.startIndex.toString(),
-  //       );
-  //     }}
-  //     // При достижении начала списка (скролл вверх) пытаемся подгрузить предыдущую страницу, если она есть
-  //     startReached={() => {
-  //       if (hasPreviousPage && !isFetchingPreviousPage) {
-  //         fetchPreviousPage();
-  //       }
-  //     }}
-  //     // При достижении конца списка (скролл вниз) подгружаем следующую страницу
-  //     endReached={() => {
-  //       if (hasNextPage && !isFetchingNextPage) {
-  //         fetchNextPage();
-  //       }
-  //     }}
-  //     // Задаём высоту контейнера (например, чтобы список занимал весь viewport)
-  //     style={{ height: "100vh" }}
-  //   />
-  // );
+  return (
+    <Virtuoso
+      ref={virtuosoRef}
+      data={cars}
+      initialTopMostItemIndex={initialIndex}
+      itemContent={(index, car) => <CarCardListItem {...car}></CarCardListItem>}
+      rangeChanged={(range) => {
+        sessionStorage.setItem(
+          "carsListScrollIndex",
+          range.startIndex.toString(),
+        );
+      }}
+      startReached={() => {
+        if (hasPreviousPage && !isFetchingPreviousPage) {
+          fetchPreviousPage();
+        }
+      }}
+      endReached={() => {
+        if (hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      }}
+      style={{ height: "calc(100vh - 140px)" }}
+    />
+  );
 };
