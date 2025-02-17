@@ -85,20 +85,13 @@ export default function ManagerCarsPage() {
           <option value={"disabled"}>Только деактивированные</option>
         </Select>
         {list.map((car) => {
-          const model = car.specifications?.find(
-            (spec) => spec.field === "model",
-          );
-          const specification = car.specifications?.find(
-            (spec) => spec.field === "specification",
-          );
-
           return (
             <Cell
-              subhead={specification?.value}
+              subhead={car.carModel}
               key={car.id}
               before={
                 <Avatar
-                  alt={model?.value}
+                  alt={car.carBrand}
                   src={
                     car.externalId
                       ? (car?.importedPhotos?.[0] ?? "")
@@ -110,7 +103,7 @@ export default function ManagerCarsPage() {
                 router.push(`/manager/cars/${car.id}`);
               }}
             >
-              {model?.value}
+              {car.carBrand}
             </Cell>
           );
         })}

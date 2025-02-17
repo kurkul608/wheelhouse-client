@@ -33,5 +33,8 @@ export interface CarCard {
   currency: FiatAsset | null;
   isActive: boolean;
   orderId: string | null;
+  carModel?: string;
+  carBrand?: string;
+  carYear?: string;
   specifications: CarCardSpecifications[];
 }
