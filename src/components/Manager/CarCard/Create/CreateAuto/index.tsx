@@ -15,6 +15,7 @@ import { createCard, CreateCardDto } from "@/actions/manager/cars/createCard";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { useRouter } from "next/navigation";
 import { createSpecification } from "@/actions/manager/specifications/create";
+import { useState } from "react";
 
 export interface RequiredSpecs {
   model: SpecificationCreateDto;
@@ -24,6 +25,7 @@ export interface RequiredSpecs {
 type FormValues = CreateCardDto & RequiredSpecs;
 
 export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const lp = useLaunchParams();
   const router = useRouter();
   const formik = useFormik<FormValues>({
@@ -42,7 +44,8 @@ export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
       },
     },
     onSubmit: async ({ model, specification, ...values }) => {
-      if (model.value && specification.value) {
+      if (model.value && specification.value && !isLoading) {
+        setIsLoading(true);
         const card = await createCard(values, getAuthorization(lp));
         if (card.id) {
           await createSpecification(
@@ -53,6 +56,7 @@ export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
             { ...specification, carCardId: card.id },
             getAuthorization(lp),
           );
+          setIsLoading(false);
 
           router.push(`/manager/cars/${card.id}`);
         }
@@ -179,7 +183,9 @@ export const CreateAuto = ({}: { toNextStage(carId: string): void }) => {
         </div>
       </List>
       <div className={"flex pt-4 justify-center items-center"}>
-        <Button type={"submit"}>Перейти к следующему этапу </Button>
+        <Button type={"submit"} loading={isLoading}>
+          Перейти к следующему этапу
+        </Button>
       </div>
     </form>
   );

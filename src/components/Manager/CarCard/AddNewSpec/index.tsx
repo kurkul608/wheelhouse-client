@@ -93,6 +93,7 @@ export const AddNewSpec: FC<AddNewSpecProps> = ({
         type={"button"}
         onClick={buttonClickHandler}
         disabled={(showForm ? !value && !field : false) || isLoading}
+        loading={isLoading}
       >
         {showForm ? "Сохранить" : "Добавить новую характеристику"}
       </Button>
