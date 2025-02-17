@@ -4,7 +4,7 @@ import { Card } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
-import { useMemo, Fragment, FC } from "react";
+import { Fragment, FC } from "react";
 import { useRouter } from "next/navigation";
 import { CarCard } from "@/models/carCard";
 import { WishlistButton } from "@/components/CarCardList/CarCardListItem/WishlistButton";
@@ -17,21 +17,6 @@ export const CarCardListItem: FC<CarCardItemListProps> = ({
   ...props
 }) => {
   const router = useRouter();
-
-  const modelName = useMemo(() => {
-    let modelName = "";
-    const model = props.specifications.find((spec) => spec.field === "model");
-    const specification = props.specifications.find(
-      (spec) => spec.field === "specification",
-    );
-    if (model) {
-      modelName = model.value;
-    }
-    if (specification) {
-      modelName += ` ${specification.value}`;
-    }
-    return modelName;
-  }, [props.specifications]);
 
   const onCardClick = () => {
     if (typeof listIndex === "number")
@@ -62,7 +47,7 @@ export const CarCardListItem: FC<CarCardItemListProps> = ({
             unoptimized={!props.importedPhotos?.[0]}
           />
         </div>
-        <CardCell readOnly subtitle={modelName}>
+        <CardCell readOnly subtitle={`${props.carBrand} ${props.carModel}`}>
           {!!props.externalId || !props.price
             ? "Узнать цену"
             : `${props.price} ${props.currency}`}
