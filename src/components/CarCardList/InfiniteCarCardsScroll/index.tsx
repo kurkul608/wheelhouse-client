@@ -13,7 +13,7 @@ import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { CarCardListItem } from "@/components/CarCardList/CarCardListItem/CarCardListItem";
 import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
-import { Spinner } from "@telegram-apps/telegram-ui";
+import { Headline, Spinner } from "@telegram-apps/telegram-ui";
 
 interface CarListProps {
   initialIndex: number;
@@ -58,6 +58,7 @@ export const CarList: FC<CarListProps> = ({ initialIndex = 0 }) => {
   );
 
   const {
+    isLoading,
     data,
     fetchNextPage,
     fetchPreviousPage,
@@ -144,6 +145,16 @@ export const CarList: FC<CarListProps> = ({ initialIndex = 0 }) => {
               <Spinner size="l" />
             </div>
           ) : null,
+        EmptyPlaceholder: () =>
+          isLoading ? (
+            <div className={"flex justify-center items-center"}>
+              <Spinner size="l" />
+            </div>
+          ) : (
+            <div className={"flex justify-center items-center"}>
+              <Headline>Ничего не найдено</Headline>
+            </div>
+          ),
       }}
     />
   );
