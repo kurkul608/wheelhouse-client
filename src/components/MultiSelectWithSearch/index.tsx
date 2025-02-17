@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Select, { ActionMeta, MultiValue, StylesConfig } from "react-select";
 
 export type SelectOption<T> = {
@@ -88,7 +88,7 @@ const customStyles: StylesConfig<SelectOption<any>, true> = {
 
 export type MultiSelectWithSearchProps<T> = {
   options: MultiValue<SelectOption<T>>;
-  defaultSelectedOptions: MultiValue<SelectOption<T>>;
+  defaultSelectedOptions?: MultiValue<SelectOption<T>>;
   placeholder?: string;
   onChange: (
     selectedOptions: MultiValue<SelectOption<T>>,
@@ -96,6 +96,7 @@ export type MultiSelectWithSearchProps<T> = {
   ) => void;
   head?: ReactNode;
   targetPortalId?: string;
+  selectedOptions?: MultiValue<SelectOption<T>>;
 };
 
 function MultiSelectWithSearch<T>({
@@ -105,10 +106,11 @@ function MultiSelectWithSearch<T>({
   onChange,
   head,
   targetPortalId,
+  selectedOptions: externalSelectedOptions,
 }: MultiSelectWithSearchProps<T>) {
   const [selectedOptions, setSelectedOptions] = useState<
     MultiValue<SelectOption<T>>
-  >(defaultSelectedOptions);
+  >(externalSelectedOptions || defaultSelectedOptions || []);
 
   const handleChange = (
     newValue: MultiValue<SelectOption<T>>,
@@ -117,6 +119,12 @@ function MultiSelectWithSearch<T>({
     setSelectedOptions(newValue || []);
     onChange(newValue, actionMeta);
   };
+
+  useEffect(() => {
+    if (externalSelectedOptions) {
+      setSelectedOptions(externalSelectedOptions);
+    }
+  }, [externalSelectedOptions]);
 
   return (
     <div>

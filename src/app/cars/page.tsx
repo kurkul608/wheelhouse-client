@@ -4,6 +4,7 @@ import { Page } from "@/components/Page";
 import React from "react";
 import { CarCardList } from "@/components/CarCardList/CarCardList";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { CarCardListFilters } from "@/components/CarCardList/CarCardListFilters";
 
 export default async function Home(
   {
@@ -25,6 +26,7 @@ export default async function Home(
             },
           ]}
         ></Breadcrumbs>
+        <CarCardListFilters />
         <CarCardList />
       </div>
     </Page>

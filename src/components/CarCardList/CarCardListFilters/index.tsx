@@ -1,19 +1,13 @@
 "use client";
 
 import { Button, Subheadline } from "@telegram-apps/telegram-ui";
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useMemo, useState } from "react";
 import {
   CarCardsFiltersContext,
   CarCardsStockFilter,
 } from "@/contexts/carCardsFiltersContext";
-import {
-  CAR_BRANDS_FILTER_OPTIONS,
-  CarBrandsFilterType,
-} from "@/constants/carBrandsFilterOptions";
-import {
-  CAR_MODELS_FILTER_OPTIONS,
-  CarModelsFilterType,
-} from "@/constants/carModelsFilterOptions";
+import { CarBrandsFilterType } from "@/constants/carBrandsFilterOptions";
+import { CarModelsFilterType } from "@/constants/carModelsFilterOptions";
 import { STOCK_FILTER_OPTIONS } from "@/constants/stockFilterOptions";
 import { CAR_LIST_SORT_OPTIONS } from "@/constants/carListSortOptions";
 import { Modal } from "@/components/Modal";
@@ -23,6 +17,8 @@ import MultiSelectWithSearch, {
 } from "@/components/MultiSelectWithSearch";
 import SingleSelectWithSearch from "@/components/SingleSelectWithSearch";
 import { YearFilter } from "@/components/YearFilter";
+import { FiltersContext } from "@/contexts/filtersContext";
+import { pick } from "lodash";
 
 export const CarCardListFilters = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,10 +32,37 @@ export const CarCardListFilters = () => {
     sortBy,
     sortOrder,
   } = useContext(CarCardsFiltersContext);
+  const { brands, models } = useContext(FiltersContext);
   const formHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsModalOpen(false);
   };
+
+  const selectedBrands = useMemo(
+    () =>
+      brands.filter((option) =>
+        carBrandFilter.some((opt) => opt === option.value),
+      ),
+    [brands, carBrandFilter],
+  );
+
+  const carModelsOptions: SelectOption<unknown>[] = useMemo(
+    () =>
+      Object.values(
+        selectedBrands.length
+          ? pick(
+              models,
+              selectedBrands.map((opt) => opt.value),
+            )
+          : models,
+      ).reduce((acc, value) => {
+        value?.forEach((val) => {
+          acc.push({ value: val, label: val });
+        });
+        return acc;
+      }, [] as SelectOption<unknown>[]),
+    [models, selectedBrands],
+  );
 
   return (
     <div id={"cars-filters"}>
@@ -83,19 +106,18 @@ export const CarCardListFilters = () => {
               head={
                 <Subheadline className={"px-[22px]"}>Марка авто</Subheadline>
               }
-              options={CAR_BRANDS_FILTER_OPTIONS}
+              options={brands}
               onChange={(newOptions) => {
                 if (update)
                   update({
                     carBrandFilter: newOptions.map(
                       (opt) => opt.value,
                     ) as CarBrandsFilterType[],
+                    carModelFilter: [],
                   });
               }}
               placeholder={"Марка авто"}
-              defaultSelectedOptions={CAR_BRANDS_FILTER_OPTIONS.filter(
-                (option) => carBrandFilter.some((opt) => opt === option.value),
-              )}
+              selectedOptions={selectedBrands}
               targetPortalId={"cars-filters"}
             />
           </div>
@@ -104,7 +126,7 @@ export const CarCardListFilters = () => {
               head={
                 <Subheadline className={"px-[22px]"}>Модель авто</Subheadline>
               }
-              options={CAR_MODELS_FILTER_OPTIONS}
+              options={carModelsOptions}
               onChange={(newOptions) => {
                 if (update)
                   update({
@@ -114,10 +136,10 @@ export const CarCardListFilters = () => {
                   });
               }}
               placeholder={"Модель авто"}
-              defaultSelectedOptions={CAR_MODELS_FILTER_OPTIONS.filter(
-                (option) => carModelFilter.some((opt) => opt === option.value),
-              )}
               targetPortalId={"cars-filters"}
+              selectedOptions={carModelsOptions.filter((option) =>
+                carModelFilter.some((opt) => opt === option.value),
+              )}
             />
           </div>
           <div className={"mb-2"}>

@@ -14,7 +14,6 @@ import { CarCardListItem } from "@/components/CarCardList/CarCardListItem/CarCar
 import { getCarCardsList } from "@/actions/carCard/getList";
 import { CarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
 import { Spinner } from "@telegram-apps/telegram-ui";
-import { CarCardListFilters } from "@/components/CarCardList/CarCardListFilters";
 
 interface CarListProps {
   initialIndex: number;
@@ -132,7 +131,6 @@ export const CarList: FC<CarListProps> = ({ initialIndex = 0 }) => {
       components={{
         Header: () => (
           <>
-            <CarCardListFilters />
             {isFetchingPreviousPage ? (
               <div className={"flex justify-center items-center"}>
                 <Spinner size="l" />

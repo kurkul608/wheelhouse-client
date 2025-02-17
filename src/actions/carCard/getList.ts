@@ -3,6 +3,7 @@
 import { CarCard } from "@/models/carCard";
 import { CARS_LIMIT } from "@/constants/carsLimit";
 import { ICarCardsFiltersContext } from "@/contexts/carCardsFiltersContext";
+import axios from "axios";
 
 export interface CarPage {
   items: CarCard[];
@@ -42,10 +43,10 @@ export const getCarCardsList = async (
     filters.carBrandFilter?.forEach((filter) => {
       searchParams.append("carBrandFilter", filter);
     });
-    const list = await fetch(
-      `${process.env.API_URL}cars?${searchParams.toString()}`,
-    );
-    return list.json();
+    const list = await axios.get(`${process.env.API_URL}cars`, {
+      params: searchParams,
+    });
+    return list.data;
   } catch (error) {
     console.error(error);
   }

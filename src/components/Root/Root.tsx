@@ -31,6 +31,8 @@ import {
 } from "@/contexts/systemContext";
 import { DEFAULT_OPTIONS, OptionsContext } from "@/contexts/OptionsContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useFilters } from "@/hooks/useFilters";
+import { FiltersContext } from "@/contexts/filtersContext";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -60,12 +62,15 @@ function RootInner({ children }: PropsWithChildren) {
   }, [swipeBehavior.isMounted()]);
 
   const [user, bucket, wishlist, updateRegisterData] = useRegister();
+  const { brands, models } = useFilters();
 
   useEffect(() => {
     if (
       user !== null &&
       bucket !== null &&
       wishlist !== null &&
+      brands !== null &&
+      models !== null &&
       isInitLoading &&
       pathname === "/"
     ) {
@@ -105,37 +110,43 @@ function RootInner({ children }: PropsWithChildren) {
             <WishlistContext.Provider
               value={{ wishlist, update: updateRegisterData }}
             >
-              <CarCardsFiltersContext.Provider
-                value={{
-                  stockFilter,
-                  update: updateCarCardsFilter,
-                  search: searchFilter,
-                  carBrandFilter: carBrandFilter,
-                  carModelFilter,
-                  maxDateFilter,
-                  minDateFilter,
-                  sortBy,
-                  sortOrder,
-                }}
+              <FiltersContext.Provider
+                value={{ brands: brands ?? [], models: models ?? {} }}
               >
-                <SystemContext.Provider value={systemValue}>
-                  <OptionsContext.Provider value={DEFAULT_OPTIONS}>
-                    {user == null ||
-                    bucket === null ||
-                    wishlist === null ||
-                    pathname === "/" ? (
-                      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                        <Spinner size="l" />
-                      </div>
-                    ) : (
-                      <>
-                        {children}
-                        {pathname !== "/" && <Navigation />}
-                      </>
-                    )}
-                  </OptionsContext.Provider>
-                </SystemContext.Provider>
-              </CarCardsFiltersContext.Provider>
+                <CarCardsFiltersContext.Provider
+                  value={{
+                    stockFilter,
+                    update: updateCarCardsFilter,
+                    search: searchFilter,
+                    carBrandFilter: carBrandFilter,
+                    carModelFilter,
+                    maxDateFilter,
+                    minDateFilter,
+                    sortBy,
+                    sortOrder,
+                  }}
+                >
+                  <SystemContext.Provider value={systemValue}>
+                    <OptionsContext.Provider value={DEFAULT_OPTIONS}>
+                      {user == null ||
+                      bucket === null ||
+                      wishlist === null ||
+                      brands === null ||
+                      models === null ||
+                      pathname === "/" ? (
+                        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                          <Spinner size="l" />
+                        </div>
+                      ) : (
+                        <>
+                          {children}
+                          {pathname !== "/" && <Navigation />}
+                        </>
+                      )}
+                    </OptionsContext.Provider>
+                  </SystemContext.Provider>
+                </CarCardsFiltersContext.Provider>
+              </FiltersContext.Provider>
             </WishlistContext.Provider>
           </BucketContext.Provider>
         </UserContext.Provider>

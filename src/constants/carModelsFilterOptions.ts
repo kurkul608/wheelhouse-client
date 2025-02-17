@@ -2,7 +2,10 @@ import { SelectOption } from "@/components/MultiSelectWithSearch";
 
 export const CAR_MODELS_FILTER_OPTIONS: SelectOption<unknown>[] = [
   { value: "3", label: "3" },
+  { value: "330e", label: "330e" },
+  { value: "430i", label: "430i" },
   { value: "740", label: "740" },
+  { value: "520d", label: "520d" },
   { value: "i7", label: "i7" },
   { value: "M", label: "M" },
   { value: "M3", label: "M3" },
@@ -16,6 +19,7 @@ export const CAR_MODELS_FILTER_OPTIONS: SelectOption<unknown>[] = [
   { value: "XM", label: "XM" },
   { value: "Q7", label: "Q7" },
   { value: "Q8", label: "Q8" },
+  { value: "RS 6", label: "RS 6" },
   { value: "BRABUS", label: "BRABUS" },
   { value: "E", label: "E" },
   { value: "G", label: "G" },
@@ -47,7 +51,9 @@ export const CAR_MODELS_FILTER_OPTIONS: SelectOption<unknown>[] = [
   { value: "Huracan", label: "Huracan" },
   { value: "Urus", label: "Urus" },
   { value: "DB12", label: "DB12" },
+  { value: "DBX707", label: "DBX707" },
   { value: "Valkyrie", label: "Valkyrie" },
+  { value: "Vantage", label: "Vantage" },
   { value: "Vanquish", label: "Vanquish" },
   { value: "911", label: "911" },
   { value: "918", label: "918" },
@@ -68,6 +74,8 @@ export const CAR_MODELS_FILTER_OPTIONS: SelectOption<unknown>[] = [
 
 export type CarModelsFilterType =
   | "3"
+  | "330e"
+  | "430i"
   | "740"
   | "i7"
   | "M"
@@ -82,6 +90,7 @@ export type CarModelsFilterType =
   | "XM"
   | "Q7"
   | "Q8"
+  | "RS 6"
   | "BRABUS"
   | "E"
   | "G"
@@ -97,6 +106,7 @@ export type CarModelsFilterType =
   | "Cullinan"
   | "Ghost"
   | "Phantom"
+  | "Spectre"
   | "Spectre"
   | "Bentayga"
   | "Continental"
@@ -114,6 +124,8 @@ export type CarModelsFilterType =
   | "Revuelto"
   | "Urus"
   | "DB12"
+  | "DBX707"
+  | "Vantage"
   | "Valkyrie"
   | "Vanquish"
   | "911"
