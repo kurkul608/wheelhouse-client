@@ -40,7 +40,7 @@ export function init(debug: boolean): void {
     expandViewport();
   }
 
-  if (Number($version()) > 8 && !swipeBehavior?.isMounted()) {
+  if (swipeBehavior.isSupported() && !swipeBehavior?.isMounted()) {
     if (swipeBehavior.mount) {
       swipeBehavior.mount();
     }
