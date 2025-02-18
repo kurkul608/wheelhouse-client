@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { CarCard } from "@/models/carCard";
 import { WishlistButton } from "@/components/CarCardList/CarCardListItem/WishlistButton";
 import { getFileLink } from "@/utils/getFileLink";
+import { priceFormatter } from "@/utils/priceFormatter";
 
 type CarCardItemListProps = { listIndex?: number } & CarCard;
 
@@ -50,7 +51,7 @@ export const CarCardListItem: FC<CarCardItemListProps> = ({
         <CardCell readOnly subtitle={`${props.carBrand} ${props.carModel}`}>
           {!!props.externalId || !props.price
             ? "Узнать цену"
-            : `${props.price} ${props.currency}`}
+            : `${priceFormatter(props.price)} ${props.currency}`}
         </CardCell>
       </Card>
     </Fragment>

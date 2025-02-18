@@ -27,6 +27,7 @@ import { createOrder } from "@/actions/order/create";
 import { getAuthorization } from "@/utils/getAuthorization";
 import parse from "html-react-parser";
 import { RequestedContact } from "@telegram-apps/sdk";
+import { priceFormatter } from "@/utils/priceFormatter";
 
 interface CarCardItemProps {
   carCard: CarCard;
@@ -118,7 +119,7 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
             subtitle={
               !!carCard.externalId || !carCard.price
                 ? "Узнать цену"
-                : `${carCard.price} ${carCard.currency}`
+                : `${priceFormatter(carCard.price)} ${carCard.currency}`
             }
             titleBadge={<Badge type={"dot"} />}
             before={
