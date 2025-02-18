@@ -3,7 +3,7 @@
 import { Button, Cell, Spinner } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
 import { File as FileModel } from "@/models/file";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { getFileLink } from "@/utils/getFileLink";
 import { removeFileFromCar } from "@/actions/manager/cars/removeFileFromCarCard";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
@@ -25,11 +25,16 @@ interface ManagePhotosProps {
 }
 
 export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
+  console.log(photos);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isUpdatingOrder, setIsUpdatingOrder] = useState(false);
   const [photoOrder, setPhotoOrder] = useState(photos);
   const lp = useLaunchParams();
   const router = useRouter();
+
+  useEffect(() => {
+    setPhotoOrder(photos);
+  }, [photos]);
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -143,8 +148,22 @@ const SortablePhoto: FC<SortablePhotoProps> = ({
           <Button
             loading={disabled}
             mode="bezeled"
-            onClick={onDelete}
+            onMouseDown={(e) => {
+              console.log("in onMouseDown");
+              e.stopPropagation();
+              onDelete();
+            }}
+            onTouchStart={(e) => {
+              console.log("In onTouchStart");
+              e.stopPropagation();
+              onDelete();
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete();
+            }}
             type="button"
+            className={"z-10"}
           >
             Удалить
           </Button>
@@ -155,46 +174,3 @@ const SortablePhoto: FC<SortablePhotoProps> = ({
     </div>
   );
 };
-
-// export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
-//   const [loading, setLoading] = useState(false);
-//   const lp = useLaunchParams();
-//   const router = useRouter();
-//
-//   return photos.map((photo) => (
-//     <Cell
-//       key={photo.id}
-//       before={
-//         <Image
-//           src={getFileLink(photo)}
-//           alt={photo.key}
-//           width={100}
-//           height={100}
-//           style={{ objectFit: "cover", borderRadius: "8px" }}
-//           onLoad={() => URL.revokeObjectURL(getFileLink(photo))}
-//           unoptimized
-//         />
-//       }
-//       subtitle={`${photo.file_size} bytes`}
-//       after={
-//         <Button
-//           loading={loading}
-//           mode={"bezeled"}
-//           onClick={async () => {
-//             if (!loading) {
-//               setLoading(true);
-//               await removeFileFromCar(carId, photo.id, getAuthorization(lp));
-//               setLoading(false);
-//               router.refresh();
-//             }
-//           }}
-//           type={"button"}
-//         >
-//           Удалить
-//         </Button>
-//       }
-//     >
-//       {photo.key}
-//     </Cell>
-//   ));
-// };
