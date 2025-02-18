@@ -8,7 +8,6 @@ import {
   init as initSDK,
   mainButton,
   expandViewport,
-  $version,
   swipeBehavior,
 } from "@telegram-apps/sdk-react";
 
