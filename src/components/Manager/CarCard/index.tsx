@@ -1,13 +1,6 @@
 "use server";
 
-import {
-  Button,
-  Input,
-  List,
-  Section,
-  Text,
-  Title,
-} from "@telegram-apps/telegram-ui";
+import { Button, List, Section, Text, Title } from "@telegram-apps/telegram-ui";
 import { classNames } from "@telegram-apps/sdk-react";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
