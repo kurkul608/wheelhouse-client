@@ -13,6 +13,7 @@ import { StockSwitch } from "@/components/Manager/CarCard/StockSwitch";
 import { Description } from "@/components/Manager/CarCard/Description";
 import { MultiPhotoUpload } from "@/components/Manager/CarCard/MultiPhotoUpload";
 import { getCarManager } from "@/actions/manager/cars/getCar";
+import { priceFormatter } from "@/utils/priceFormatter";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -51,6 +52,11 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
           <Text style={{ color: "var(--tgui--hint_color)" }}>
             {specification?.value}
           </Text>
+          {carCard.price ? (
+            <Text style={{ color: "var(--tgui--hint_color)" }}>
+              {priceFormatter(carCard.price)} {carCard.currency}
+            </Text>
+          ) : null}
         </div>
       </List>
       <Section className={"mt-2"}>
