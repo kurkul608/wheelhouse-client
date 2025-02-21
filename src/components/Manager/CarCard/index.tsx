@@ -1,6 +1,13 @@
 "use server";
 
-import { List, Section, Text, Title } from "@telegram-apps/telegram-ui";
+import {
+  Button,
+  Input,
+  List,
+  Section,
+  Text,
+  Title,
+} from "@telegram-apps/telegram-ui";
 import { classNames } from "@telegram-apps/sdk-react";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
@@ -14,6 +21,7 @@ import { Description } from "@/components/Manager/CarCard/Description";
 import { MultiPhotoUpload } from "@/components/Manager/CarCard/MultiPhotoUpload";
 import { getCarManager } from "@/actions/manager/cars/getCar";
 import { priceFormatter } from "@/utils/priceFormatter";
+import Link from "next/link";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -27,7 +35,6 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
   const specification = carCard.specifications?.find(
     (spec) => spec.field === "specification",
   );
-  console.log(carCard);
 
   return (
     <>
@@ -57,6 +64,7 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
               {priceFormatter(carCard.price)} {carCard.currency}
             </Text>
           ) : null}
+          <Text style={{ color: "var(--tgui--hint_color)" }}>{carCard.id}</Text>
         </div>
       </List>
       <Section className={"mt-2"}>
@@ -67,6 +75,9 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
         <SectionHeader>Управление добавленными фотографиями</SectionHeader>
         <ManagePhotos photos={carCard.photos ?? []} carId={carCard.id} />
       </Section>
+      {/*<Section className={"mt-2"}>*/}
+      {/*    div*/}
+      {/*</Section>*/}
       <Section className={"mt-2"}>
         <SectionHeader>Характеристики авто</SectionHeader>
         <SpecList carCard={carCard} />
@@ -78,6 +89,11 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
       <Section className={"mt-2"}>
         <SectionHeader>Описание карточки авто</SectionHeader>
         <Description carCard={carCard} />
+      </Section>
+      <Section className={"mt-2"}>
+        <Link href={`/cars/${carCard.id}`}>
+          <Button>Посмотреть карточку пользователя</Button>
+        </Link>
       </Section>
     </>
   );
