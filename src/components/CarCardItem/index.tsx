@@ -6,6 +6,7 @@ import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import {
   Avatar,
   Badge,
+  Button,
   Cell,
   List,
   Section,
@@ -17,7 +18,7 @@ import {
   requestContact,
   useLaunchParams,
 } from "@telegram-apps/sdk-react";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { CarCard } from "@/models/carCard";
 import { CarItemActions } from "@/components/CarCardItem/CarItemActions";
 import { getFileLink } from "@/utils/getFileLink";
@@ -28,6 +29,8 @@ import { getAuthorization } from "@/utils/getAuthorization";
 import parse from "html-react-parser";
 import { RequestedContact } from "@telegram-apps/sdk";
 import { priceFormatter } from "@/utils/priceFormatter";
+import { UserContext } from "@/contexts/userContext";
+import Link from "next/link";
 
 interface CarCardItemProps {
   carCard: CarCard;
@@ -37,6 +40,7 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
   const [isRequestSend, setIsRequestSend] = useState(false);
   const [mainButtonText, setMainButtonText] = useState<string | null>(null);
   const lp = useLaunchParams();
+  const { user } = useContext(UserContext);
   const model = carCard.specifications?.find((spec) => spec.field === "model");
   const specification = carCard.specifications?.find(
     (spec) => spec.field === "specification",
@@ -66,6 +70,8 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
       }
     }
   };
+
+  const isUserRoleManager = user?.roles.some((role) => role === "MANAGER");
 
   return (
     <div className={"h-[calc(100vh-62px)] overflow-auto"}>
@@ -154,6 +160,11 @@ export const CarCardItem: FC<CarCardItemProps> = ({ carCard }) => {
           </Section>
         </List>
       )}
+      {isUserRoleManager ? (
+        <Link href={`/manager/cars/${carCard.id}`}>
+          <Button>Перейти к редактированию авто</Button>
+        </Link>
+      ) : null}
     </div>
   );
 };

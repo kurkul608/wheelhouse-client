@@ -97,6 +97,10 @@ function RootInner({ children }: PropsWithChildren) {
 
   const queryClient = new QueryClient();
 
+  if (user?.roles.some((role) => role === "SUPER_ADMIN")) {
+    console.log(lp);
+  }
+
   return (
     <AppRoot
       appearance={isDark ? "dark" : "light"}
