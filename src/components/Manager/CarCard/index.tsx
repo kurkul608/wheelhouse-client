@@ -15,6 +15,7 @@ import { MultiPhotoUpload } from "@/components/Manager/CarCard/MultiPhotoUpload"
 import { getCarManager } from "@/actions/manager/cars/getCar";
 import { priceFormatter } from "@/utils/priceFormatter";
 import Link from "next/link";
+import { UpdatePrice } from "@/components/Manager/CarCard/UpdatePrice";
 
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
@@ -68,9 +69,10 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
         <SectionHeader>Управление добавленными фотографиями</SectionHeader>
         <ManagePhotos photos={carCard.photos ?? []} carId={carCard.id} />
       </Section>
-      {/*<Section className={"mt-2"}>*/}
-      {/*    div*/}
-      {/*</Section>*/}
+      <Section className={"mt-2"}>
+        <SectionHeader>Цена автомобиля</SectionHeader>
+        <UpdatePrice carCardId={carCard.id} price={carCard.price} />
+      </Section>
       <Section className={"mt-2"}>
         <SectionHeader>Характеристики авто</SectionHeader>
         <SpecList carCard={carCard} />
