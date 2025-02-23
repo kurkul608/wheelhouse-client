@@ -1,5 +1,4 @@
 "use client";
-import { CarCard } from "@/models/carCard";
 import { Button, Input } from "@telegram-apps/telegram-ui";
 import { FC, useEffect, useState } from "react";
 import { updatePrice } from "@/actions/manager/cars/updatePrice";
