@@ -14,7 +14,7 @@ export default async function Home(
   },
 ) {
   return (
-    <Page>
+    <Page back={false}>
       <div
         style={{ background: "var(--tgui--secondary_bg_color)" }}
         className={"min-h-[calc(100vh-62px)] overflow-hidden"}
