@@ -6,12 +6,14 @@ import "./modal.css";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  elementId?: string;
 }
 
 export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   isOpen,
   onClose,
   children,
+  elementId,
 }) => {
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -26,7 +28,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
 
   if (typeof window === "undefined" || !isOpen) return null;
 
-  const modalRoot = document.getElementById("cars-filters");
+  const modalRoot = document.getElementById(elementId || "cars-filters");
 
   if (!modalRoot) return null;
 

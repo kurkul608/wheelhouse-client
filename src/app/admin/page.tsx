@@ -32,6 +32,15 @@ export default async function AdminPage() {
           >
             <Cell subtitle="Нажать для перехода">Список пользователей</Cell>
           </Link>
+          <Link
+            href={"/admin/ref"}
+            style={{
+              textDecoration: "none",
+              color: "var(--tgui--link_color)",
+            }}
+          >
+            <Cell subtitle="Нажать для перехода">Реферальные ссылки</Cell>
+          </Link>
         </Section>
       </List>
     </Page>

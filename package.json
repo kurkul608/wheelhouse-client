@@ -23,6 +23,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "add": "^2.0.6",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
     "eruda": "^3.4.1",
     "formik": "^2.4.6",
     "html-react-parser": "^5.2.2",
