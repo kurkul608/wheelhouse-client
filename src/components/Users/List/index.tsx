@@ -7,13 +7,16 @@ import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { User } from "@/models/user";
 import {
+  Button,
   Cell,
   Headline,
   Input,
   List,
+  Snackbar,
   Spinner,
 } from "@telegram-apps/telegram-ui";
 import { ChangeUserRole } from "@/components/Users/ChangeUserRole";
+import { sentUsersScv } from "@/admin/users/sentUsersCsv";
 
 export const UsersList = () => {
   const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
@@ -21,6 +24,10 @@ export const UsersList = () => {
   const [list, setList] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const lp = useLaunchParams();
+  const [showClipBoard, setShowClipBoard] = useState({
+    state: false,
+    text: "",
+  });
 
   useEffect(() => {
     const getUsers = async () => {
@@ -35,6 +42,25 @@ export const UsersList = () => {
     getUsers();
   }, [refreshFlag, searchString]);
 
+  const sentCsvButtonHandler = async () => {
+    const res = await sentUsersScv(
+      lp.initData?.user?.id as number,
+      getAuthorization(lp) as AxiosHeaders,
+    );
+
+    if (res) {
+      setShowClipBoard({
+        text: "CSV отправлен в личные сообщения",
+        state: true,
+      });
+    } else {
+      setShowClipBoard({
+        text: "Не отправить CSV",
+        state: true,
+      });
+    }
+  };
+
   return (
     <List
       style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
@@ -45,6 +71,19 @@ export const UsersList = () => {
         value={searchString}
         onChange={(e) => setSearchString(e.target.value)}
       />
+      <Button onClick={sentCsvButtonHandler}>Получить в CSV</Button>
+      {showClipBoard.state && (
+        <Snackbar
+          onClose={() => {
+            setShowClipBoard({
+              state: false,
+              text: "",
+            });
+          }}
+        >
+          <div className={"size-4 w-full"}>{showClipBoard.text}</div>
+        </Snackbar>
+      )}
       {!loading &&
         list.map((user) => (
           <Cell
