@@ -5,3 +5,8 @@ export interface RefCodeModel {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ExpandedRefCodeModel extends RefCodeModel {
+  usersCount: number;
+  usersWithOrderCount: number;
+}

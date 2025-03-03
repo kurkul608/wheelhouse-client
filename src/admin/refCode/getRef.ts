@@ -1,14 +1,14 @@
 "use server";
 
 import axios, { AxiosHeaders } from "axios";
-import { RefCodeModel } from "@/models/refCode";
+import { ExpandedRefCodeModel } from "@/models/refCode";
 
 export const getRefCode = async (
   refId: string,
   headers: AxiosHeaders,
-): Promise<RefCodeModel | undefined> => {
+): Promise<ExpandedRefCodeModel | undefined> => {
   try {
-    const refCode = await axios.get<RefCodeModel>(
+    const refCode = await axios.get<ExpandedRefCodeModel>(
       `${process.env.API_URL}admin/ref/${refId}`,
       {
         headers: { ...headers },
