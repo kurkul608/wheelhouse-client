@@ -29,6 +29,7 @@ export const YearFilter: FC<YearFilterProps> = ({
       <Subheadline className={"px-[22px]"}>Год</Subheadline>
       <div className={"flex justify-between"}>
         <SingleSelectWithSearch
+          isSearchable={false}
           options={Array.from(
             { length: new Date().getFullYear() - 2004 + 1 },
             (_, i) => 2004 + i,
@@ -46,6 +47,7 @@ export const YearFilter: FC<YearFilterProps> = ({
         />
         {"-"}
         <SingleSelectWithSearch
+          isSearchable={false}
           options={Array.from(
             { length: new Date().getFullYear() - 2004 + 1 },
             (_, i) => 2004 + i,

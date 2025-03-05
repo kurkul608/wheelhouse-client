@@ -75,6 +75,7 @@ export type SingleSelectWithSearchProps<T> = {
   ) => void;
   head?: ReactNode;
   targetPortalId?: string;
+  isSearchable?: boolean;
 };
 
 function SingleSelectWithSearch<T>({
@@ -84,6 +85,7 @@ function SingleSelectWithSearch<T>({
   onChange,
   head,
   targetPortalId,
+  isSearchable = true,
 }: SingleSelectWithSearchProps<T>) {
   const [selectedOption, setSelectedOption] = useState<SelectOption<T> | null>(
     defaultSelectedOption,
@@ -105,6 +107,7 @@ function SingleSelectWithSearch<T>({
         value={selectedOption}
         onChange={handleChange}
         placeholder={placeholder}
+        isSearchable={isSearchable}
         styles={customStyles}
         className="w-full"
         classNamePrefix="react-select"
