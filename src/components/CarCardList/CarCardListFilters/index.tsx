@@ -84,6 +84,7 @@ export const CarCardListFilters = () => {
         <form onSubmit={formHandler}>
           <div className={"mb-2"}>
             <SingleSelectWithSearch
+              isSearchable={false}
               options={STOCK_FILTER_OPTIONS}
               onChange={(option) => {
                 if (update)
@@ -169,6 +170,7 @@ export const CarCardListFilters = () => {
 
             <div className={"mb-2"}>
               <SingleSelectWithSearch
+                isSearchable={false}
                 options={CAR_LIST_SORT_OPTIONS}
                 onChange={(option) => {
                   if (option && update)
