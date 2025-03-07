@@ -104,6 +104,7 @@ export const CarCardListFilters = () => {
           </div>
           <div className={"mb-2"}>
             <MultiSelectWithSearch
+              isSearchable={false}
               head={
                 <Subheadline className={"px-[22px]"}>Марка авто</Subheadline>
               }
@@ -124,6 +125,7 @@ export const CarCardListFilters = () => {
           </div>
           <div className={"mb-2"}>
             <MultiSelectWithSearch
+              isSearchable={false}
               head={
                 <Subheadline className={"px-[22px]"}>Модель авто</Subheadline>
               }

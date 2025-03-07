@@ -97,6 +97,7 @@ export type MultiSelectWithSearchProps<T> = {
   head?: ReactNode;
   targetPortalId?: string;
   selectedOptions?: MultiValue<SelectOption<T>>;
+  isSearchable?: boolean;
 };
 
 function MultiSelectWithSearch<T>({
@@ -107,6 +108,7 @@ function MultiSelectWithSearch<T>({
   head,
   targetPortalId,
   selectedOptions: externalSelectedOptions,
+  isSearchable = true,
 }: MultiSelectWithSearchProps<T>) {
   const [selectedOptions, setSelectedOptions] = useState<
     MultiValue<SelectOption<T>>
@@ -132,6 +134,7 @@ function MultiSelectWithSearch<T>({
       <Select
         isMulti
         options={options}
+        isSearchable={isSearchable}
         value={selectedOptions}
         onChange={handleChange}
         placeholder={placeholder}
