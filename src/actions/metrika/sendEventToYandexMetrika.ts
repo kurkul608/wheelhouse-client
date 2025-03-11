@@ -30,13 +30,19 @@ export async function sendEventToYandexMetrika({
     return;
   }
 
+  if (!process.env.MS_TOKEN) {
+    console.warn("MS_TOKEN не найден. Событие не отправлено.");
+    return;
+  }
+
   const searchParams = new URLSearchParams({
-    tid: process.env.METRIKA_ID || "",
+    tid: process.env.METRIKA_ID,
     cid: clientID,
     t: eventType,
     ...(eventType === "pageview"
       ? { dr: prevPage || "-", dl: pageURL || "", dt: pageTitle || "" }
       : {}),
+    ms: process.env.MS_TOKEN,
   });
 
   try {
