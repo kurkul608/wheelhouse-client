@@ -7,5 +7,6 @@ export interface User {
   firstName?: string;
   lastName?: string;
   languageCode?: string;
+  clientId?: string;
   roles: UserRole[];
 }

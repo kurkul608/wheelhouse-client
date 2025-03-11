@@ -33,6 +33,7 @@ import { DEFAULT_OPTIONS, OptionsContext } from "@/contexts/OptionsContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFilters } from "@/hooks/useFilters";
 import { FiltersContext } from "@/contexts/filtersContext";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -143,6 +144,7 @@ function RootInner({ children }: PropsWithChildren) {
                         </div>
                       ) : (
                         <>
+                          <AnalyticsTracker />
                           {children}
                           {pathname !== "/" && <Navigation />}
                         </>
