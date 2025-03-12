@@ -10,13 +10,14 @@ import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { useRouter } from "next/navigation";
 import {
-  DndContext,
   closestCenter,
-  PointerSensor,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -33,6 +34,7 @@ interface ManagePhotosProps {
 }
 
 export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
+  console.log(photos);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isUpdatingOrder, setIsUpdatingOrder] = useState(false);
   const [photoOrder, setPhotoOrder] = useState(photos);
@@ -42,15 +44,6 @@ export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
   useEffect(() => {
     setPhotoOrder(photos);
   }, [photos]);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: { delay: 250, tolerance: 5 },
-    }),
-  );
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -62,6 +55,7 @@ export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
       const newOrder = arrayMove(photoOrder, oldIndex, newIndex);
       setPhotoOrder(newOrder);
       setIsUpdatingOrder(true);
+      console.log(newOrder.map((photo) => photo.id));
       await updatePhotos(
         carId,
         newOrder.map((photo) => photo.id),
@@ -72,12 +66,18 @@ export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
     }
   };
 
+  const mouseSensor = useSensor(MouseSensor);
+  const touchSensor = useSensor(TouchSensor);
+  const keyboardSensor = useSensor(KeyboardSensor);
+
+  const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
+
   return (
     <div style={{ position: "relative" }}>
       <DndContext
-        sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
+        sensors={sensors}
       >
         <SortableContext
           items={photoOrder.map((photo) => photo.id)}
@@ -138,43 +138,29 @@ const SortablePhoto: FC<SortablePhotoProps> = ({
   disabled,
   onDelete,
 }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    setActivatorNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: photo.id });
-
+  // Хук для реализации сортировки
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: photo.id });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    touchAction: "none",
     filter: disabled ? "blur(2px)" : undefined,
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <Cell
         key={photo.id}
         before={
-          <div
-            ref={setActivatorNodeRef}
-            {...listeners}
-            {...attributes}
-            style={{ display: "inline-block", cursor: "grab" }}
-          >
-            <Image
-              src={getFileLink(photo)}
-              alt={photo.key}
-              width={100}
-              height={100}
-              style={{ objectFit: "cover", borderRadius: "8px" }}
-              onLoad={() => URL.revokeObjectURL(getFileLink(photo))}
-              unoptimized
-            />
-          </div>
+          <Image
+            src={getFileLink(photo)}
+            alt={photo.key}
+            width={100}
+            height={100}
+            style={{ objectFit: "cover", borderRadius: "8px" }}
+            onLoad={() => URL.revokeObjectURL(getFileLink(photo))}
+            unoptimized
+          />
         }
         subtitle={`${photo.file_size} bytes`}
         after={
@@ -182,6 +168,12 @@ const SortablePhoto: FC<SortablePhotoProps> = ({
             loading={disabled}
             mode="bezeled"
             onMouseDown={(e) => {
+              console.log("in onMouseDown");
+              e.stopPropagation();
+              onDelete();
+            }}
+            onTouchStart={(e) => {
+              console.log("In onTouchStart");
               e.stopPropagation();
               onDelete();
             }}
