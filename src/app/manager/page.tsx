@@ -3,6 +3,10 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+export const metadata = {
+  title: "Страница менеджера",
+};
+
 export default async function ManagerPage() {
   const cookiesStorage = await cookies();
 

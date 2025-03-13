@@ -1,11 +1,18 @@
 import { Page } from "@/components/Page";
 import { ManagerCarCard } from "@/components/Manager/CarCard";
 
-export default async function ManagerCarsPage({
-  params,
-}: {
+type Props = {
   params: Promise<{ slug: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  return {
+    title: `Менеджер карточка авто ${slug}`,
+  };
+}
+
+export default async function ManagerCarsPage({ params }: Props) {
   const { slug } = await params;
 
   return (

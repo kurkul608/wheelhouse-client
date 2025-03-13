@@ -1,18 +1,14 @@
-"use server";
-
 import { Page } from "@/components/Page";
 import React from "react";
 import { CarCardList } from "@/components/CarCardList/CarCardList";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CarCardListFilters } from "@/components/CarCardList/CarCardListFilters";
 
-export default async function Home(
-  {
-    // searchParams,
-  }: {
-    searchParams: Promise<{ page: string }>;
-  },
-) {
+export const metadata = {
+  title: "Список авто",
+};
+
+export default async function HomePage() {
   return (
     <Page back={false}>
       <div

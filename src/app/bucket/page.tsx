@@ -3,6 +3,10 @@ import { Bucket as BucketComponent } from "@/components/Bucket";
 import { getCarsPageUrl } from "@/utils/getCarsPageUrl";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
+export const metadata = {
+  title: "Корзина",
+};
+
 export default async function Bucket() {
   return (
     <Page>

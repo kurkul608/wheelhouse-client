@@ -4,6 +4,10 @@ import { Cell, List, Section } from "@telegram-apps/telegram-ui";
 import Link from "next/link";
 import { Page } from "@/components/Page";
 
+export const metadata = {
+  title: "Админ страница",
+};
+
 export default async function AdminPage() {
   const cookiesStorage = await cookies();
 

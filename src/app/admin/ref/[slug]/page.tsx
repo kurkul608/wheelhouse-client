@@ -1,11 +1,18 @@
 import { RefLink } from "@/components/RefLink/Reflink";
 import { Page } from "@/components/Page";
 
-export default async function RefCode({
-  params,
-}: {
+type Props = {
   params: Promise<{ slug: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  return {
+    title: `Реферальный код ${slug}`,
+  };
+}
+
+export default async function RefCode({ params }: Props) {
   const { slug } = await params;
 
   return (

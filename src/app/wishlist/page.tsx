@@ -3,6 +3,10 @@ import { getCarsPageUrl } from "@/utils/getCarsPageUrl";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Wishlist } from "@/components/Wishlist";
 
+export const metadata = {
+  title: "Список избранного",
+};
+
 export default async function WishlistPage() {
   return (
     <Page>

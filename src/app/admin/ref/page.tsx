@@ -2,6 +2,10 @@ import { Page } from "@/components/Page";
 import { CreateRefLink } from "@/components/RefLink/CreateRef";
 import { RefLinkList } from "@/components/RefLink/RefLinkList";
 
+export const metadata = {
+  title: "Список реферальных кодов",
+};
+
 export default async function AdminPage() {
   return (
     <Page>

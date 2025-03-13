@@ -1,6 +1,10 @@
 import { ManagerCarCardCreate } from "@/components/Manager/CarCard/Create";
 import { Page } from "@/components/Page";
 
+export const metadata = {
+  title: "Менеджер создание авто",
+};
+
 export default async function ManagerCarCreatePage() {
   return (
     <Page>
