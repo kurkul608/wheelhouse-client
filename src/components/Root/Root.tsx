@@ -34,6 +34,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFilters } from "@/hooks/useFilters";
 import { FiltersContext } from "@/contexts/filtersContext";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import { ManagerFiltersContext } from "@/contexts/managerFiltersContext";
+import { useManagerFilters } from "@/hooks/useManagerFilters";
 
 function RootInner({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -92,6 +94,8 @@ function RootInner({ children }: PropsWithChildren) {
     sortBy,
   } = useCarCardsFilters();
 
+  const { managerFilters, updateManagerFilters } = useManagerFilters();
+
   useStartParams(user !== null && bucket !== null && wishlist !== null);
 
   const systemValue = useMemo(createSystemContextValue, []);
@@ -115,44 +119,53 @@ function RootInner({ children }: PropsWithChildren) {
             <WishlistContext.Provider
               value={{ wishlist, update: updateRegisterData }}
             >
-              <FiltersContext.Provider
-                value={{ brands: brands ?? [], models: models ?? {} }}
+              <ManagerFiltersContext.Provider
+                value={{
+                  stockFilter: managerFilters.stockFilter,
+                  activeFilter: managerFilters.activeFilter,
+                  searchString: managerFilters.searchString,
+                  updateManagerFilters,
+                }}
               >
-                <CarCardsFiltersContext.Provider
-                  value={{
-                    stockFilter,
-                    update: updateCarCardsFilter,
-                    search: searchFilter,
-                    carBrandFilter: carBrandFilter,
-                    carModelFilter,
-                    maxDateFilter,
-                    minDateFilter,
-                    sortBy,
-                    sortOrder,
-                  }}
+                <FiltersContext.Provider
+                  value={{ brands: brands ?? [], models: models ?? {} }}
                 >
-                  <SystemContext.Provider value={systemValue}>
-                    <OptionsContext.Provider value={DEFAULT_OPTIONS}>
-                      {user == null ||
-                      bucket === null ||
-                      wishlist === null ||
-                      brands === null ||
-                      models === null ||
-                      pathname === "/" ? (
-                        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                          <Spinner size="l" />
-                        </div>
-                      ) : (
-                        <>
-                          <AnalyticsTracker />
-                          {children}
-                          {pathname !== "/" && <Navigation />}
-                        </>
-                      )}
-                    </OptionsContext.Provider>
-                  </SystemContext.Provider>
-                </CarCardsFiltersContext.Provider>
-              </FiltersContext.Provider>
+                  <CarCardsFiltersContext.Provider
+                    value={{
+                      stockFilter,
+                      update: updateCarCardsFilter,
+                      search: searchFilter,
+                      carBrandFilter: carBrandFilter,
+                      carModelFilter,
+                      maxDateFilter,
+                      minDateFilter,
+                      sortBy,
+                      sortOrder,
+                    }}
+                  >
+                    <SystemContext.Provider value={systemValue}>
+                      <OptionsContext.Provider value={DEFAULT_OPTIONS}>
+                        {user == null ||
+                        bucket === null ||
+                        wishlist === null ||
+                        brands === null ||
+                        models === null ||
+                        pathname === "/" ? (
+                          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <Spinner size="l" />
+                          </div>
+                        ) : (
+                          <>
+                            <AnalyticsTracker />
+                            {children}
+                            {pathname !== "/" && <Navigation />}
+                          </>
+                        )}
+                      </OptionsContext.Provider>
+                    </SystemContext.Provider>
+                  </CarCardsFiltersContext.Provider>
+                </FiltersContext.Provider>
+              </ManagerFiltersContext.Provider>
             </WishlistContext.Provider>
           </BucketContext.Provider>
         </UserContext.Provider>

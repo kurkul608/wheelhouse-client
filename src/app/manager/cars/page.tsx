@@ -1,7 +1,7 @@
 "use client";
 
 import { getManagerCarsList } from "@/actions/manager/cars/getList";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CarCard } from "@/models/carCard";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
@@ -18,20 +18,23 @@ import { CarCardsStockFilter } from "@/contexts/carCardsFiltersContext";
 import { useRouter } from "next/navigation";
 import { Page } from "@/components/Page";
 import { getFileLink } from "@/utils/getFileLink";
+import { ManagerFiltersContext } from "@/contexts/managerFiltersContext";
 
 export type ActiveFilter = "all" | "active" | "disabled";
 
 export default function ManagerCarsPage() {
   const router = useRouter();
   const [list, setList] = useState<CarCard[]>([]);
-  const [search, setSearch] = useState("");
-  const [stockFilter, setStockFilter] = useState<CarCardsStockFilter>("all");
-  const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
+  const { stockFilter, activeFilter, updateManagerFilters, searchString } =
+    useContext(ManagerFiltersContext);
+  // const [search, setSearch] = useState("");
+  // const [stockFilter, setStockFilter] = useState<CarCardsStockFilter>("all");
+  // const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
   const [loading, setLoading] = useState(false);
   const lp = useLaunchParams();
   const getCars = async () => {
     const cars = await getManagerCarsList(
-      search,
+      searchString,
       stockFilter,
       activeFilter,
       getAuthorization(lp),
@@ -47,7 +50,7 @@ export default function ManagerCarsPage() {
     setLoading(true);
     setList([]);
     getCars();
-  }, [stockFilter, activeFilter, search]);
+  }, [stockFilter, activeFilter, searchString]);
 
   return (
     <Page>
@@ -56,14 +59,18 @@ export default function ManagerCarsPage() {
         className={"h-[calc(100vh-62px)] overflow-auto"}
       >
         <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchString}
+          onChange={(e) =>
+            updateManagerFilters?.({ searchString: e.target.value })
+          }
           placeholder={"Введите название авто"}
         />
         <Text className={"flex  px-[10px] py-[8px]"}>Фильтр наличия авто:</Text>
         <Select
           onChange={(e) => {
-            setStockFilter(e.target.value as CarCardsStockFilter);
+            updateManagerFilters?.({
+              stockFilter: e.target.value as CarCardsStockFilter,
+            });
           }}
           value={stockFilter}
         >
@@ -76,7 +83,9 @@ export default function ManagerCarsPage() {
         </Text>
         <Select
           onChange={(e) => {
-            setActiveFilter(e.target.value as ActiveFilter);
+            updateManagerFilters?.({
+              activeFilter: e.target.value as ActiveFilter,
+            });
           }}
           value={activeFilter}
         >
