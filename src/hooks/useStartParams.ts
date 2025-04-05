@@ -14,6 +14,7 @@ export const useStartParams = (isInitDataLoaded: boolean) => {
     if (!redirected && isInitDataLoaded && lp.startParam) {
       const decodedDataString = atob(lp.startParam);
       const decodedData = JSON.parse(decodedDataString) as IStartParams;
+      console.log("decodedData.refId: ", decodedData.refId);
 
       if (decodedData.carId) {
         setRedirected(true);

@@ -2,17 +2,22 @@
 
 import { cookies } from "next/headers";
 import { User } from "@/models/user";
+import axios, { AxiosHeaders } from "axios";
 
 export async function registerUser(
-  headers: HeadersInit,
+  data: { refId: string | null },
+  headers: AxiosHeaders,
 ): Promise<User | undefined> {
   try {
-    const user = await fetch(`${process.env.API_URL}users/register`, {
-      method: "POST",
-      headers,
-    });
+    const user = await axios.post(
+      `${process.env.API_URL}users/register`,
+      { ...(data.refId ? { refId: data.refId } : {}) },
+      {
+        headers,
+      },
+    );
 
-    const userData: User = await user.json();
+    const userData: User = user.data;
     const cookieStore = await cookies();
 
     if (userData.roles.some((role) => role === "MANAGER")) {

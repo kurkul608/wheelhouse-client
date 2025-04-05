@@ -24,6 +24,9 @@ import { getMiniAppLink } from "@/utils/getMiniAppLink";
 import { createOrder } from "@/actions/order/create";
 import { MainButton } from "@/components/MainButton";
 import { RequestedContact } from "@telegram-apps/sdk";
+import { UserContext } from "@/contexts/userContext";
+import { Modal } from "@/components/Modal";
+import { SelectRef } from "@/components/CarCardItem/SelectRef";
 
 interface CarItemActionsProps {
   wishlistDefaultState?: boolean;
@@ -36,9 +39,11 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   isRequestAlreadySend,
   existMainButtonText,
 }) => {
+  const [isSelectRefModal, setIsSelectRefModal] = useState(false);
   const [mainButtonText, setMainButtonText] = useState(
     "Нажать, чтобы менеджер связался с вами",
   );
+  const { user } = useContext(UserContext);
   const [isRequestSend, setIsRequestSend] = useState(isRequestAlreadySend);
   const [loader, setLoader] = useState(false);
   const [showClipBoard, setShowClipBoard] = useState({
@@ -101,12 +106,16 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
     }
   };
 
-  const shareClick = async () => {
+  const isUserRoleAdmin = user?.roles.some((role) => role === "ADMIN");
+
+  console.log(isSelectRefModal);
+
+  const shareClick = async (refId?: string) => {
     const res = await writeToClipboard(
       getMiniAppLink({ carId: carId as string }),
     );
 
-    shareURL(getMiniAppLink({ carId: carId as string }));
+    shareURL(getMiniAppLink({ carId: carId as string, refId }));
 
     if (res) {
       setShowClipBoard({
@@ -118,6 +127,10 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
         text: "Не удалось скопировать в буфер обмена",
         state: true,
       });
+    }
+
+    if (isSelectRefModal) {
+      setIsSelectRefModal(false);
     }
   };
 
@@ -148,7 +161,10 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
   };
 
   return (
-    <div className={"flex gap-2 top-[8px] right-[10px] absolute"}>
+    <div
+      className={"flex gap-2 top-[8px] right-[10px] absolute"}
+      id={"car-filters"}
+    >
       <MainButton
         text={existMainButtonText ?? mainButtonText}
         disabled={isRequestSend}
@@ -170,11 +186,26 @@ export const CarItemActions: FC<CarItemActionsProps> = ({
       <Image
         src={shareButtonSvg.src}
         alt={"share-button-icon"}
-        onClick={shareClick}
+        onClick={() => {
+          if (isUserRoleAdmin) {
+            setIsSelectRefModal(true);
+          } else {
+            shareClick();
+          }
+        }}
         width={16}
         height={16}
         unoptimized
       />
+      <Modal
+        isOpen={isSelectRefModal}
+        onClose={() => {
+          setIsSelectRefModal(false);
+        }}
+        elementId={"car-filters"}
+      >
+        <SelectRef shareClick={shareClick} />
+      </Modal>
       {showWishlistSnackBar.state && (
         <Snackbar
           before={

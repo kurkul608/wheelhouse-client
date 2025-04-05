@@ -9,6 +9,8 @@ import { getBucket } from "@/actions/bucket/get";
 import { registerUser } from "@/actions/user/register";
 import { Wishlist } from "@/models/wishlist";
 import { getWishlist } from "@/actions/wishlist/get";
+import { IStartParams } from "@/utils/getMiniAppLink";
+import { AxiosHeaders } from "axios";
 
 export const useRegister = (): [
   User | null,
@@ -24,7 +26,20 @@ export const useRegister = (): [
   const headers = getAuthorization(lp);
 
   const register = async () => {
-    const user: User | undefined = await registerUser(headers);
+    let refId: null | string = null;
+    if (lp && lp.startParam) {
+      const decodedDataString = atob(lp.startParam);
+      const decodedData = JSON.parse(decodedDataString) as IStartParams;
+      console.log("decodedData.refId: ", decodedData.refId);
+      if (decodedData.refId) {
+        refId = decodedData.refId;
+      }
+    }
+
+    const user: User | undefined = await registerUser(
+      { refId },
+      headers as AxiosHeaders,
+    );
 
     if (user) {
       setUser(user);

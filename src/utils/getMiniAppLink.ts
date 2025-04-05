@@ -1,5 +1,6 @@
 export interface IStartParams {
   carId?: string;
+  refId?: string;
 }
 
 export const getMiniAppLink = (linkData: IStartParams) => {

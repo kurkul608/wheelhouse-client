@@ -27,9 +27,6 @@ export default function ManagerCarsPage() {
   const [list, setList] = useState<CarCard[]>([]);
   const { stockFilter, activeFilter, updateManagerFilters, searchString } =
     useContext(ManagerFiltersContext);
-  // const [search, setSearch] = useState("");
-  // const [stockFilter, setStockFilter] = useState<CarCardsStockFilter>("all");
-  // const [activeFilter, setActiveFilter] = useState<ActiveFilter>("all");
   const [loading, setLoading] = useState(false);
   const lp = useLaunchParams();
   const getCars = async () => {
