@@ -58,7 +58,10 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
               {priceFormatter(carCard.price)} {carCard.currency}
             </Text>
           ) : null}
-          <Text style={{ color: "var(--tgui--hint_color)" }}>{carCard.id}</Text>
+          <Text style={{ color: "var(--tgui--hint_color)" }}>
+            <p>{carCard.id}</p>
+            <p>{carCard.externalId}</p>
+          </Text>
         </div>
       </List>
       <Section className={"mt-2"}>
