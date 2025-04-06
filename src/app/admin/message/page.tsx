@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Page } from "@/components/Page";
 
 export const metadata = {
-  title: "Админ страница",
+  title: "Админ меню рассылки",
 };
 
 export default async function AdminMessagePage() {
@@ -23,9 +23,7 @@ export default async function AdminMessagePage() {
       >
         <Section
           header={"Меню рассылки"}
-          footer={
-            "Здесь вы можете управлять пользователями - назначать и убирать им роли"
-          }
+          footer={"Здесь происходит управление рассылкой"}
         >
           <Link
             href={"/admin/message/messageTemplate"}
@@ -35,6 +33,15 @@ export default async function AdminMessagePage() {
             }}
           >
             <Cell subtitle="Нажать для перехода">Шаблоны сообщений</Cell>
+          </Link>
+          <Link
+            href={"/admin/message/list"}
+            style={{
+              textDecoration: "none",
+              color: "var(--tgui--link_color)",
+            }}
+          >
+            <Cell subtitle="Нажать для перехода">Активные рассылки</Cell>
           </Link>
         </Section>
       </List>

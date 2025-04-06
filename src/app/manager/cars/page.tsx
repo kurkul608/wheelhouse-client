@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { Page } from "@/components/Page";
 import { getFileLink } from "@/utils/getFileLink";
 import { ManagerFiltersContext } from "@/contexts/managerFiltersContext";
+import { AxiosHeaders } from "axios";
 
 export type ActiveFilter = "all" | "active" | "disabled";
 
@@ -34,7 +35,7 @@ export default function ManagerCarsPage() {
       searchString,
       stockFilter,
       activeFilter,
-      getAuthorization(lp),
+      getAuthorization(lp) as AxiosHeaders,
     );
 
     if (cars) {

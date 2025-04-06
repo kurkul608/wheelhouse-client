@@ -1,14 +1,14 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Page } from "@/components/Page";
-import { CreateMessageTemplate } from "@/components/Message/MessageTemplate/CreateMessageTemplate";
-import { ListMessageTemplate } from "@/components/Message/MessageTemplate/ListMessageTemplate";
+import { MessageList } from "@/components/Message/MessageList";
+import { CreateMessage } from "@/components/Message/CreateMessage";
 
 export const metadata = {
-  title: "Список шаблонов для рассылки",
+  title: "Список активных рассылок",
 };
 
-export default async function AdminMessageTemplatePage() {
+export default async function AdminMessageActivePage() {
   const cookiesStorage = await cookies();
 
   if (!cookiesStorage.get("roleManager")?.value) {
@@ -21,8 +21,8 @@ export default async function AdminMessageTemplatePage() {
         style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
         className={"h-[calc(100vh-62px)] overflow-auto"}
       >
-        <CreateMessageTemplate />
-        <ListMessageTemplate />
+        <CreateMessage />
+        <MessageList />
       </div>
     </Page>
   );

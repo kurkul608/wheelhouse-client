@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import Select, { ActionMeta, StylesConfig } from "react-select";
 import { SelectOption } from "@/components/MultiSelectWithSearch";
+import { classNames } from "@telegram-apps/sdk-react";
 
 const textStyles = {
   fontSize: "var(--tgui--text--font_size)",
@@ -13,26 +14,44 @@ const textStyles = {
 const customStyles: StylesConfig<SelectOption<any>, false> = {
   control: (provided, state) => ({
     ...provided,
-    backgroundColor: "var(--tgui--bg_color)",
-    border: "1px solid var(--tgui--bg_color)",
+    backgroundColor: state.isDisabled
+      ? "var(--tgui--disabled-bg)"
+      : "var(--tgui--bg_color)",
+    border:
+      "1px solid " +
+      (state.isDisabled
+        ? "var(--tgui--disabled-border)"
+        : "var(--tgui--bg_color)"),
     borderRadius: "12px",
     boxShadow: state.isFocused ? "0 0 0 1px #2684FF" : "none",
     "&:hover": {
-      borderColor: "var(--tgui--bg_color)",
+      borderColor: state.isDisabled
+        ? "var(--tgui--disabled-border)"
+        : "var(--tgui--bg_color)",
     },
+    cursor: state.isDisabled ? "not-allowed" : "default",
   }),
-  input: (provided) => ({
+  input: (provided, state) => ({
     ...provided,
     ...textStyles,
+    color: state.isDisabled
+      ? "var(--tgui--disabled-text)"
+      : "var(--tgui--text_color)",
   }),
-  placeholder: (provided) => ({
+  placeholder: (provided, state) => ({
     ...provided,
     ...textStyles,
-    color: "var(--tg-theme-hint-color)",
+    color: state.isDisabled
+      ? "var(--tg-theme-disabled-color)"
+      : "var(--tg-theme-hint-color)",
+    opacity: state.isDisabled ? 0.6 : 1,
   }),
-  singleValue: (provided) => ({
+  singleValue: (provided, state) => ({
     ...provided,
     ...textStyles,
+    color: state.isDisabled
+      ? "var(--tgui--disabled-text)"
+      : "var(--tgui--text_color)",
   }),
   menu: (provided) => ({
     ...provided,
@@ -52,7 +71,7 @@ const customStyles: StylesConfig<SelectOption<any>, false> = {
       ? "rgba(38, 132, 255, 0.1)"
       : "var(--tgui--bg_color)",
     ...textStyles,
-    cursor: "pointer",
+    cursor: state.isDisabled ? "not-allowed" : "pointer",
     ":active": {
       backgroundColor: state.isSelected
         ? "rgba(38, 132, 255, 0.2)"
@@ -76,6 +95,8 @@ export type SingleSelectWithSearchProps<T> = {
   head?: ReactNode;
   targetPortalId?: string;
   isSearchable?: boolean;
+  disabled?: boolean;
+  className?: string;
 };
 
 function SingleSelectWithSearch<T>({
@@ -86,6 +107,8 @@ function SingleSelectWithSearch<T>({
   head,
   targetPortalId,
   isSearchable = true,
+  disabled,
+  className,
 }: SingleSelectWithSearchProps<T>) {
   const [selectedOption, setSelectedOption] = useState<SelectOption<T> | null>(
     defaultSelectedOption,
@@ -103,13 +126,14 @@ function SingleSelectWithSearch<T>({
     <div>
       {head ? <div className="mb-1">{head}</div> : null}
       <Select
+        isDisabled={disabled}
         options={options}
         value={selectedOption}
         onChange={handleChange}
         placeholder={placeholder}
         isSearchable={isSearchable}
         styles={customStyles}
-        className="w-full"
+        className={classNames("w-full", className)}
         classNamePrefix="react-select"
         menuPortalTarget={
           typeof document !== "undefined"

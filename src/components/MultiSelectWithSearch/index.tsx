@@ -98,6 +98,7 @@ export type MultiSelectWithSearchProps<T> = {
   targetPortalId?: string;
   selectedOptions?: MultiValue<SelectOption<T>>;
   isSearchable?: boolean;
+  disabled?: boolean;
 };
 
 function MultiSelectWithSearch<T>({
@@ -109,6 +110,7 @@ function MultiSelectWithSearch<T>({
   targetPortalId,
   selectedOptions: externalSelectedOptions,
   isSearchable = true,
+  disabled,
 }: MultiSelectWithSearchProps<T>) {
   const [selectedOptions, setSelectedOptions] = useState<
     MultiValue<SelectOption<T>>
@@ -132,6 +134,7 @@ function MultiSelectWithSearch<T>({
     <div>
       {head ? <div className={"mb-1"}>{head}</div> : null}
       <Select
+        isDisabled={disabled}
         isMulti
         options={options}
         isSearchable={isSearchable}
