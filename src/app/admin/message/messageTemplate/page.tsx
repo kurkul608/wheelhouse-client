@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { List } from "@telegram-apps/telegram-ui";
 import { Page } from "@/components/Page";
 import { CreateMessageTemplate } from "@/components/Message/MessageTemplate/CreateMessageTemplate";
+import { ListMessageTemplate } from "@/components/Message/MessageTemplate/ListMessageTemplate";
 
 export const metadata = {
   title: "Админ страница",
@@ -17,12 +18,13 @@ export default async function AdminMessageTemplatePage() {
 
   return (
     <Page>
-      <List
+      <div
         style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
         className={"h-[calc(100vh-62px)] overflow-auto"}
       >
         <CreateMessageTemplate />
-      </List>
+        <ListMessageTemplate />
+      </div>
     </Page>
   );
 }
