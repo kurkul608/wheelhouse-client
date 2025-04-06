@@ -37,6 +37,7 @@ export const RefLinkList = () => {
         <Link href={`/admin/ref/${link.id}`} key={link.id}>
           <Cell
             subtitle={`Создано: ${formatDateInClientTimeZone(link.createdAt)}`}
+            description={`Кликов: ${link.clicks ?? 0}`}
           >
             {link.name}
           </Cell>

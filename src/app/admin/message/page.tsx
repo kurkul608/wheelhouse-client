@@ -8,7 +8,7 @@ export const metadata = {
   title: "Админ страница",
 };
 
-export default async function AdminPage() {
+export default async function AdminMessagePage() {
   const cookiesStorage = await cookies();
 
   if (!cookiesStorage.get("roleManager")?.value) {
@@ -22,37 +22,19 @@ export default async function AdminPage() {
         className={"h-[calc(100vh-62px)] overflow-auto"}
       >
         <Section
-          header={"Админ меню"}
+          header={"Меню рассылки"}
           footer={
             "Здесь вы можете управлять пользователями - назначать и убирать им роли"
           }
         >
           <Link
-            href={"/admin/users"}
+            href={"/admin/message/messageTemplate"}
             style={{
               textDecoration: "none",
               color: "var(--tgui--link_color)",
             }}
           >
-            <Cell subtitle="Нажать для перехода">Список пользователей</Cell>
-          </Link>
-          <Link
-            href={"/admin/ref"}
-            style={{
-              textDecoration: "none",
-              color: "var(--tgui--link_color)",
-            }}
-          >
-            <Cell subtitle="Нажать для перехода">Реферальные ссылки</Cell>
-          </Link>
-          <Link
-            href={"/admin/message"}
-            style={{
-              textDecoration: "none",
-              color: "var(--tgui--link_color)",
-            }}
-          >
-            <Cell subtitle="Нажать для перехода">Рассылка</Cell>
+            <Cell subtitle="Нажать для перехода">Шаблоны сообщений</Cell>
           </Link>
         </Section>
       </List>

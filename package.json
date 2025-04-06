@@ -18,6 +18,8 @@
     "@tanstack/react-query": "^5.66.0",
     "@telegram-apps/sdk-react": "^2.0.22",
     "@telegram-apps/telegram-ui": "^2.1.6",
+    "@tiptap/extension-link": "^2.11.7",
+    "@tiptap/extension-underline": "^2.11.7",
     "@tiptap/pm": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",

@@ -102,7 +102,12 @@ export const RefLink: FC<ReflinkPorps> = ({ id }) => {
         subhead={`${formatDateInClientTimeZone(refLink.createdAt)}`}
         after={<Button onClick={copyRefLink}>Скопировать</Button>}
         subtitle={<div>Пользователей: {refLink.usersCount}</div>}
-        description={<div>С ордерами {refLink.usersWithOrderCount}</div>}
+        description={
+          <div>
+            <p>С ордерами {refLink.usersWithOrderCount}</p>
+            <p>Кликов: {refLink.clicks ?? 0}</p>
+          </div>
+        }
       >
         {refLink.name}
         {showClipBoard.state && (
