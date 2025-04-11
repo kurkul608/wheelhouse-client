@@ -5,9 +5,6 @@ import Image from "next/image";
 import { File as FileModel } from "@/models/file";
 import { FC, useEffect, useState } from "react";
 import { getFileLink } from "@/utils/getFileLink";
-import { removeFileFromCar } from "@/actions/manager/cars/removeFileFromCarCard";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { getAuthorization } from "@/utils/getAuthorization";
 import { useRouter } from "next/navigation";
 import {
   closestCenter,
@@ -26,19 +23,21 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { updatePhotos } from "@/actions/manager/cars/updatePhotos";
 
 interface ManagePhotosProps {
   photos: FileModel[];
-  carId: string;
+  onUpdate(photos: FileModel[]): Promise<void>;
+  onRemove(photos: FileModel): Promise<void>;
 }
 
-export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
-  console.log(photos);
+export const ManagePhotos: FC<ManagePhotosProps> = ({
+  photos,
+  onUpdate,
+  onRemove,
+}) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [isUpdatingOrder, setIsUpdatingOrder] = useState(false);
   const [photoOrder, setPhotoOrder] = useState(photos);
-  const lp = useLaunchParams();
   const router = useRouter();
 
   useEffect(() => {
@@ -55,12 +54,7 @@ export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
       const newOrder = arrayMove(photoOrder, oldIndex, newIndex);
       setPhotoOrder(newOrder);
       setIsUpdatingOrder(true);
-      console.log(newOrder.map((photo) => photo.id));
-      await updatePhotos(
-        carId,
-        newOrder.map((photo) => photo.id),
-        getAuthorization(lp),
-      );
+      await onUpdate(newOrder);
       setIsUpdatingOrder(false);
       router.refresh();
     }
@@ -91,11 +85,7 @@ export const ManagePhotos: FC<ManagePhotosProps> = ({ photos, carId }) => {
               onDelete={async () => {
                 if (!deleteLoading) {
                   setDeleteLoading(true);
-                  await removeFileFromCar(
-                    carId,
-                    photo.id,
-                    getAuthorization(lp),
-                  );
+                  await onRemove(photo);
                   setDeleteLoading(false);
                   router.refresh();
                 }

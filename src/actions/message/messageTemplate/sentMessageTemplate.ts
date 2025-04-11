@@ -3,14 +3,23 @@
 import axios, { AxiosHeaders } from "axios";
 
 export const sentMessageTemplate = async (
-  messageText: string,
-  userId: string,
+  {
+    photoIds,
+    text,
+    userId,
+    links,
+  }: {
+    text: string;
+    userId: string;
+    photoIds?: string[];
+    links?: string[];
+  },
   headers: AxiosHeaders,
 ) => {
   try {
     const res = await axios.post(
       `${process.env.API_URL}admin/messageTemplate/sent`,
-      { text: messageText, userId },
+      { text, userId, photoIds, links },
       { headers: { ...headers, "Content-Type": "application/json" } },
     );
 

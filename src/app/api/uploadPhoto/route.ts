@@ -3,14 +3,12 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { createS3Service } from "@/actions/s3/create.s3.service";
 import { createFile } from "@/actions/file/create";
 import { AxiosHeaders } from "axios";
-import { addToCarCard } from "@/actions/file/addToCarCard";
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const token = JSON.parse(formData.get("token") as string) as AxiosHeaders;
-    const carCardId = formData.get("carCardId") as string;
     console.log(`Parsed token: ${token}`);
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -36,9 +34,11 @@ export async function POST(request: Request) {
       token,
     );
 
-    await addToCarCard(uploadedFile.id, carCardId, token);
-
-    return NextResponse.json({ message: "File uploaded successfully", key });
+    return NextResponse.json({
+      message: "File uploaded successfully",
+      command,
+      uploadedFile,
+    });
   } catch (error) {
     console.error("Error uploading file:", error);
     return NextResponse.json(

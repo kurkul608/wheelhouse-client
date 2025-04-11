@@ -5,18 +5,17 @@ import { classNames } from "@telegram-apps/sdk-react";
 import { PhotoGallery } from "@/components/PhotoGallery/PhotoGallery";
 import { ActiveSwitch } from "@/components/Manager/CarCard/ActiveSwitch";
 import { getFileLink } from "@/utils/getFileLink";
-import { ManagePhotos } from "@/components/Manager/CarCard/ManagePhotos";
 import { SectionHeader } from "@telegram-apps/telegram-ui/dist/components/Blocks/Section/components/SectionHeader/SectionHeader";
 import { SpecList } from "@/components/Manager/CarCard/SpecList";
 import { AddNewSpec } from "@/components/Manager/CarCard/AddNewSpec";
 import { StockSwitch } from "@/components/Manager/CarCard/StockSwitch";
 import { Description } from "@/components/Manager/CarCard/Description";
-import { MultiPhotoUpload } from "@/components/Manager/CarCard/MultiPhotoUpload";
 import { getCarManager } from "@/actions/manager/cars/getCar";
 import { priceFormatter } from "@/utils/priceFormatter";
 import Link from "next/link";
 import { UpdatePrice } from "@/components/Manager/CarCard/UpdatePrice";
-
+import { UploadPhoto } from "@/components/Manager/CarCard/UploadPhoto";
+import { ManagePhotosWrapper } from "@/components/Manager/CarCard/ManagePhotosWrapper";
 export const ManagerCarCard = async ({ id }: { id: string }) => {
   if (!id) return null;
   const carCard = await getCarManager(id);
@@ -66,11 +65,11 @@ export const ManagerCarCard = async ({ id }: { id: string }) => {
       </List>
       <Section className={"mt-2"}>
         <SectionHeader>Загрузить фотографии</SectionHeader>
-        <MultiPhotoUpload carCardId={carCard.id} />
+        <UploadPhoto carCard={carCard} />
       </Section>
       <Section className={"mt-2"}>
         <SectionHeader>Управление добавленными фотографиями</SectionHeader>
-        <ManagePhotos photos={carCard.photos ?? []} carId={carCard.id} />
+        <ManagePhotosWrapper caraCard={carCard} />
       </Section>
       <Section className={"mt-2"}>
         <SectionHeader>Цена автомобиля</SectionHeader>

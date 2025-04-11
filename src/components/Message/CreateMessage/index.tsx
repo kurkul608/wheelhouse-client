@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@telegram-apps/telegram-ui";
+import { Spinner } from "@telegram-apps/telegram-ui";
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/Modal";
 import { CreateMessageForm } from "@/components/Message/CreateMessage/CreateMessageForm";
 import { MessageTemplate } from "@/models/messageTemplate";
 import { getListMessageTemplate } from "@/actions/message/messageTemplate/getListMessageTemplate";
@@ -11,7 +10,6 @@ import { AxiosHeaders } from "axios";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 
 export const CreateMessage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
   const [isTemplatesLoading, setIsTemplateLoading] = useState(false);
 
@@ -19,10 +17,6 @@ export const CreateMessage = () => {
   // const [isLoadingCars, setIsLoadingCars] = useState(false);
 
   const lp = useLaunchParams();
-
-  const modalHandler = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -58,23 +52,9 @@ export const CreateMessage = () => {
   //   }
   // }, [lp]);
 
-  return (
-    <div className={"flex justify-end"} id={"create-message"}>
-      <Button
-        onClick={modalHandler}
-        disabled={isTemplatesLoading}
-        loading={isTemplatesLoading}
-      >
-        Создать новую рассылку
-      </Button>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={modalHandler}
-        elementId={"create-message"}
-      >
-        <CreateMessageForm templates={templates} />
-      </Modal>
-    </div>
+  return isTemplatesLoading ? (
+    <Spinner size={"l"} />
+  ) : (
+    <CreateMessageForm templates={templates} />
   );
 };

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { File as FileModel } from "@/models/file";
 
 interface Photo {
   id: string;
@@ -14,8 +15,12 @@ interface Photo {
   errorMessage?: string;
 }
 
-export const MultiPhotoUpload: React.FC<{ carCardId: string }> = ({
-  carCardId,
+interface IMultiPhotoUploadProps {
+  onUpload(file: FileModel): Promise<void>;
+}
+
+export const MultiPhotoUpload: React.FC<IMultiPhotoUploadProps> = ({
+  onUpload,
 }) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +47,6 @@ export const MultiPhotoUpload: React.FC<{ carCardId: string }> = ({
       const formData = new FormData();
       formData.append("file", photo.file);
       formData.append("token", JSON.stringify(getAuthorization(lp)));
-      formData.append("carCardId", carCardId);
 
       try {
         const res = await fetch("/api/uploadPhoto", {
@@ -57,6 +61,10 @@ export const MultiPhotoUpload: React.FC<{ carCardId: string }> = ({
           updatedPhotos[i].errorMessage = errorText;
         } else {
           const data = await res.json();
+
+          if (data.uploadedFile && onUpload) {
+            await onUpload(data.uploadedFile);
+          }
           console.log("Файл успешно загружен:", data);
           updatedPhotos[i].status = "success";
         }
@@ -68,7 +76,6 @@ export const MultiPhotoUpload: React.FC<{ carCardId: string }> = ({
       setPhotos([...updatedPhotos]);
     }
 
-    console.log("after for cycle");
     router.refresh();
     if (inputRef.current) {
       inputRef.current.value = "";

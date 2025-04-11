@@ -1,103 +1,122 @@
 "use client";
 
-import { Button, Headline, Input } from "@telegram-apps/telegram-ui";
-import { Modal } from "@/components/Modal";
-import { useContext, useState } from "react";
-import { useFormik } from "formik";
+import { Button, Input, Subheadline } from "@telegram-apps/telegram-ui";
+import { useState } from "react";
+import { Form, Formik } from "formik";
 import { TipTapTelegramMessage } from "@/components/Message/MessageTemplate/CreateMessageTemplate/TipTapTelegramMessage";
-import { sentMessageTemplate } from "@/actions/message/messageTemplate/sentMessageTemplate";
-import { UserContext } from "@/contexts/userContext";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { saveMessageTemplate } from "@/actions/message/messageTemplate/saveMessageTemplate";
+import { useRouter } from "next/navigation";
+import { MultiPhotoUpload } from "@/components/MultiPhotoUpload";
+import { ManagePhotos } from "@/components/ManagePhotos";
+import { File as FileModel } from "@/models/file";
+import { SendToAdmin } from "@/components/Message/MessageTemplate/CreateMessageTemplate/SendToAdmin";
+import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { CreateLink } from "@/components/Message/MessageTemplate/CreateMessageTemplate/CreateLink";
 
+export interface CreateMessageTemplateFormValues {
+  name: string;
+  description: string;
+  photos: FileModel[];
+  links: string[];
+}
 export const CreateMessageTemplate = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSentMessageLoading, setIsSentMessageLoading] = useState(false);
   const [isMessageTemplateLoading, setIsMessageTemplateLoading] =
     useState(false);
-  const { user } = useContext(UserContext);
   const lp = useLaunchParams();
-
-  const { handleSubmit, handleChange, values, setFieldValue } = useFormik({
-    initialValues: { name: "", description: "" },
-    onSubmit: async (values) => {
-      if (values.description.length && values.name.length) {
-        setIsMessageTemplateLoading(true);
-        await saveMessageTemplate(
-          values.description,
-          values.name,
-          getAuthorization(lp) as AxiosHeaders,
-        ).then(() => {
-          setIsMessageTemplateLoading(false);
-          setIsModalOpen(false);
-        });
-      }
-    },
-  });
-
-  const modalHandler = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const handleSend = async () => {
-    if (user && !isSentMessageLoading) {
-      setIsSentMessageLoading(true);
-      await sentMessageTemplate(
-        values.description,
-        user.id,
-        getAuthorization(lp) as AxiosHeaders,
-      ).then(() => {
-        setIsSentMessageLoading(false);
-      });
-    }
-  };
+  const router = useRouter();
 
   return (
-    <div className={"flex justify-end"} id={"create-message-template"}>
-      <Button onClick={modalHandler}>Создать новый шаблон</Button>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={modalHandler}
-        elementId={"create-message-template"}
+    <div className={"flex justify-center"} id={"create-message-template"}>
+      <Formik
+        initialValues={
+          {
+            name: "",
+            description: "",
+            photos: [] as FileModel[],
+            links: [],
+          } as CreateMessageTemplateFormValues
+        }
+        onSubmit={async (values) => {
+          if (values.description.length && values.name.length) {
+            setIsMessageTemplateLoading(true);
+            await saveMessageTemplate(
+              {
+                text: values.description,
+                name: values.name,
+                photoIds: values.photos.map((photo) => photo.id),
+                links: values.links,
+              },
+              getAuthorization(lp) as AxiosHeaders,
+            ).then(() => {
+              setIsMessageTemplateLoading(false);
+              router.push("/admin/message/messageTemplate");
+            });
+          }
+        }}
       >
-        <form onSubmit={handleSubmit} className={"w-[85vw] h-[85vh]"}>
-          <Headline>Название шаблона</Headline>
-          <Input
-            className={"w-full"}
-            id="name"
-            name="name"
-            placeholder={"Введите название шаблона"}
-            value={values.name}
-            onChange={handleChange}
-          />
+        {({ handleChange, values, setFieldValue }) => (
+          <Form className={"w-[85vw] h-[85vh]"}>
+            <SendToAdmin />
+            <Subheadline>Название шаблона</Subheadline>
+            <Input
+              className={"w-full"}
+              id="name"
+              name="name"
+              placeholder={"Введите название шаблона"}
+              value={values.name}
+              onChange={handleChange}
+            />
 
-          <Headline className={"mt-2"}>Текст сообщения</Headline>
-          <TipTapTelegramMessage
-            editorContent={values.description}
-            onChange={(value: string) => {
-              setFieldValue("description", value);
-            }}
-          />
+            <Subheadline className={"mt-2"}>Текст сообщения</Subheadline>
+            <TipTapTelegramMessage
+              editorContent={values.description}
+              onChange={(value: string) => {
+                setFieldValue("description", value);
+              }}
+            />
+            <div className={"mt-2"}>
+              <Subheadline>Фотографии для рассылки</Subheadline>
+              <MultiPhotoUpload
+                onUpload={async (file) => {
+                  setFieldValue("photos", [...values.photos, file]);
+                }}
+              />
+            </div>
+            {values.photos.length ? (
+              <div className={"mt-2"}>
+                <Subheadline>Порядок фотографий</Subheadline>
+                <ManagePhotos
+                  onUpdate={async (newPhotos) => {
+                    setFieldValue("photos", newPhotos);
+                  }}
+                  onRemove={async (photoForRemove) => {
+                    setFieldValue(
+                      "photos",
+                      values.photos.filter(
+                        (photo) => photo.id !== photoForRemove.id,
+                      ),
+                    );
+                  }}
+                  photos={values.photos}
+                />
+              </div>
+            ) : null}
 
-          <div className={"flex justify-center w-full"}>
-            <Button onClick={handleSend} loading={isSentMessageLoading}>
-              Отправить сообщение себе
-            </Button>
-          </div>
-          <div className={"flex justify-center w-full mt-2"}>
-            <Button
-              type={"submit"}
-              disabled={!values.description.length || !values.name.length}
-              loading={isMessageTemplateLoading}
-            >
-              Сохранить шаблон
-            </Button>
-          </div>
-        </form>
-      </Modal>
+            <CreateLink />
+            <div className={"flex justify-start w-full mt-2"}>
+              <Button
+                type={"submit"}
+                disabled={!values.description.length || !values.name.length}
+                loading={isMessageTemplateLoading}
+              >
+                Сохранить шаблон
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

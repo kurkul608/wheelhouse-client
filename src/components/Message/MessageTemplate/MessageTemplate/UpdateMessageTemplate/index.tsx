@@ -53,8 +53,7 @@ export const UpdateMessageTemplate: FC<IProps> = ({ template }) => {
     if (user && !isSentMessageLoading) {
       setIsSentMessageLoading(true);
       await sentMessageTemplate(
-        values.description,
-        user.id,
+        { text: values.description, userId: user.id },
         getAuthorization(lp) as AxiosHeaders,
       ).then(() => {
         setIsSentMessageLoading(false);
