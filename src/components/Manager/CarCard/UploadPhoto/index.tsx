@@ -1,7 +1,7 @@
 "use client";
 
 import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { File as FileModel } from "@/models/file";
+import { FileModel } from "@/models/file";
 import { AxiosHeaders } from "axios";
 import { addToCarCard } from "@/actions/file/addToCarCard";
 import { MultiPhotoUpload } from "@/components/MultiPhotoUpload";

@@ -1,4 +1,4 @@
-export interface File {
+export interface FileModel {
   id: string;
   domain: string;
   file_size: number;

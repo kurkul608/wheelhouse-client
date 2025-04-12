@@ -2,7 +2,7 @@
 
 import { Button, Cell, Spinner } from "@telegram-apps/telegram-ui";
 import Image from "next/image";
-import { File as FileModel } from "@/models/file";
+import { FileModel } from "@/models/file";
 import { FC, useEffect, useState } from "react";
 import { getFileLink } from "@/utils/getFileLink";
 import { useRouter } from "next/navigation";

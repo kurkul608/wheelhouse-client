@@ -7,7 +7,7 @@ import { getMessageTemplate } from "@/actions/message/messageTemplate/getMessage
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { Headline, List, Spinner } from "@telegram-apps/telegram-ui";
-import { UpdateMessageTemplate } from "@/components/Message/MessageTemplate/MessageTemplate/UpdateMessageTemplate";
+import { UpdateMessageTemplate } from "../UpdateMessageTemplate";
 
 interface IProps {
   messageTemplateId: string;

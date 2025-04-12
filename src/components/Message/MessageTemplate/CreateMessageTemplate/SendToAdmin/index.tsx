@@ -7,8 +7,8 @@ import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { useContext, useState } from "react";
 import { UserContext } from "@/contexts/userContext";
-import { CreateMessageTemplateFormValues } from "@/components/Message/MessageTemplate/CreateMessageTemplate";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { CreateMessageTemplateFormValues } from "@/components/Message/MessageTemplate/MessageTemplateForm";
 
 export const SendToAdmin = () => {
   const [isSentMessageLoading, setIsSentMessageLoading] = useState(false);

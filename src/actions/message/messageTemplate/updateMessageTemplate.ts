@@ -5,18 +5,23 @@ import axios, { AxiosHeaders } from "axios";
 export const updateMessageTemplate = async (
   id: string,
   {
-    messageText,
-    messageName,
+    photoIds,
+    name,
+    text,
+    links,
   }: {
-    messageText: string;
-    messageName: string;
+    text: string;
+    name: string;
+    photoIds?: string[];
+    links?: string[];
   },
   headers: AxiosHeaders,
 ) => {
   try {
+    const body = { text, name, photoIds, links };
     const res = await axios.patch(
       `${process.env.API_URL}admin/messageTemplate/${id}`,
-      { text: messageText, name: messageName },
+      body,
       { headers: { ...headers, "Content-Type": "application/json" } },
     );
 

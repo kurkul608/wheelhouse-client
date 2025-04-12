@@ -1,6 +1,6 @@
-import { File } from "@/models/file";
+import { FileModel } from "@/models/file";
 
-export const getFileLink = (value?: File) => {
+export const getFileLink = (value?: FileModel) => {
   if (!value) {
     return "";
   }

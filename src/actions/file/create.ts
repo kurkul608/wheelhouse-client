@@ -1,6 +1,6 @@
 "use server";
 
-import { File as FileModel } from "@/models/file";
+import { FileModel } from "@/models/file";
 import axios, { AxiosHeaders } from "axios";
 
 export const createFile = async (

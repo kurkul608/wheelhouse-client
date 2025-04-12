@@ -2,7 +2,7 @@
 
 import { getAuthorization } from "@/utils/getAuthorization";
 import { CarCard } from "@/models/carCard";
-import { File as FileModel } from "@/models/file";
+import { FileModel } from "@/models/file";
 import { FC } from "react";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { ManagePhotos } from "@/components/ManagePhotos";

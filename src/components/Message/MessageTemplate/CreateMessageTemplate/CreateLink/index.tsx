@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormikContext } from "formik";
-import { CreateMessageTemplateFormValues } from "@/components/Message/MessageTemplate/CreateMessageTemplate";
 import { Button, Cell, Input, Subheadline } from "@telegram-apps/telegram-ui";
 import {
   closestCenter,
@@ -19,6 +18,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
+import { CreateMessageTemplateFormValues } from "@/components/Message/MessageTemplate/MessageTemplateForm";
 
 export const CreateLink = () => {
   const { values, setFieldValue } =

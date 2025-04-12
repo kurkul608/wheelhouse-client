@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { File as FileModel } from "@/models/file";
+import { FileModel } from "@/models/file";
 
 interface Photo {
   id: string;
