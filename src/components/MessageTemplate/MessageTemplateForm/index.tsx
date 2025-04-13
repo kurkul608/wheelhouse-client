@@ -1,12 +1,12 @@
 "use client";
 
 import { Form, Formik } from "formik";
-import { SendToAdmin } from "@/components/Message/MessageTemplate/CreateMessageTemplate/SendToAdmin";
+import { SendToAdmin } from "@/components/MessageTemplate/CreateMessageTemplate/SendToAdmin";
 import { Button, Input, Subheadline } from "@telegram-apps/telegram-ui";
-import { TipTapTelegramMessage } from "@/components/Message/MessageTemplate/CreateMessageTemplate/TipTapTelegramMessage";
+import { TipTapTelegramMessage } from "@/components/MessageTemplate/CreateMessageTemplate/TipTapTelegramMessage";
 import { MultiPhotoUpload } from "@/components/MultiPhotoUpload";
 import { ManagePhotos } from "@/components/ManagePhotos";
-import { CreateLink } from "@/components/Message/MessageTemplate/CreateMessageTemplate/CreateLink";
+import { CreateLink } from "@/components/MessageTemplate/CreateMessageTemplate/CreateLink";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileModel } from "@/models/file";

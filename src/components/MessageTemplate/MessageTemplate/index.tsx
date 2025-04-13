@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { MessageTemplate } from "@/models/messageTemplate";
-import { getMessageTemplate } from "@/actions/message/messageTemplate/getMessageTemplate";
+import { getMessageTemplate } from "@/actions/messageTemplate/getMessageTemplate";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { Headline, List, Spinner } from "@telegram-apps/telegram-ui";

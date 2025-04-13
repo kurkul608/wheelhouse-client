@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Page } from "@/components/Page";
-import { MessageTemplateComp } from "@/components/Message/MessageTemplate/MessageTemplate";
+import { MessageTemplateComp } from "@/components/MessageTemplate/MessageTemplate";
 
 type Props = {
   params: Promise<{ slug: string }>;

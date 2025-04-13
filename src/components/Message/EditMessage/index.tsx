@@ -1,44 +1,57 @@
 "use client";
 
-import { Spinner } from "@telegram-apps/telegram-ui";
-import { useEffect, useState } from "react";
-import { MessageTemplate } from "@/models/messageTemplate";
-import { getListMessageTemplate } from "@/actions/messageTemplate/getListMessageTemplate";
+import { FC, useEffect, useState } from "react";
+import {
+  Message,
+  MessageStatus,
+  MessageType,
+  WhereUsersEnum,
+} from "@/models/message";
+import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { getMessage } from "@/actions/message/getMessage";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
+import { Headline, Spinner } from "@telegram-apps/telegram-ui";
+import { MessageTemplate } from "@/models/messageTemplate";
+import { getListMessageTemplate } from "@/actions/messageTemplate/getListMessageTemplate";
 import {
   MessageFormValues,
   MessageForm,
 } from "@/components/Message/MessageForm";
-import { createMessage } from "@/actions/message/createMessage";
-import { MessageStatus, MessageType, WhereUsersEnum } from "@/models/message";
+import { updateMessage } from "@/actions/message/updateMessage";
 
-export const CreateMessage = () => {
+interface IEditMessageProps {
+  slug: string;
+}
+export const EditMessage: FC<IEditMessageProps> = ({ slug }) => {
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
-  const [isTemplatesLoading, setIsTemplateLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<null | Message>(null);
 
   const lp = useLaunchParams();
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getListMessageTemplate(
+      const data = await getMessage(slug, getAuthorization(lp) as AxiosHeaders);
+      setMessage(data);
+
+      const templatesResponse = await getListMessageTemplate(
         getAuthorization(lp) as AxiosHeaders,
       );
-      setTemplates(data);
-      setIsTemplateLoading(false);
-    };
 
-    if (lp && !templates.length) {
-      setIsTemplateLoading(true);
+      setTemplates(templatesResponse);
+      setIsLoading(false);
+    };
+    if (!isLoading && !message && lp) {
+      setIsLoading(true);
       getData();
     }
   }, [lp]);
 
   const onSubmit = async (values: MessageFormValues) => {
-    await createMessage(
+    await updateMessage(
+      slug,
       {
-        messageTemplateId: values.template!.value,
         name: values.name,
         // type: values.type!.value as MessageType,
         type: MessageType.ONCE,
@@ -65,8 +78,7 @@ export const CreateMessage = () => {
               ),
             }
           : {}),
-        ...(values.startTime ? { startTime: values.startTime } : {}),
-        startNow: values.isSentImmediately,
+        startTime: undefined,
       },
       getAuthorization(lp) as AxiosHeaders,
     );
@@ -74,9 +86,14 @@ export const CreateMessage = () => {
 
   return (
     <>
-      {isTemplatesLoading ? <Spinner size={"l"} /> : null}
-      {!isTemplatesLoading ? (
-        <MessageForm templates={templates} onSubmit={onSubmit} />
+      {isLoading ? <Spinner size="l" /> : null}
+      {!isLoading && !message && <Headline>Ничего не найдено</Headline>}
+      {message && !isLoading ? (
+        <MessageForm
+          existMessage={message}
+          templates={templates}
+          onSubmit={onSubmit}
+        />
       ) : null}
     </>
   );

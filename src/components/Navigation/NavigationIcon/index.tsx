@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Link } from "@/components/Link/Link";
 import "./navigationIcon.css";
+import { InlineButtons } from "@telegram-apps/telegram-ui";
 
 interface NavigationIconProps {
   href: string;
@@ -15,10 +16,7 @@ export const NavigationIcon: FC<NavigationIconProps> = ({
 }) => {
   return (
     <Link href={href} className={"navigation-link"}>
-      <div className={"flex flex-col gap-1 items-center"}>
-        {icon}
-        <span className={"text-xs"}>{text}</span>
-      </div>
+      <InlineButtons.Item text={text}>{icon}</InlineButtons.Item>
     </Link>
   );
 };

@@ -1,11 +1,4 @@
-export enum WhereUsersEnum {
-  ONCE_USE_BOT = "ONCE_USE_BOT",
-  N_AUTO_IN_WISHLIST = "N_AUTO_IN_WISHLIST",
-  SPECIAL_AUTO_IN_WISHLIST = "SPECIAL_AUTO_IN_WISHLIST",
-  MANY_SPECIAL_AUTO_IN_WISHLIST = "MANY_SPECIAL_AUTO_IN_WISHLIST",
-  MANY_ORDERS = "MANY_ORDERS",
-  MANY_ORDER_ON_BRAND = "MANY_ORDER_ON_BRAND",
-}
+import { WhereUsersEnum } from "@/models/message";
 
 export const whereOptions: { label: string; value: WhereUsersEnum }[] = [
   {
@@ -15,10 +8,6 @@ export const whereOptions: { label: string; value: WhereUsersEnum }[] = [
   {
     label: "Пользователи, которые добавили n авто в вишлист",
     value: WhereUsersEnum.N_AUTO_IN_WISHLIST,
-  },
-  {
-    label: "Пользователи, которые добавили определенную марку авто в вишлист",
-    value: WhereUsersEnum.SPECIAL_AUTO_IN_WISHLIST,
   },
   {
     label: "Пользователи, которые добавили n определенных марок авто в вишлист",
@@ -31,5 +20,9 @@ export const whereOptions: { label: string; value: WhereUsersEnum }[] = [
   {
     label: "Пользователи которые оставили заявку на определенные марки",
     value: WhereUsersEnum.MANY_ORDER_ON_BRAND,
+  },
+  {
+    label: "Только для администраторов",
+    value: WhereUsersEnum.ADMIN_ONLY,
   },
 ];

@@ -5,11 +5,11 @@ import { FC } from "react";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { updateMessageTemplate } from "@/actions/message/messageTemplate/updateMessageTemplate";
+import { updateMessageTemplate } from "@/actions/messageTemplate/updateMessageTemplate";
 import {
   CreateMessageTemplateFormValues,
   MessageTemplateForm,
-} from "@/components/Message/MessageTemplate/MessageTemplateForm";
+} from "@/components/MessageTemplate/MessageTemplateForm";
 
 interface IProps {
   template: MessageTemplate;

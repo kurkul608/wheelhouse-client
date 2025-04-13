@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Page } from "@/components/Page";
-import { CreateMessageTemplate } from "@/components/Message/MessageTemplate/CreateMessageTemplate";
+import { CreateMessageTemplate } from "@/components/MessageTemplate/CreateMessageTemplate";
 
 export const metadata = {
   title: "Список шаблонов для рассылки",

@@ -41,7 +41,7 @@ export default async function AdminMessagePage() {
               color: "var(--tgui--link_color)",
             }}
           >
-            <Cell subtitle="Нажать для перехода">Активные рассылки</Cell>
+            <Cell subtitle="Нажать для перехода">Рассылки</Cell>
           </Link>
         </Section>
       </List>

@@ -3,8 +3,8 @@
 import {
   CreateMessageTemplateFormValues,
   MessageTemplateForm,
-} from "@/components/Message/MessageTemplate/MessageTemplateForm";
-import { saveMessageTemplate } from "@/actions/message/messageTemplate/saveMessageTemplate";
+} from "@/components/MessageTemplate/MessageTemplateForm";
+import { saveMessageTemplate } from "@/actions/messageTemplate/saveMessageTemplate";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
 import { useLaunchParams } from "@telegram-apps/sdk-react";

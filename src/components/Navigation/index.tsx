@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { UserContext } from "@/contexts/userContext";
 import Image from "next/image";
 import listSvg from "@/app/_assets/list.svg";
+import { InlineButtons } from "@telegram-apps/telegram-ui";
 
 export const Navigation = () => {
   const autoSearchParams = new URLSearchParams({
@@ -47,7 +48,7 @@ export const Navigation = () => {
             unoptimized
           />
         }
-        text={"Менеджер меню"}
+        text={"Менеджер"}
       />,
     );
   }
@@ -66,21 +67,20 @@ export const Navigation = () => {
             unoptimized
           />
         }
-        text={"Админ меню"}
+        text={"Админ"}
       />,
     );
   }
   return (
-    <nav
-      className={
-        "fixed bottom-0 w-full flex items-center justify-around gap-4 px-[18px] py-[9px] border-t-2"
-      }
+    <InlineButtons
+      mode="plain"
+      className={"fixed bottom-0 w-full flex justify-center"}
       style={{
         backgroundColor: "var(--tgui--bg_color)",
         borderColor: "var(--tgui--secondary_bg_color)",
       }}
     >
       {navElements}
-    </nav>
+    </InlineButtons>
   );
 };

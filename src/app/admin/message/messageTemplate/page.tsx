@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Page } from "@/components/Page";
-import { ListMessageTemplate } from "@/components/Message/MessageTemplate/ListMessageTemplate";
+import { ListMessageTemplate } from "@/components/MessageTemplate/ListMessageTemplate";
 import Link from "next/link";
 import { Button } from "@telegram-apps/telegram-ui";
 

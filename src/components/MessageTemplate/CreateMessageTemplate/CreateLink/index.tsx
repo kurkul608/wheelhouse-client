@@ -18,7 +18,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { CreateMessageTemplateFormValues } from "@/components/Message/MessageTemplate/MessageTemplateForm";
+import { CreateMessageTemplateFormValues } from "@/components/MessageTemplate/MessageTemplateForm";
 
 export const CreateLink = () => {
   const { values, setFieldValue } =
