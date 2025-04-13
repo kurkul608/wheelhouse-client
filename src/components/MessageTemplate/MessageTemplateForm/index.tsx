@@ -1,21 +1,22 @@
 "use client";
 
 import { Form, Formik } from "formik";
-import { SendToAdmin } from "@/components/MessageTemplate/CreateMessageTemplate/SendToAdmin";
+import { SendToAdmin } from "../MessageTemplate/SendToAdmin";
 import { Button, Input, Subheadline } from "@telegram-apps/telegram-ui";
-import { TipTapTelegramMessage } from "@/components/MessageTemplate/CreateMessageTemplate/TipTapTelegramMessage";
+import { TipTapTelegramMessage } from "../MessageTemplate/TipTapTelegramMessage";
 import { MultiPhotoUpload } from "@/components/MultiPhotoUpload";
 import { ManagePhotos } from "@/components/ManagePhotos";
-import { CreateLink } from "@/components/MessageTemplate/CreateMessageTemplate/CreateLink";
+import { CreateLink } from "../MessageTemplate/CreateLink";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileModel } from "@/models/file";
+import { MessageLink } from "@/models/messageTemplate";
 
 export interface CreateMessageTemplateFormValues {
   name: string;
   description: string;
   photos: FileModel[];
-  links: string[];
+  links: MessageLink[];
 }
 type IMessageTemplateFormProps = {
   onSubmit(values: CreateMessageTemplateFormValues): Promise<void>;

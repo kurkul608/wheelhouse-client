@@ -42,8 +42,6 @@ export const Message: FC<MessageProps> = ({ slug }) => {
     }
   }, [lp]);
 
-  console.log(message);
-
   return (
     <List>
       {isLoading ? <Spinner size="l" /> : null}

@@ -39,7 +39,8 @@
     "react-slick": "^0.30.3",
     "react-virtuoso": "^4.12.5",
     "slick-carousel": "^1.8.1",
-    "yarn": "^1.22.22"
+    "yarn": "^1.22.22",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
