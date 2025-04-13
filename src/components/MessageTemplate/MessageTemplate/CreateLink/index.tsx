@@ -1,7 +1,7 @@
 "use client";
 
-import { Form, Formik, useFormikContext } from "formik";
-import { Button, Cell, Input, Subheadline } from "@telegram-apps/telegram-ui";
+import { useFormikContext } from "formik";
+import { Button, Cell, Subheadline } from "@telegram-apps/telegram-ui";
 import { useState } from "react";
 import { CreateMessageTemplateFormValues } from "@/components/MessageTemplate/MessageTemplateForm";
 import { MessageLink } from "@/models/messageTemplate";

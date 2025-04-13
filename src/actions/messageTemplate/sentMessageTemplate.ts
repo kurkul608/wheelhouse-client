@@ -1,6 +1,7 @@
 "use server";
 
 import axios, { AxiosHeaders } from "axios";
+import { MessageLink } from "@/models/messageTemplate";
 
 export const sentMessageTemplate = async (
   {
@@ -12,7 +13,7 @@ export const sentMessageTemplate = async (
     text: string;
     userId: string;
     photoIds?: string[];
-    links?: string[];
+    links?: MessageLink[];
   },
   headers: AxiosHeaders,
 ) => {
