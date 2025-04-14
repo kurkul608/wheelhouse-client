@@ -33,7 +33,7 @@ export const CreateLink = () => {
   };
 
   return (
-    <div className={"mt-2"} id={"create-link"}>
+    <div className={"mt-2"}>
       <Subheadline>Ссылки к сообщению</Subheadline>
       <div className={"relative"}>
         {values.links.map((link) => (
@@ -59,7 +59,7 @@ export const CreateLink = () => {
         ))}
       </div>
       <div className={"flex"}>
-        <Modal isOpen={isOpen} onClose={modalHandler} elementId={"create-link"}>
+        <Modal isOpen={isOpen} onClose={modalHandler}>
           <LinkForm
             addLink={addLink}
             modalHandler={modalHandler}

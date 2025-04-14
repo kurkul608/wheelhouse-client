@@ -43,7 +43,12 @@ export const LinkForm: FC<ILinkFormProps> = ({
   }, [linkForUpdate]);
 
   return (
-    <Form onSubmit={formik.submitForm}>
+    <Form
+      onSubmit={(event) => {
+        event.stopPropagation();
+        formik.submitForm();
+      }}
+    >
       <div>
         <Subheadline>Название ссылки</Subheadline>
         <Input
