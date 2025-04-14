@@ -96,6 +96,12 @@ export const Message: FC<MessageProps> = ({ slug }) => {
               text={String(message.countOrders)}
             />
           ) : null}
+          {message.startTime ? (
+            <CellWithTooltip
+              cellBefore={"Время начала рассылки:"}
+              text={formatDateInClientTimeZone(message.startTime)}
+            />
+          ) : null}
           <CellWithTooltip
             cellBefore={"Создано:"}
             text={formatDateInClientTimeZone(message.createdAt)}

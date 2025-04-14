@@ -4,7 +4,6 @@ import { MessageFormValues } from "@/components/Message/MessageForm";
 
 export const DateMessage = () => {
   const { values, handleChange } = useFormikContext<MessageFormValues>();
-  console.log(values);
   return (
     <div className={"mt-2"}>
       <Subheadline className={"px-[22px]"}>

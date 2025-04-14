@@ -18,7 +18,6 @@ export const getCarCardsListWithNoFilters = async ({
       `${process.env.API_URL}cars?${searchParams.toString()}`,
     );
     const data = await list.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);

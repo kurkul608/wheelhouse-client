@@ -19,6 +19,7 @@ import {
   MessageForm,
 } from "@/components/Message/MessageForm";
 import { updateMessage } from "@/actions/message/updateMessage";
+import { clientDateToUTC } from "@/utils/date";
 
 interface IEditMessageProps {
   slug: string;
@@ -78,7 +79,11 @@ export const EditMessage: FC<IEditMessageProps> = ({ slug }) => {
               ),
             }
           : {}),
-        startTime: undefined,
+        ...(values.startTime
+          ? {
+              startTime: clientDateToUTC(values.startTime),
+            }
+          : {}),
       },
       getAuthorization(lp) as AxiosHeaders,
     );

@@ -28,6 +28,7 @@ export const createMessage = async (
   headers: AxiosHeaders,
 ) => {
   try {
+    console.log(body);
     const response = await axios.post(
       `${process.env.API_URL}admin/message`,
       body,

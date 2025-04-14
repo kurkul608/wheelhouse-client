@@ -13,6 +13,7 @@ import {
 } from "@/components/Message/MessageForm";
 import { createMessage } from "@/actions/message/createMessage";
 import { MessageStatus, MessageType, WhereUsersEnum } from "@/models/message";
+import { clientDateToUTC } from "@/utils/date";
 
 export const CreateMessage = () => {
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
@@ -65,7 +66,11 @@ export const CreateMessage = () => {
               ),
             }
           : {}),
-        ...(values.startTime ? { startTime: values.startTime } : {}),
+        ...(values.startTime
+          ? {
+              startTime: clientDateToUTC(values.startTime),
+            }
+          : {}),
         startNow: values.isSentImmediately,
       },
       getAuthorization(lp) as AxiosHeaders,

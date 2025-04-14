@@ -110,6 +110,7 @@ export const MessageForm: FC<IProps> = ({
       onSubmit={async (values) => {
         if (isCanBeCreated(values)) {
           setIsLoading(true);
+
           await onSubmit(values).then(() => {
             router.push("/admin/message/list");
           });

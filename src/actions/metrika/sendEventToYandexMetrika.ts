@@ -54,8 +54,6 @@ export async function sendEventToYandexMetrika({
     if (response.status !== 200) {
       throw new Error(`Ошибка отправки события: ${response.statusText}`);
     }
-    console.log(searchParams);
-    console.log("Событие успешно отправлено:", response.data);
 
     return response.data;
   } catch (error) {
