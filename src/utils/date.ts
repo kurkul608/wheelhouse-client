@@ -11,7 +11,6 @@ export const formatDateInClientTimeZone = (
 ) => {
   if (typeof window !== "undefined") {
     const clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log("clientTimeZone: ", clientTimeZone);
     return dayjs.utc(date).tz(clientTimeZone).format(format);
   }
   return dayjs.utc(date).format(format); // Фолбэк, если нет доступа к `window`

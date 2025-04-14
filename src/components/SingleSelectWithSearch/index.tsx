@@ -97,6 +97,7 @@ export type SingleSelectWithSearchProps<T> = {
   isSearchable?: boolean;
   disabled?: boolean;
   className?: string;
+  name?: string;
 };
 
 function SingleSelectWithSearch<T>({
@@ -109,6 +110,7 @@ function SingleSelectWithSearch<T>({
   isSearchable = true,
   disabled,
   className,
+  name,
 }: SingleSelectWithSearchProps<T>) {
   const [selectedOption, setSelectedOption] = useState<SelectOption<T> | null>(
     defaultSelectedOption,
@@ -126,6 +128,7 @@ function SingleSelectWithSearch<T>({
     <div>
       {head ? <div className="mb-1">{head}</div> : null}
       <Select
+        name={name}
         isDisabled={disabled}
         options={options}
         value={selectedOption}

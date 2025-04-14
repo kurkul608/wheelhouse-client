@@ -12,7 +12,12 @@ import {
   MessageForm,
 } from "@/components/Message/MessageForm";
 import { createMessage } from "@/actions/message/createMessage";
-import { MessageStatus, MessageType, WhereUsersEnum } from "@/models/message";
+import {
+  MessagePeriodType,
+  MessageStatus,
+  MessageType,
+  WhereUsersEnum,
+} from "@/models/message";
 import { clientDateToUTC } from "@/utils/date";
 
 export const CreateMessage = () => {
@@ -41,8 +46,7 @@ export const CreateMessage = () => {
       {
         messageTemplateId: values.template!.value,
         name: values.name,
-        // type: values.type!.value as MessageType,
-        type: MessageType.ONCE,
+        type: values.type!.value as MessageType,
         status: MessageStatus.ACTIVE,
         usersWhere: values.whereUser!.value as WhereUsersEnum,
         ...(values.countAutoInWishlist !== undefined &&
@@ -71,6 +75,7 @@ export const CreateMessage = () => {
               startTime: clientDateToUTC(values.startTime),
             }
           : {}),
+        periodType: values.periodType?.value as MessagePeriodType,
         startNow: values.isSentImmediately,
       },
       getAuthorization(lp) as AxiosHeaders,

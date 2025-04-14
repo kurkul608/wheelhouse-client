@@ -8,7 +8,7 @@ import { WhereUsersEnum } from "@/models/message";
 import { MessageFormValues } from "@/components/Message/MessageForm";
 
 export const OptionalMessages = () => {
-  const { values, handleChange, setFieldValue } =
+  const { values, handleChange, setFieldValue, touched, errors } =
     useFormikContext<MessageFormValues>();
   return (
     <>
@@ -35,6 +35,9 @@ export const OptionalMessages = () => {
           }
           onChange={handleChange}
         />
+        {touched.countAutoInWishlist && errors.countAutoInWishlist && (
+          <div style={{ color: "red" }}>{errors.countAutoInWishlist}</div>
+        )}
       </div>
       <div
         className={classNames("mt-2", {
@@ -62,6 +65,9 @@ export const OptionalMessages = () => {
           defaultSelectedOptions={values.manySpecialCarBrand}
           targetPortalId={"create-message"}
         />
+        {/*{touched.manySpecialCarBrand && errors.manySpecialCarBrand && (*/}
+        {/*  <div style={{ color: "red" }}>{errors.manySpecialCarBrand}</div>*/}
+        {/*)}*/}
       </div>
       <div
         className={classNames("mt-2", {
@@ -82,6 +88,9 @@ export const OptionalMessages = () => {
           }
           onChange={handleChange}
         />
+        {touched.countOrders && errors.countOrders && (
+          <div style={{ color: "red" }}>{errors.countOrders}</div>
+        )}
       </div>
       <div
         className={classNames("mt-2", {
@@ -107,6 +116,9 @@ export const OptionalMessages = () => {
           defaultSelectedOptions={values.manyOrderOnBrand}
           targetPortalId={"create-message"}
         />
+        {/*{touched.manyOrderOnBrand && errors.manyOrderOnBrand && (*/}
+        {/*  <div style={{ color: "red" }}>{errors.manyOrderOnBrand}</div>*/}
+        {/*)}*/}
       </div>
     </>
   );

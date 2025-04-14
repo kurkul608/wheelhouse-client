@@ -3,6 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import {
   Message,
+  MessagePeriodType,
   MessageStatus,
   MessageType,
   WhereUsersEnum,
@@ -54,8 +55,7 @@ export const EditMessage: FC<IEditMessageProps> = ({ slug }) => {
       slug,
       {
         name: values.name,
-        // type: values.type!.value as MessageType,
-        type: MessageType.ONCE,
+        type: values.type!.value as MessageType,
         status: MessageStatus.ACTIVE,
         usersWhere: values.whereUser!.value as WhereUsersEnum,
         ...(values.countAutoInWishlist !== undefined &&
@@ -83,6 +83,9 @@ export const EditMessage: FC<IEditMessageProps> = ({ slug }) => {
           ? {
               startTime: clientDateToUTC(values.startTime),
             }
+          : {}),
+        ...(values.periodType
+          ? { periodType: values.periodType.value as MessagePeriodType }
           : {}),
       },
       getAuthorization(lp) as AxiosHeaders,

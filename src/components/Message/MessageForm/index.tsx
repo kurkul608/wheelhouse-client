@@ -20,6 +20,12 @@ import { useRouter } from "next/navigation";
 import { OptionalMessages } from "@/components/Message/MessageForm/OptionalMessages";
 import { DateMessage } from "@/components/Message/MessageForm/DateMessage";
 import { CAR_BRANDS_FILTER_OPTIONS } from "@/constants/carBrandsFilterOptions";
+import { formatDateInClientTimeZone } from "@/utils/date";
+import { messageTypeOptions } from "@/constants/messageTypeOptions";
+import { classNames } from "@telegram-apps/sdk-react";
+import { messagePeriodTypeOptions } from "@/constants/messagePeriodTypeOptions";
+import { PeriodMessage } from "@/components/Message/MessageForm/PeriodMessage";
+import * as Yup from "yup";
 
 interface IProps {
   templates: MessageTemplate[];
@@ -37,7 +43,7 @@ export interface MessageFormValues {
   startTime: null | string;
   manySpecialCarBrand: MultiValue<SelectOption<unknown>>;
   manyOrderOnBrand: MultiValue<SelectOption<unknown>>;
-  // isSentImmediately?: "on" | "off";
+  periodType: null | SelectOption<unknown>;
   isSentImmediately?: boolean;
 }
 
@@ -48,15 +54,15 @@ export const MessageForm: FC<IProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const isCanBeCreated = (values: MessageFormValues) => {
-    return (
-      values.template?.value &&
-      values.name &&
-      // values.type?.value &&
-      values.whereUser?.value &&
-      !isLoading
-    );
-  };
+  // const isCanBeCreated = (values: MessageFormValues) => {
+  //   return (
+  //     values.template?.value &&
+  //     values.name &&
+  //     // values.type?.value &&
+  //     values.whereUser?.value &&
+  //     !isLoading
+  //   );
+  // };
 
   const templatesOptions = templates.map((mt) => ({
     value: mt.id,
@@ -70,7 +76,10 @@ export const MessageForm: FC<IProps> = ({
             templateOption.value === existMessage.messageTemplateId,
         )!
       : null,
-    type: { value: MessageType.ONCE, label: "Разовая рассылка" },
+    type:
+      existMessage && existMessage.type
+        ? messageTypeOptions.find((opt) => opt.value === existMessage.type)!
+        : null,
     name: existMessage ? existMessage.name : "",
     whereUser: existMessage
       ? whereOptions.find((opt) => opt.value === existMessage.usersWhere)!
@@ -100,25 +109,67 @@ export const MessageForm: FC<IProps> = ({
           )
         : [],
     startTime:
-      existMessage && existMessage.startTime ? existMessage.startTime : null,
+      existMessage && existMessage.startTime
+        ? formatDateInClientTimeZone(
+            existMessage.startTime,
+            "YYYY-MM-DD HH:mm:ss",
+          )
+        : null,
     isSentImmediately: false,
+    periodType:
+      existMessage && existMessage.periodType
+        ? messagePeriodTypeOptions.find(
+            (opt) => opt.value === existMessage.periodType,
+          )!
+        : null,
   };
+
+  const messageFormValidationSchema = Yup.object().shape({
+    template: Yup.object().nullable().required("Template is required"),
+
+    type: Yup.object().nullable().required("MessageType is required"),
+
+    name: Yup.string().required("Name is required"),
+
+    whereUser: Yup.object().nullable().required("WhereUser is required"),
+
+    countAutoInWishlist: Yup.number().nullable(),
+    countOrders: Yup.number().nullable(),
+
+    startTime: Yup.string()
+      .nullable()
+      .when("type", {
+        is: (val: SelectOption<unknown>) => val?.value === MessageType.PERIOD,
+        then: (s) => s.required("startTime is required"),
+      }),
+
+    manySpecialCarBrand: Yup.array(),
+    manyOrderOnBrand: Yup.array(),
+
+    periodType: Yup.object()
+      .nullable()
+      .when("type", {
+        is: (val: SelectOption<unknown>) => val?.value === MessageType.PERIOD,
+        then: (s) => s.required("periodType is required"),
+      }),
+
+    isSentImmediately: Yup.boolean(),
+  });
 
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={messageFormValidationSchema}
       onSubmit={async (values) => {
-        if (isCanBeCreated(values)) {
-          setIsLoading(true);
+        setIsLoading(true);
 
-          await onSubmit(values).then(() => {
-            router.push("/admin/message/list");
-          });
-          setIsLoading(false);
-        }
+        await onSubmit(values).then(() => {
+          router.push("/admin/message/list");
+        });
+        setIsLoading(false);
       }}
     >
-      {({ values, handleChange, setFieldValue }) => (
+      {({ values, handleChange, setFieldValue, touched, errors }) => (
         <Form className={"w-[85vw] h-[85vh]"}>
           <Headline>Создание рассылки</Headline>
           <div className={"mt-2"}>
@@ -131,13 +182,15 @@ export const MessageForm: FC<IProps> = ({
               value={values.name}
               onChange={handleChange}
             />
+            {touched.name && errors.name && (
+              <div style={{ color: "red" }}>{errors.name}</div>
+            )}
           </div>
           <div className={"mt-2"}>
             <SingleSelectWithSearch
               isSearchable={false}
               options={templatesOptions}
               onChange={(newOptions) => {
-                console.log("in tamplate change");
                 setFieldValue("template", newOptions);
               }}
               head={
@@ -148,7 +201,11 @@ export const MessageForm: FC<IProps> = ({
               placeholder={"Выбрать шаблон сообщения"}
               defaultSelectedOption={values.template}
               targetPortalId={"create-message"}
+              name={"template"}
             />
+            {touched.template && errors.template && (
+              <div style={{ color: "red" }}>{errors.template}</div>
+            )}
           </div>
           <div className={"mt-2"}>
             <SingleSelectWithSearch
@@ -165,18 +222,17 @@ export const MessageForm: FC<IProps> = ({
               placeholder={"Выбрать фильтр по пользователям"}
               defaultSelectedOption={values.whereUser}
               targetPortalId={"create-message"}
+              name={"whereUser"}
             />
+            {touched.whereUser && errors.whereUser && (
+              <div style={{ color: "red" }}>{errors.whereUser}</div>
+            )}
           </div>
           <OptionalMessages />
-          <div className={"mt-2 hidden"}>
+          <div className={"mt-2"}>
             <SingleSelectWithSearch
               isSearchable={false}
-              options={
-                [
-                  { value: MessageType.ONCE, label: "Разовая рассылка" },
-                  { value: MessageType.PERIOD, label: "Рассылка с периодом" },
-                ] as SelectOption<unknown>[]
-              }
+              options={messageTypeOptions as SelectOption<unknown>[]}
               onChange={(newOptions) => {
                 setFieldValue("type", newOptions);
               }}
@@ -186,9 +242,18 @@ export const MessageForm: FC<IProps> = ({
               placeholder={"Выбрать типа рассылки"}
               defaultSelectedOption={values.type}
               targetPortalId={"create-message"}
+              name={"type"}
             />
+            {touched.type && errors.type && (
+              <div style={{ color: "red" }}>{errors.type}</div>
+            )}
           </div>
-          <div className={"mt-2"}>
+          <PeriodMessage />
+          <div
+            className={classNames("mt-2", {
+              hidden: values.type?.value === MessageType.PERIOD,
+            })}
+          >
             <Cell
               Component="label"
               before={
@@ -208,13 +273,16 @@ export const MessageForm: FC<IProps> = ({
             >
               Отправка
             </Cell>
+            {touched.isSentImmediately && errors.isSentImmediately && (
+              <div style={{ color: "red" }}>{errors.isSentImmediately}</div>
+            )}
           </div>
           <DateMessage />
           <div className={"mt-2 w-full flex justify-center"}>
             <Button
               type={"submit"}
               loading={isLoading}
-              disabled={!isCanBeCreated(values)}
+              // disabled={!isCanBeCreated(values)}
             >
               Сохарнить
             </Button>
