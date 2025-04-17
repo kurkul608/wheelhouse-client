@@ -9,6 +9,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "@/contexts/userContext";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { CreateMessageTemplateFormValues } from "@/components/MessageTemplate/MessageTemplateForm";
+import { sentMessageToChanelTemplate } from "@/actions/messageTemplate/sentMessageToChanelTemplate";
 
 export const SendToAdmin = () => {
   const [isSentMessageLoading, setIsSentMessageLoading] = useState(false);
@@ -36,13 +37,32 @@ export const SendToAdmin = () => {
     }
   };
 
+  const handleSendChanel = async () => {
+    if (user && !isSentMessageLoading) {
+      setIsSentMessageLoading(true);
+      await sentMessageToChanelTemplate(
+        {
+          text: values.description,
+          photoIds: values.photos.map((photo) => photo.id),
+          links: values.links,
+        },
+        getAuthorization(lp) as AxiosHeaders,
+      ).then(() => {
+        setIsSentMessageLoading(false);
+      });
+    }
+  };
+
   return (
     <div
-      className={"w-full flex justify-end sticky top-0 z-10"}
+      className={"w-full flex justify-between sticky top-0 z-10"}
       style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
     >
+      <Button onClick={handleSendChanel} loading={isSentMessageLoading}>
+        Отправить В канал
+      </Button>
       <Button onClick={handleSend} loading={isSentMessageLoading}>
-        Отправить сообщение себе
+        Отправить Себе
       </Button>
     </div>
   );
