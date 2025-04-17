@@ -1,6 +1,12 @@
 "use client";
 
-import { Cell, Headline, List, Spinner } from "@telegram-apps/telegram-ui";
+import {
+  Button,
+  Cell,
+  Headline,
+  List,
+  Spinner,
+} from "@telegram-apps/telegram-ui";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { useEffect, useState } from "react";
 import { Message } from "@/models/message";
@@ -8,6 +14,7 @@ import Link from "next/link";
 import { getMessagesList } from "@/actions/message/getMessagesList";
 import { getAuthorization } from "@/utils/getAuthorization";
 import { AxiosHeaders } from "axios";
+import { Virtuoso } from "react-virtuoso";
 
 export const MessageList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -29,15 +36,26 @@ export const MessageList = () => {
   }, [lp]);
 
   return (
-    <List>
-      {messages.map((message) => (
-        <Link
-          key={`message-id--${message.id}`}
-          href={`/admin/message/${message.id}`}
-        >
-          <Cell>{message.name}</Cell>
-        </Link>
-      ))}
+    <List className={"h-full"}>
+      {!isLoading && messages.length ? (
+        <Virtuoso
+          components={{
+            Header: () => (
+              <Link href={"/admin/message/create"}>
+                <Button>Создать новую рассылку</Button>
+              </Link>
+            ),
+          }}
+          style={{ height: "100%" }}
+          totalCount={messages.length}
+          data={messages}
+          itemContent={(_, message) => (
+            <Link href={`/admin/message/${message.id}`}>
+              <Cell>{message.name}</Cell>
+            </Link>
+          )}
+        />
+      ) : null}
       {isLoading ? <Spinner size={"l"} /> : null}
       {!isLoading && !messages.length && <Headline>Ничего не найдено</Headline>}
     </List>

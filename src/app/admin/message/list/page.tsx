@@ -2,8 +2,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Page } from "@/components/Page";
 import { MessageList } from "@/components/Message/MessageList";
-import { Button } from "@telegram-apps/telegram-ui";
-import Link from "next/link";
 
 export const metadata = {
   title: "Список активных рассылок",
@@ -22,9 +20,6 @@ export default async function AdminMessageActivePage() {
         style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
         className={"h-[calc(100vh-62px)] overflow-auto"}
       >
-        <Link href={"/admin/message/create"}>
-          <Button>Создать новую рассылку</Button>
-        </Link>
         <MessageList />
       </div>
     </Page>

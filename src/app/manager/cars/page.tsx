@@ -57,46 +57,54 @@ export default function ManagerCarsPage() {
         style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
         className={"h-[calc(100vh-62px)] overflow-auto"}
       >
-        <Input
-          value={searchString}
-          onChange={(e) =>
-            updateManagerFilters?.({ searchString: e.target.value })
-          }
-          placeholder={"Введите название авто"}
-        />
-        <Text className={"flex  px-[10px] py-[8px]"}>Фильтр наличия авто:</Text>
-        <Select
-          onChange={(e) => {
-            updateManagerFilters?.({
-              stockFilter: e.target.value as CarCardsStockFilter,
-            });
-          }}
-          value={stockFilter}
-        >
-          <option value={"all"}>Все</option>
-          <option value={"inStock"}>Только в наличии</option>
-          <option value={"onOrder"}>Только на заказ</option>
-        </Select>
-        <Text className={"flex  px-[10px] py-[8px]"}>
-          Фильтр активных авто:
-        </Text>
-        <Select
-          onChange={(e) => {
-            updateManagerFilters?.({
-              activeFilter: e.target.value as ActiveFilter,
-            });
-          }}
-          value={activeFilter}
-        >
-          <option value={"all"}>Все</option>
-          <option value={"active"}>Только активные</option>
-          <option value={"disabled"}>Только деактивированные</option>
-        </Select>
         {!loading && list.length ? (
           <Virtuoso
             style={{ height: "100%" }}
             totalCount={list.length}
             data={list}
+            components={{
+              Header: () => (
+                <>
+                  <Input
+                    value={searchString}
+                    onChange={(e) =>
+                      updateManagerFilters?.({ searchString: e.target.value })
+                    }
+                    placeholder={"Введите название авто"}
+                  />
+                  <Text className={"flex  px-[10px] py-[8px]"}>
+                    Фильтр наличия авто:
+                  </Text>
+                  <Select
+                    onChange={(e) => {
+                      updateManagerFilters?.({
+                        stockFilter: e.target.value as CarCardsStockFilter,
+                      });
+                    }}
+                    value={stockFilter}
+                  >
+                    <option value={"all"}>Все</option>
+                    <option value={"inStock"}>Только в наличии</option>
+                    <option value={"onOrder"}>Только на заказ</option>
+                  </Select>
+                  <Text className={"flex  px-[10px] py-[8px]"}>
+                    Фильтр активных авто:
+                  </Text>
+                  <Select
+                    onChange={(e) => {
+                      updateManagerFilters?.({
+                        activeFilter: e.target.value as ActiveFilter,
+                      });
+                    }}
+                    value={activeFilter}
+                  >
+                    <option value={"all"}>Все</option>
+                    <option value={"active"}>Только активные</option>
+                    <option value={"disabled"}>Только деактивированные</option>
+                  </Select>
+                </>
+              ),
+            }}
             itemContent={(_, car) => (
               <Cell
                 subhead={car.carModel}
