@@ -20,6 +20,7 @@ import { Page } from "@/components/Page";
 import { getFileLink } from "@/utils/getFileLink";
 import { ManagerFiltersContext } from "@/contexts/managerFiltersContext";
 import { AxiosHeaders } from "axios";
+import { Virtuoso } from "react-virtuoso";
 
 export type ActiveFilter = "all" | "active" | "disabled";
 
@@ -91,29 +92,33 @@ export default function ManagerCarsPage() {
           <option value={"active"}>Только активные</option>
           <option value={"disabled"}>Только деактивированные</option>
         </Select>
-        {list.map((car) => {
-          return (
-            <Cell
-              subhead={car.carModel}
-              key={car.id}
-              before={
-                <Avatar
-                  alt={car.carBrand}
-                  src={
-                    car.externalId
-                      ? (car?.importedPhotos?.[0] ?? "")
-                      : (getFileLink(car?.photos?.[0]) ?? "")
-                  }
-                />
-              }
-              onClick={() => {
-                router.push(`/manager/cars/${car.id}`);
-              }}
-            >
-              {car.carBrand}
-            </Cell>
-          );
-        })}
+        {!loading && list.length ? (
+          <Virtuoso
+            style={{ height: "100%" }}
+            totalCount={list.length}
+            data={list}
+            itemContent={(_, car) => (
+              <Cell
+                subhead={car.carModel}
+                before={
+                  <Avatar
+                    alt={car.carBrand}
+                    src={
+                      car.externalId
+                        ? (car?.importedPhotos?.[0] ?? "")
+                        : (getFileLink(car?.photos?.[0]) ?? "")
+                    }
+                  />
+                }
+                onClick={() => {
+                  router.push(`/manager/cars/${car.id}`);
+                }}
+              >
+                {car.carBrand}
+              </Cell>
+            )}
+          />
+        ) : null}
         {loading && <Spinner size={"l"} />}
         {!loading && !list.length && <Headline>Ничего не найдено</Headline>}
       </div>
