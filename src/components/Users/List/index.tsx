@@ -17,6 +17,7 @@ import {
 } from "@telegram-apps/telegram-ui";
 import { ChangeUserRole } from "@/components/Users/ChangeUserRole";
 import { sentUsersScv } from "@/admin/users/sentUsersCsv";
+import { Virtuoso } from "react-virtuoso";
 
 export const UsersList = () => {
   const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
@@ -84,23 +85,29 @@ export const UsersList = () => {
           <div className={"size-4 w-full"}>{showClipBoard.text}</div>
         </Snackbar>
       )}
-      {!loading &&
-        list.map((user) => (
-          <Cell
-            key={user.id}
-            after={
-              <ChangeUserRole
-                user={user}
-                refresh={() => {
-                  setRefreshFlag(!refreshFlag);
-                }}
-              />
-            }
-            subtitle={`${user.firstName || ""} ${user.lastName || ""}`}
-          >
-            {`@${user.username || ""}`}
-          </Cell>
-        ))}
+
+      {!loading && list.length ? (
+        <Virtuoso
+          style={{ height: "100%" }}
+          totalCount={list.length}
+          data={list}
+          itemContent={(_, user) => (
+            <Cell
+              after={
+                <ChangeUserRole
+                  user={user}
+                  refresh={() => {
+                    setRefreshFlag(!refreshFlag);
+                  }}
+                />
+              }
+              subtitle={`${user.firstName || ""} ${user.lastName || ""}`}
+            >
+              {`@${user.username || ""}`}
+            </Cell>
+          )}
+        />
+      ) : null}
       {loading && <Spinner size={"l"} />}
       {!loading && !list.length && <Headline>Ничего не найдено!</Headline>}
     </List>
