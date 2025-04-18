@@ -278,7 +278,12 @@ export const MessageForm: FC<IProps> = ({
                   defaultChecked={values.status === "on"}
                   value={values.status}
                   name={"status"}
-                  onChange={handleChange}
+                  onClick={async () => {
+                    await setFieldValue(
+                      "status",
+                      values.status === "on" ? "off" : "on",
+                    );
+                  }}
                 />
               }
             >
