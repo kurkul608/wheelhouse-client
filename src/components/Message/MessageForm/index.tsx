@@ -8,6 +8,7 @@ import {
   Headline,
   Input,
   Subheadline,
+  Switch,
 } from "@telegram-apps/telegram-ui";
 import { Form, Formik } from "formik";
 import { FC, useState } from "react";
@@ -15,7 +16,7 @@ import { MessageTemplate } from "@/models/messageTemplate";
 import SingleSelectWithSearch from "@/components/SingleSelectWithSearch";
 import { MultiValue } from "react-select";
 import { whereOptions } from "@/constants/whereUserOptions";
-import { Message, MessageType } from "@/models/message";
+import { Message, MessageStatus, MessageType } from "@/models/message";
 import { useRouter } from "next/navigation";
 import { OptionalMessages } from "@/components/Message/MessageForm/OptionalMessages";
 import { DateMessage } from "@/components/Message/MessageForm/DateMessage";
@@ -37,6 +38,7 @@ export interface MessageFormValues {
   template: null | SelectOption<unknown>;
   type: null | SelectOption<unknown>;
   name: string;
+  status: "on" | "off";
   whereUser: null | SelectOption<unknown>;
   countAutoInWishlist: null | number;
   countOrders: null | number;
@@ -54,15 +56,6 @@ export const MessageForm: FC<IProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  // const isCanBeCreated = (values: MessageFormValues) => {
-  //   return (
-  //     values.template?.value &&
-  //     values.name &&
-  //     // values.type?.value &&
-  //     values.whereUser?.value &&
-  //     !isLoading
-  //   );
-  // };
 
   const templatesOptions = templates.map((mt) => ({
     value: mt.id,
@@ -81,6 +74,7 @@ export const MessageForm: FC<IProps> = ({
         ? messageTypeOptions.find((opt) => opt.value === existMessage.type)!
         : null,
     name: existMessage ? existMessage.name : "",
+    status: existMessage?.status === MessageStatus.ACTIVE ? "on" : "off",
     whereUser: existMessage
       ? whereOptions.find((opt) => opt.value === existMessage.usersWhere)!
       : null,
@@ -276,6 +270,20 @@ export const MessageForm: FC<IProps> = ({
             {touched.isSentImmediately && errors.isSentImmediately && (
               <div style={{ color: "red" }}>{errors.isSentImmediately}</div>
             )}
+          </div>
+          <div className={"mt-2"}>
+            <Cell
+              after={
+                <Switch
+                  defaultChecked={values.status === "on"}
+                  value={values.status}
+                  name={"status"}
+                  onChange={handleChange}
+                />
+              }
+            >
+              Активная рассылка
+            </Cell>
           </div>
           <DateMessage />
           <div className={"mt-2 w-full flex justify-center"}>

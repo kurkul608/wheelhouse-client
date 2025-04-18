@@ -127,9 +127,6 @@ export const Message: FC<MessageProps> = ({ slug }) => {
               ? "Актвиный"
               : "Не активный"}
           </Cell>
-          {/*<Cell before={"Тип рассылки:"}>*/}
-          {/*  {message.type === MessageType.ONCE ? "Единоразовая" : "Период"}*/}
-          {/*</Cell>*/}
         </Section>
       ) : null}
     </List>

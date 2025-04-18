@@ -1,13 +1,27 @@
 "use server";
 
 import axios, { AxiosHeaders } from "axios";
-import { Message } from "@/models/message";
+import {
+  Message,
+  MessageStatus,
+  MessageType,
+  MessagePeriodType,
+} from "@/models/message";
 
-export const getMessagesList = async (headers: AxiosHeaders) => {
+export interface IGetMessagesListParams {
+  filterByStatus?: MessageStatus;
+  filterByType?: MessageType;
+  filterByPeriod?: MessagePeriodType;
+}
+
+export const getMessagesList = async (
+  params: IGetMessagesListParams,
+  headers: AxiosHeaders,
+) => {
   try {
     const list = await axios.get<Message[]>(
       `${process.env.API_URL}admin/message`,
-      { headers },
+      { headers, params },
     );
 
     return list.data;

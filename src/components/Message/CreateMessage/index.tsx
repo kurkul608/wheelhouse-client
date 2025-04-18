@@ -47,7 +47,10 @@ export const CreateMessage = () => {
         messageTemplateId: values.template!.value,
         name: values.name,
         type: values.type!.value as MessageType,
-        status: MessageStatus.ACTIVE,
+        status:
+          values.status === "on"
+            ? MessageStatus.ACTIVE
+            : MessageStatus.DISABLED,
         usersWhere: values.whereUser!.value as WhereUsersEnum,
         ...(values.countAutoInWishlist !== undefined &&
         values.countAutoInWishlist !== null
