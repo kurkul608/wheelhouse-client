@@ -10,28 +10,57 @@ import { CreateLink } from "../MessageTemplate/CreateLink";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileModel } from "@/models/file";
-import { MessageLink } from "@/models/messageTemplate";
+import {
+  CarsWherePeriod,
+  MessageLink,
+  MessageTemplate,
+} from "@/models/messageTemplate";
+import { SelectOption } from "@/components/MultiSelectWithSearch";
+import SingleSelectWithSearch from "@/components/SingleSelectWithSearch";
+import { carWhereOptions as carWhereOptionsTemplate } from "@/constants/carWhereOptions";
+import { CarWhereField } from "@/components/MessageTemplate/MessageTemplateForm/CarWhereField";
+import { carStockOptions } from "@/constants/carStockOptions";
+import { formatDateInClientTimeZone } from "@/utils/date";
+import { carWhereDefaultPeriodOptions } from "@/constants/carWhereDefaultPeriodOptions";
 
 export interface CreateMessageTemplateFormValues {
   name: string;
   description: string;
   photos: FileModel[];
   links: MessageLink[];
+  carsWhere: SelectOption<unknown>;
+  carsWhereDefaultPeriod: SelectOption<unknown>;
+  carsWhereStock: SelectOption<unknown>;
+  carsWherePeriodStart: string;
+  carsWherePeriodEnd: string;
 }
 type IMessageTemplateFormProps = {
   onSubmit(values: CreateMessageTemplateFormValues): Promise<void>;
-} & Partial<CreateMessageTemplateFormValues>;
+} & Partial<CreateMessageTemplateFormValues> & {
+    template?: MessageTemplate;
+  };
+
+const carWhereOptions = [{ value: "", label: "-" }, ...carWhereOptionsTemplate];
 
 export const MessageTemplateForm: FC<IMessageTemplateFormProps> = ({
-  name,
-  photos,
-  links,
-  description,
+  template = {},
   onSubmit,
 }) => {
   const [isMessageTemplateLoading, setIsMessageTemplateLoading] =
     useState(false);
   const router = useRouter();
+
+  const {
+    carsWherePeriodEnd,
+    carsWhereStock,
+    carsWhere,
+    carsWherePeriodStart,
+    carsWhereDefaultPeriod,
+    name,
+    photos,
+    links,
+    text,
+  } = template;
 
   return (
     <div className={"flex justify-center"} id={"create-message-template"}>
@@ -39,9 +68,34 @@ export const MessageTemplateForm: FC<IMessageTemplateFormProps> = ({
         initialValues={
           {
             name: name || "",
-            description: description || "",
+            description: text || "",
             photos: photos || [],
             links: links || [],
+            carsWhere: carWhereOptions.find(
+              (opt) => opt.value === (carsWhere ?? ""),
+            ),
+            carsWherePeriodStart: carsWherePeriodStart
+              ? formatDateInClientTimeZone(
+                  carsWherePeriodStart,
+                  "YYYY-MM-DD HH:mm:ss",
+                )
+              : "",
+            carsWherePeriodEnd: carsWherePeriodEnd
+              ? formatDateInClientTimeZone(
+                  carsWherePeriodEnd,
+                  "YYYY-MM-DD HH:mm:ss",
+                )
+              : "",
+            carsWhereStock: carsWhereStock
+              ? carStockOptions.find((opt) => opt.value === carsWhereStock)
+              : { value: "", label: "-" },
+            carsWhereDefaultPeriod: carsWhereDefaultPeriod
+              ? carWhereDefaultPeriodOptions.find(
+                  (opt) => opt.value === carsWhereDefaultPeriod,
+                )
+              : carWhereDefaultPeriodOptions.find(
+                  (opt) => opt.value === CarsWherePeriod.LAST_DAY,
+                ),
           } as CreateMessageTemplateFormValues
         }
         onSubmit={async (values) => {
@@ -101,6 +155,24 @@ export const MessageTemplateForm: FC<IMessageTemplateFormProps> = ({
                 />
               </div>
             ) : null}
+
+            <div className={"mt-2"}>
+              <SingleSelectWithSearch
+                isSearchable={false}
+                defaultSelectedOption={values.carsWhere}
+                options={carWhereOptions}
+                onChange={(opt) => {
+                  setFieldValue("carsWhere", opt);
+                }}
+                placeholder={"Прикрепить ссылки на авто"}
+                head={
+                  <Subheadline className={"px-[22px]"}>
+                    Прикрепить ссылки на авто
+                  </Subheadline>
+                }
+              />
+            </div>
+            <CarWhereField />
 
             <CreateLink />
             <div className={"flex justify-start w-full mt-2"}>

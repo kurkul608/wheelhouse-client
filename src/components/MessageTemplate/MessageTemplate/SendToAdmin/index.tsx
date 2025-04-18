@@ -10,6 +10,12 @@ import { UserContext } from "@/contexts/userContext";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import { CreateMessageTemplateFormValues } from "@/components/MessageTemplate/MessageTemplateForm";
 import { sentMessageToChanelTemplate } from "@/actions/messageTemplate/sentMessageToChanelTemplate";
+import { clientDateToUTC } from "@/utils/date";
+import {
+  CarsWhere,
+  CarsWherePeriod,
+  CarsWhereStock,
+} from "@/models/messageTemplate";
 
 export const SendToAdmin = () => {
   const [isSentMessageLoading, setIsSentMessageLoading] = useState(false);
@@ -29,6 +35,30 @@ export const SendToAdmin = () => {
           userId: user.id,
           photoIds: values.photos.map((photo) => photo.id),
           links: values.links,
+          ...(values.carsWherePeriodStart
+            ? {
+                carsWherePeriodStart: clientDateToUTC(
+                  values.carsWherePeriodStart,
+                ),
+              }
+            : {}),
+          ...(values.carsWherePeriodEnd
+            ? { carsWherePeriodEnd: clientDateToUTC(values.carsWherePeriodEnd) }
+            : {}),
+          ...(values.carsWhereStock.value
+            ? { carsWhereStock: values.carsWhereStock.value as CarsWhereStock }
+            : {}),
+          ...(values.carsWhereDefaultPeriod.value
+            ? {
+                carsWhereDefaultPeriod: values.carsWhereDefaultPeriod
+                  .value as CarsWherePeriod,
+              }
+            : {}),
+          ...(values.carsWhere.value
+            ? {
+                carsWhere: values.carsWhere.value as CarsWhere,
+              }
+            : {}),
         },
         getAuthorization(lp) as AxiosHeaders,
       ).then(() => {
@@ -45,6 +75,30 @@ export const SendToAdmin = () => {
           text: values.description,
           photoIds: values.photos.map((photo) => photo.id),
           links: values.links,
+          ...(values.carsWherePeriodStart
+            ? {
+                carsWherePeriodStart: clientDateToUTC(
+                  values.carsWherePeriodStart,
+                ),
+              }
+            : {}),
+          ...(values.carsWherePeriodEnd
+            ? { carsWherePeriodEnd: clientDateToUTC(values.carsWherePeriodEnd) }
+            : {}),
+          ...(values.carsWhereStock.value
+            ? { carsWhereStock: values.carsWhereStock.value as CarsWhereStock }
+            : {}),
+          ...(values.carsWhereDefaultPeriod.value
+            ? {
+                carsWhereDefaultPeriod: values.carsWhereDefaultPeriod
+                  .value as CarsWherePeriod,
+              }
+            : {}),
+          ...(values.carsWhere.value
+            ? {
+                carsWhere: values.carsWhere.value as CarsWhere,
+              }
+            : {}),
         },
         getAuthorization(lp) as AxiosHeaders,
       ).then(() => {
