@@ -171,6 +171,7 @@ function RootInner({ children }: PropsWithChildren) {
         </UserContext.Provider>
       </QueryClientProvider>
       <div id="modal-root"></div>
+      <div id="select-portal"></div>
     </AppRoot>
   );
 }

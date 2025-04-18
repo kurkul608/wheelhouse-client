@@ -142,8 +142,9 @@ function SingleSelectWithSearch<T>({
           typeof document !== "undefined"
             ? targetPortalId
               ? document.getElementById(targetPortalId)
-              : document.body
-            : null
+              : document.getElementById("select-portal")
+            : // : document.body
+              null
         }
         menuPosition="fixed"
         menuPlacement="auto"
