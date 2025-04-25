@@ -33,15 +33,13 @@ export const sentMessageToChanelTemplate = async (
   headers: AxiosHeaders,
 ) => {
   try {
-    console.log(process.env);
     const chanelId = process.env.CHANEL_ID;
-    console.log(`chanelId: ${chanelId}`);
 
     const res = await axios.post(
       `${process.env.API_URL}admin/messageTemplate/sent-to-chanel`,
       {
         text,
-        chanelId: process.env.CHANEL_ID,
+        chanelId,
         photoIds,
         links,
         carsWhereDefaultPeriod,
