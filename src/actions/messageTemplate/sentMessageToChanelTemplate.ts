@@ -33,6 +33,7 @@ export const sentMessageToChanelTemplate = async (
   headers: AxiosHeaders,
 ) => {
   try {
+    console.log(process.env);
     const chanelId = process.env.CHANEL_ID;
     console.log(`chanelId: ${chanelId}`);
 
