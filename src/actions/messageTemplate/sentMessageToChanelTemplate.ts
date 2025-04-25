@@ -33,6 +33,9 @@ export const sentMessageToChanelTemplate = async (
   headers: AxiosHeaders,
 ) => {
   try {
+    const chanelId = process.env.CHANEL_ID;
+    console.log(`chanelId: ${chanelId}`);
+
     const res = await axios.post(
       `${process.env.API_URL}admin/messageTemplate/sent-to-chanel`,
       {
