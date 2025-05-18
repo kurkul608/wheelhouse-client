@@ -55,56 +55,55 @@ export default function ManagerCarsPage() {
     <Page>
       <div
         style={{ backgroundColor: "var(--tgui--secondary_bg_color)" }}
-        className={"h-[calc(100vh-62px)] overflow-auto"}
+        className="h-[calc(100vh-62px)] overflow-auto"
       >
-        {!loading && list.length ? (
+        <div className="px-[10px] py-[8px] flex flex-col gap-2">
+          <Input
+            value={searchString}
+            onChange={(e) =>
+              updateManagerFilters?.({ searchString: e.target.value })
+            }
+            placeholder="Введите название авто"
+          />
+          <Text>Фильтр наличия авто:</Text>
+          <Select
+            value={stockFilter}
+            onChange={(e) =>
+              updateManagerFilters?.({
+                stockFilter: e.target.value as CarCardsStockFilter,
+              })
+            }
+          >
+            <option value="all">Все</option>
+            <option value="inStock">Только в наличии</option>
+            <option value="onOrder">Только на заказ</option>
+          </Select>
+          <Text>Фильтр активных авто:</Text>
+          <Select
+            value={activeFilter}
+            onChange={(e) =>
+              updateManagerFilters?.({
+                activeFilter: e.target.value as ActiveFilter,
+              })
+            }
+          >
+            <option value="all">Все</option>
+            <option value="active">Только активные</option>
+            <option value="disabled">Только деактивированные</option>
+          </Select>
+        </div>
+
+        {loading && (
+          <div className="flex justify-center items-center mt-8">
+            <Spinner size="l" />
+          </div>
+        )}
+
+        {!loading && list.length > 0 && (
           <Virtuoso
             style={{ height: "100%" }}
             totalCount={list.length}
             data={list}
-            components={{
-              Header: () => (
-                <>
-                  <Input
-                    value={searchString}
-                    onChange={(e) =>
-                      updateManagerFilters?.({ searchString: e.target.value })
-                    }
-                    placeholder={"Введите название авто"}
-                  />
-                  <Text className={"flex  px-[10px] py-[8px]"}>
-                    Фильтр наличия авто:
-                  </Text>
-                  <Select
-                    onChange={(e) => {
-                      updateManagerFilters?.({
-                        stockFilter: e.target.value as CarCardsStockFilter,
-                      });
-                    }}
-                    value={stockFilter}
-                  >
-                    <option value={"all"}>Все</option>
-                    <option value={"inStock"}>Только в наличии</option>
-                    <option value={"onOrder"}>Только на заказ</option>
-                  </Select>
-                  <Text className={"flex  px-[10px] py-[8px]"}>
-                    Фильтр активных авто:
-                  </Text>
-                  <Select
-                    onChange={(e) => {
-                      updateManagerFilters?.({
-                        activeFilter: e.target.value as ActiveFilter,
-                      });
-                    }}
-                    value={activeFilter}
-                  >
-                    <option value={"all"}>Все</option>
-                    <option value={"active"}>Только активные</option>
-                    <option value={"disabled"}>Только деактивированные</option>
-                  </Select>
-                </>
-              ),
-            }}
             itemContent={(_, car) => (
               <Cell
                 subhead={car.carModel}
@@ -113,22 +112,24 @@ export default function ManagerCarsPage() {
                     alt={car.carBrand}
                     src={
                       car.externalId
-                        ? (car?.importedPhotos?.[0] ?? "")
-                        : (getFileLink(car?.photos?.[0]) ?? "")
+                        ? (car.importedPhotos?.[0] ?? "")
+                        : (getFileLink(car.photos?.[0]) ?? "")
                     }
                   />
                 }
-                onClick={() => {
-                  router.push(`/manager/cars/${car.id}`);
-                }}
+                onClick={() => router.push(`/manager/cars/${car.id}`)}
               >
                 {car.carBrand}
               </Cell>
             )}
           />
-        ) : null}
-        {loading && <Spinner size={"l"} />}
-        {!loading && !list.length && <Headline>Ничего не найдено</Headline>}
+        )}
+
+        {!loading && list.length === 0 && (
+          <div className="flex justify-center mt-8">
+            <Headline>Ничего не найдено</Headline>
+          </div>
+        )}
       </div>
     </Page>
   );
