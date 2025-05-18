@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+---
 
-First, run the development server:
+## `wheelhouse-client` — README.md
+
+```markdown
+# Wheelhouse Client
+
+Front-end for the **Wheelhouse** Telegram Mini App – a slick, cache-first car catalogue built with Next JS 15 & the Telegram Web Apps SDK.
+
+> ⏱️ **Delivered in 30 days** alongside the API.
+
+---
+
+## ✨ Highlights
+
+* **Instant feel** – SSR + smart client-side caching make scroll & search fly, even on mobile data.
+* **Seamless Telegram UX** – adapts to Web Apps colour themes, viewport resizing, and back-button expectations.
+* **S3-optimised images** – cars images are transformed & served from AWS S3 with signed URLs.
+* **Manager live-chat deep-links** – one-tap jump from a car page straight into a Telegram chat with the correct manager.
+* **Offline-ready catalogue** – service worker keeps previously visited car pages available without network.
+
+---
+
+## 🛠 Stack
+
+| Area | Tech |
+|------|------|
+| Framework | Next JS 15 (App Router, TypeScript) |
+| UI layer | Tailwind CSS + Radix UI primitives |
+| State & data | TanStack Query, Zod for runtime types |
+| Messaging | Telegram Mini Apps SDK (`@telegram-apps/webapp`) |
+| Image hosting | AWS S3 (`@aws-sdk/client-s3` signed URLs) |
+| Lint/format | eslint, prettier, stylelint |
+
+---
+
+## 🚀 Quick start
+
+### Prerequisites
+
+* **Node >= 22**
+* **pnpm >= 8**
+
+### 1. Clone & install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git clone https://github.com/your-org/wheelhouse-client.git
+cd wheelhouse-client
+pnpm install
